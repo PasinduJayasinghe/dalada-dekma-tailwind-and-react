@@ -1,9 +1,15 @@
 import React from "react";
+import "./Grid.css"; // Make sure you have this CSS file for styling
 
-function Grid() {
+function Grid({ children, timestamp }) {
   return (
-    <div className="w-75 h-75 rounded-xl shadow flex items-center justify-center bg-[#fbb304]">
-     
+    <div className="mb-4">
+      {timestamp && (
+        <div className="text-sm text-gray-700 mb-2">{timestamp}</div>
+      )}
+      <div className="grid-container bg-[#fbb304] bg-opacity-20 p-4 rounded-lg">
+        {children}
+      </div>
     </div>
   );
 }

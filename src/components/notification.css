@@ -1,0 +1,13 @@
+/* Notification.css */
+.notification-bar {
+    position: relative;
+    overflow: hidden; /* Ensures the sliding content is clipped */
+  }
+  
+  .notification-text {
+    white-space: nowrap; /* Prevent text from wrapping */
+  }
+  
+  .next-text {
+    opacity: 0; /* Initially hide the next text */
+  }
