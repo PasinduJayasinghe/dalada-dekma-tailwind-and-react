@@ -9,7 +9,7 @@ function ImportantLocations() {
       <Grid timestamp="March 28, 2024 - 10:00 AM">
         <div>
           <h3 className="text-lg font-bold mb-2">Main Entrance</h3>
-          <p>Located at Sri Dalada Maligawa main gate. Please arrive 30 minutes before your scheduled time.</p>
+          <p>ශ්‍රි දළදා මාලිගාව</p>
         </div>
       </Grid>
       

@@ -55,7 +55,7 @@ function Footer() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Your Name"
-                  className="w-full px-4 py-2 rounded text-gray-800"
+                  className="w-full px-4 py-2 rounded text-amber-50 bg-gray-700"
                   required
                 />
               </div>
@@ -67,7 +67,7 @@ function Footer() {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Phone Number"
-                  className="w-full px-4 py-2 rounded text-gray-800"
+                  className="w-full px-4 py-2 rounded text-amber-50 bg-gray-700"  
                   required
                 />
               </div>
@@ -86,7 +86,7 @@ function Footer() {
           </div>
           
           {/* Admin Login Button */}
-          <div className="mt-4 md:mt-0 self-end md:self-start">
+          <div className="mt-4 md:mt-26 self-end md:self-start">
             <button 
               onClick={handleAdminLogin}
               className="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700 transition duration-300"
