@@ -1,0 +1,37 @@
+/* Grid container with transition effect */
+.grid-container {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .grid-container:hover {
+    transform: scale(1.05); /* Slightly enlarge the grid on hover */
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1); /* Add shadow when hovered */
+  }
+  
+  /* Optional: Popup effect when hovered */
+  .grid-container:hover .popup-content {
+    animation: popUp 0.5s ease forwards;
+  }
+  
+  /* Pop-up Animation Styling */
+  .popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    display: none; /* Hidden by default */
+    opacity: 0; /* Invisible */
+  }
+  
+  /* Pop-up animation triggered by hover */
+  @keyframes popUp {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
