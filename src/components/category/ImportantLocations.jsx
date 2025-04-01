@@ -1,22 +1,24 @@
 import React from "react";
-import Grid from "../Grid"; // Import the Grid component
+import Grid from "../Grid";
 
 function ImportantLocations() {
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-bold text-white">Important Locations</h2>
-      <div className="grid grid-cols-1 gap-4">
-        <Grid>
-          <h1>Location 1</h1>
-        </Grid>
-        <Grid>
-          <h1>Location 2</h1>
-        </Grid>
-        <Grid>
-          <h1>Location 3</h1>
-        </Grid>
-        {/* Add more grids as needed */}
-      </div>
+    <div className="flex flex-col">
+      <h2 className="text-2xl font-bold mb-4 border-b pb-2 border-gray-300">Important Locations</h2>
+      
+      <Grid timestamp="March 28, 2024 - 10:00 AM">
+        <div>
+          <h3 className="text-lg font-bold mb-2">Main Entrance</h3>
+          <p>Located at Sri Dalada Maligawa main gate. Please arrive 30 minutes before your scheduled time.</p>
+        </div>
+      </Grid>
+      
+      <Grid timestamp="March 28, 2024 - 9:30 AM">
+        <div>
+          <h3 className="text-lg font-bold mb-2">Information Center</h3>
+          <p>Visit our information center near the main entrance for any assistance.</p>
+        </div>
+      </Grid>
     </div>
   );
 }

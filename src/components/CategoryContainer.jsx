@@ -5,14 +5,14 @@ import Traffic from "./category/traffic";
 
 function CategoryContainer() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 bg-[#fc7515] p-4">
-      <div className="flex justify-center items-center">
-        <Announcements />
-      </div>
-      <div className="flex justify-center items-center">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 bg-white">
+      <div>
         <Traffic />
       </div>
-      <div className="flex justify-center items-center">
+      <div>
+        <Announcements />
+      </div>
+      <div>
         <ImportantLocations />
       </div>
     </div>

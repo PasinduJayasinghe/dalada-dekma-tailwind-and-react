@@ -1,22 +1,24 @@
 import React from "react";
-import Grid from "../Grid"; // Import the Grid component
+import Grid from "../Grid";
 
 function Traffic() {
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-bold text-white">Traffic</h2>
-      <div className="grid grid-cols-1 gap-4">
-        <Grid>
-          <h1>Traffic Info 1</h1>
-        </Grid>
-        <Grid>
-          <h1>Traffic Info 2</h1>
-        </Grid>
-        <Grid>
-          <h1>Traffic Info 3</h1>
-        </Grid>
-        {/* Add more grids as needed */}
-      </div>
+    <div className="flex flex-col">
+      <h2 className="text-2xl font-bold mb-4 border-b pb-2 border-gray-300">Traffic Updates</h2>
+      
+      <Grid timestamp="March 28, 2024 - 8:00 AM">
+        <div>
+          <h3 className="text-lg font-bold mb-2">Road Closures</h3>
+          <p>Main roads leading to Sri Dalada Maligawa will be closed from 6:00 AM to 8:00 PM.</p>
+        </div>
+      </Grid>
+      
+      <Grid timestamp="March 28, 2024 - 7:30 AM">
+        <div>
+          <h3 className="text-lg font-bold mb-2">Parking Information</h3>
+          <p>Designated parking areas available at Kandy Lake View Parking and City Center Parking.</p>
+        </div>
+      </Grid>
     </div>
   );
 }
