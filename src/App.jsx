@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './App.css';
+
 import Notification from './components/Notification.jsx';
 import Banner from './components/Banner.jsx';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -11,9 +11,9 @@ import AdminDashboard from './components/admin/AdminDashboard.jsx';
 // Layout component for the main public site
 const PublicLayout = () => {
   const notifications = [
-    "CHECK OUT THE NEW LIBRARY SPACES",
-    "EXTENDED HOURS DURING FINALS WEEK",
-    "NEW RESOURCES AVAILABLE ONLINE"
+    "වාහන නැවැත්වීම් මධ්‍ය්ස්ථානයේ ඉඩ පහසුකම් ඇත",
+    "භාණ්ඩ පිලිබදව සුපරික්ෂාකාරී වන්න",
+    "කසල නිසි ස්ථානවල බැහැර කිරීමට කාරුණික වන්න" 
   ];
 
   return (
