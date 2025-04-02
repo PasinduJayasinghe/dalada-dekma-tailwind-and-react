@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './notification.css'; // Import the CSS file
 
-function Notification({ messages = ["CHECK OUT THE NEW LIBRARY SPACES"], interval = 3000 }) {
+function Notification({ messages = [], interval = 3000 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState('left'); // 'left' or 'right'
   const [isAnimating, setIsAnimating] = useState(false);
@@ -46,7 +46,7 @@ function Notification({ messages = ["CHECK OUT THE NEW LIBRARY SPACES"], interva
       {messages.length > 1 && (
         <button
           onClick={goToPrevious}
-          className="absolute left-2 text-black hover:bg-yellow-500 rounded-full h-8 w-8 flex items-center justify-center z-10"
+          className="bg-amber-50 shadow-md absolute left-2 text-black hover:bg-yellow-500 rounded-full h-8 w-8 flex items-center justify-center z-10"
           aria-label="Previous notification"
         >
           &lt;
@@ -83,7 +83,7 @@ function Notification({ messages = ["CHECK OUT THE NEW LIBRARY SPACES"], interva
       {messages.length > 1 && (
         <button
           onClick={goToNext}
-          className="absolute right-2 text-black hover:bg-yellow-500 rounded-full h-8 w-8 flex items-center justify-center z-10"
+          className="bg-amber-50 shadow-md absolute right-2 text-black hover:bg-yellow-500 rounded-full h-8 w-8 flex items-center justify-center z-10"
           aria-label="Next notification"
         >
           &gt;

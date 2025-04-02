@@ -22,9 +22,9 @@ function AdminDashboard() {
   ];
   
   const notificationData = [
-    { id: 1, content: 'CHECK OUT THE NEW LIBRARY SPACES' },
-    { id: 2, content: 'EXTENDED HOURS DURING EXAM WEEK' },
-    { id: 3, content: 'NEW ONLINE RESOURCES AVAILABLE' }
+    { id: 1, content: 'වාහන නැවැත්වීම් මධ්‍ය්ස්ථානයේ ඉඩ පහසුකම් ඇත' },
+    { id: 2, content: 'භාණ්ඩ පිලිබදව සුපරික්ෂාකාරී වන්න' },
+    { id: 3, content: 'කසල නිසි ස්ථානවල බැහැර කිරීමට කාරුණික වන්න' }
   ];
   
   const subscriberData = [

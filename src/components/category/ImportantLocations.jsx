@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Grid from "../Grid";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css"; // Leaflet styles
-import ImportantLocationsGrid from "./ImportantLocationsGrid";
 
 // Example data - in a real app, you'd fetch this from your backend
 const initialLocations = [
