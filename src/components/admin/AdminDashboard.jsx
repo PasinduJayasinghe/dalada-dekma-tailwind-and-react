@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function AdminDashboard() {
   const [activeSection, setActiveSection] = useState('announcements');
+  const navigate = useNavigate();
   
   // Sample data
   const announcementData = [
@@ -57,6 +59,11 @@ function AdminDashboard() {
       category: 'Important Notices',
       date: ''
     });
+  };
+
+  // Handle logout functionality
+  const handleLogout = () => {
+    navigate('/');
   };
   
   // Render the appropriate content based on active section
@@ -250,7 +257,10 @@ function AdminDashboard() {
           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
           <div>
             <span className="mr-4">Welcome, Admin</span>
-            <button className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700">
+            <button 
+              className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+              onClick={handleLogout}
+            >
               Logout
             </button>
           </div>
