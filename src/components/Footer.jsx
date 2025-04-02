@@ -41,8 +41,8 @@ function Footer() {
   };
 
   return (
-    <footer className="bg-gray-800 text-white py-12">
-      <div className="container mx-auto px-4">
+    <footer className="bg-gray-800 text-white py-9">
+      <div className="container mx-auto px-6">
         {/* First row with subscription form and admin button */}
         <div className="flex flex-col md:flex-row justify-between items-start">
           {/* Subscription Form */}

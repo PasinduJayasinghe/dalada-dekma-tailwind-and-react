@@ -76,9 +76,9 @@ function ImportantLocations() {
     </h2>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
       {locations.map((location, index) => (
-        <div key={index} className="bg-yellow-50 p-4 rounded-lg shadow-md">
+        <div key={index} className="grid-container bg-yellow-50 p-4 rounded-lg shadow-md">
           <p className="text-sm text-gray-600 mb-2">{location.timestamp}</p>
-          <div className="bg-yellow-500 p-3 rounded-lg">
+          <div className=" bg-yellow-500 p-3 rounded-lg">
             <h3 className="text-lg font-bold text-black text-center">{location.name}</h3>
             
           </div>

@@ -1,6 +1,5 @@
 import React from "react";
 import Grid from "../Grid";
-
 function ImportantLocationsGrid({ locations = [] }) {
   // If no locations are provided, display a message
   if (locations.length === 0) {
@@ -14,19 +13,12 @@ function ImportantLocationsGrid({ locations = [] }) {
   return (
     <div className=" grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
       {locations.map((location, index) => (
-        <div key={index} className="grid-container bg-[#fbb304] shadow-md rounded-lg overflow-hidden">
+        <div key={index} className="bg-[#fbb304] shadow-md rounded-lg overflow-hidden">
           <div className="bg-yellow-50 p-3 border-b border-yellow-200">
-            <h3 className="text-lg font-bold text-yellow-800">{location.name}</h3>
             <p className="text-sm text-gray-600">{location.timestamp}</p>
           </div>
           <div className="p-4">
             <p className="text-gray-700 mb-2">{location.description}</p>
-            {location.coordinates && (
-              <div className="text-sm text-gray-500">
-                <span className="font-medium">Coordinates: </span>
-                {location.coordinates[0].toFixed(4)}, {location.coordinates[1].toFixed(4)}
-              </div>
-            )}
           </div>
         </div>
       ))}
