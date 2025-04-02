@@ -23,7 +23,7 @@ function Footer() {
     console.log('Subscription data:', formData);
     
     // Show success message
-    setSubscriptionStatus('Thank you for subscribing! You will receive our latest updates.');
+    setSubscriptionStatus('Thank you for subscribing! You can connect with Bitzify for digital solutions.');
     
     // Reset form
     setFormData({ name: '', phone: '' });

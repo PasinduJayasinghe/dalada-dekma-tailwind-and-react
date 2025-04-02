@@ -46,7 +46,7 @@ function Notification({ messages = [], interval = 3000 }) {
       {messages.length > 1 && (
         <button
           onClick={goToPrevious}
-          className="bg-amber-50 shadow-md absolute left-2 text-black hover:bg-yellow-500 rounded-full h-8 w-8 flex items-center justify-center z-10"
+          className="font-bold bg-amber-50 shadow-md absolute left-2 text-black hover:bg-yellow-500 rounded-full h-8 w-8 flex items-center justify-center z-10"
           aria-label="Previous notification"
         >
           &lt;
@@ -83,7 +83,7 @@ function Notification({ messages = [], interval = 3000 }) {
       {messages.length > 1 && (
         <button
           onClick={goToNext}
-          className="bg-amber-50 shadow-md absolute right-2 text-black hover:bg-yellow-500 rounded-full h-8 w-8 flex items-center justify-center z-10"
+          className="font-bold bg-amber-50 shadow-md absolute right-2 text-black hover:bg-yellow-500 rounded-full h-8 w-8 flex items-center justify-center z-10"
           aria-label="Next notification"
         >
           &gt;
