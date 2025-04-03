@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import './notification.css'; // Import the CSS file
+import './notification.css';
+import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
 
 function Notification({ messages = [], interval = 3000 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [slideDirection, setSlideDirection] = useState('left'); // 'left' or 'right'
+  const [slideDirection, setSlideDirection] = useState('left');
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
@@ -11,82 +12,95 @@ function Notification({ messages = [], interval = 3000 }) {
       const timer = setInterval(() => {
         goToNextAuto();
       }, interval);
-      return () => clearInterval(timer); // Cleanup on unmount
+      return () => clearInterval(timer);
     }
-  }, [messages, interval]);
+  }, [messages, interval, currentIndex]); // Added currentIndex to dependencies
 
   const goToPrevious = () => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setSlideDirection('right');
+    if (messages.length <= 1 || isAnimating) return;
+    
+    setIsAnimating(true);
+    setSlideDirection('right');
+    setTimeout(() => {
       setCurrentIndex((prevIndex) => (prevIndex - 1 + messages.length) % messages.length);
-      setTimeout(() => setIsAnimating(false), 300); // Adjust timing with CSS transition
-    }
+      setIsAnimating(false);
+    }, 300);
   };
 
   const goToNext = () => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setSlideDirection('left');
+    if (messages.length <= 1 || isAnimating) return;
+    
+    setIsAnimating(true);
+    setSlideDirection('left');
+    setTimeout(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % messages.length);
-      setTimeout(() => setIsAnimating(false), 300); // Adjust timing with CSS transition
-    }
+      setIsAnimating(false);
+    }, 300);
   };
 
   const goToNextAuto = () => {
-    if (!isAnimating) {
-      setSlideDirection('left');
+    if (messages.length <= 1 || isAnimating) return;
+    
+    setIsAnimating(true);
+    setSlideDirection('left');
+    setTimeout(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % messages.length);
-    }
+      setIsAnimating(false);
+    }, 300);
   };
 
+  if (messages.length === 0) return null;
+
   return (
-    <div className="notification-bar cursor-default bg-amber-500 text-black py-6 px-8 flex items-center justify-center overflow-hidden">
+    <div className="notification-bar cursor-default bg-amber-500 text-black py-4 px-8 flex items-center justify-center overflow-hidden relative min-h-[60px]">
       {/* Left navigation arrow */}
       {messages.length > 1 && (
         <button
           onClick={goToPrevious}
-          className="font-bold bg-amber-50 cursor-pointer shadow-md absolute left-2 text-black hover:bg-yellow-300 rounded-full h-8 w-8 flex items-center justify-center z-10"
+          className="font-bold bg-amber-100 hover:bg-amber-200 cursor-pointer shadow-md absolute left-2 text-black rounded-full h-8 w-8 flex items-center justify-center z-10 transition-colors duration-200"
           aria-label="Previous notification"
         >
-          &lt;
+          <BsChevronCompactLeft size={20} className="ml-0.5" />
         </button>
       )}
 
-      {/* Notification text */}
-      <div
-        className={`notification-text text-center text-sm sm:text-lg font-bold uppercase tracking-wide absolute w-full`}
-        style={{
-          transform: isAnimating
-            ? `translateX(${slideDirection === 'left' ? '-100%' : '100%'})`
-            : 'translateX(0)',
-          transition: isAnimating ? 'transform 0.3s ease-in-out' : 'none',
-        }}
-      >
-        {messages[currentIndex]}
-      </div>
-
-      {/* Notification text (for the sliding effect) */}
-      {isAnimating && (
+      {/* Notification text container */}
+      <div className="relative w-full h-full overflow-hidden flex items-center justify-center">
+        {/* Current notification text */}
         <div
-          className={`notification-text next-text text-center font-bold uppercase tracking-wide absolute w-full`}
-          style={{
-            transform: `translateX(${slideDirection === 'left' ? '100%' : '-100%'})`,
-            transition: 'none',
-          }}
+          className={`notification-text text-center text-sm sm:text-base md:text-lg font-bold uppercase tracking-wide w-full ${
+            isAnimating
+              ? slideDirection === 'left'
+                ? 'animate-slide-out-left'
+                : 'animate-slide-out-right'
+              : ''
+          }`}
         >
-          {messages[(currentIndex + (slideDirection === 'right' ? -1 : 1) + messages.length) % messages.length]}
+          {messages[currentIndex]}
         </div>
-      )}
+
+        {/* Next notification text (for animation) */}
+        {isAnimating && (
+          <div
+            className={`notification-text text-center text-sm sm:text-base md:text-lg font-bold uppercase tracking-wide w-full ${
+              slideDirection === 'left'
+                ? 'animate-slide-in-left'
+                : 'animate-slide-in-right'
+            }`}
+          >
+            {messages[(currentIndex + (slideDirection === 'right' ? -1 : 1) + messages.length) % messages.length]}
+          </div>
+        )}
+      </div>
 
       {/* Right navigation arrow */}
       {messages.length > 1 && (
         <button
           onClick={goToNext}
-          className="font-bold bg-amber-50 cursor-pointer shadow-md absolute right-2 text-black hover:bg-yellow-300 rounded-full h-8 w-8 flex items-center justify-center z-10"
+          className="font-bold bg-amber-100 hover:bg-amber-200 cursor-pointer shadow-md absolute right-2 text-black rounded-full h-8 w-8 flex items-center justify-center z-10 transition-colors duration-200"
           aria-label="Next notification"
         >
-          &gt;
+          <BsChevronCompactRight size={20} className="mr-0.5" />
         </button>
       )}
     </div>
