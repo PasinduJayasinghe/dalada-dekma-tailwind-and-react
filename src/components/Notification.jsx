@@ -41,12 +41,12 @@ function Notification({ messages = [], interval = 3000 }) {
   };
 
   return (
-    <div className="notification-bar bg-[#fbb304] text-black py-6 px-8 relative flex items-center justify-center overflow-hidden">
+    <div className="notification-bar cursor-default bg-amber-500 text-black py-6 px-8 flex items-center justify-center overflow-hidden">
       {/* Left navigation arrow */}
       {messages.length > 1 && (
         <button
           onClick={goToPrevious}
-          className="font-bold bg-amber-50 shadow-md absolute left-2 text-black hover:bg-yellow-500 rounded-full h-8 w-8 flex items-center justify-center z-10"
+          className="font-bold bg-amber-50 cursor-pointer shadow-md absolute left-2 text-black hover:bg-yellow-300 rounded-full h-8 w-8 flex items-center justify-center z-10"
           aria-label="Previous notification"
         >
           &lt;
@@ -55,7 +55,7 @@ function Notification({ messages = [], interval = 3000 }) {
 
       {/* Notification text */}
       <div
-        className={`notification-text text-center font-bold uppercase tracking-wide absolute w-full`}
+        className={`notification-text text-center text-sm sm:text-lg font-bold uppercase tracking-wide absolute w-full`}
         style={{
           transform: isAnimating
             ? `translateX(${slideDirection === 'left' ? '-100%' : '100%'})`
@@ -83,7 +83,7 @@ function Notification({ messages = [], interval = 3000 }) {
       {messages.length > 1 && (
         <button
           onClick={goToNext}
-          className="font-bold bg-amber-50 shadow-md absolute right-2 text-black hover:bg-yellow-500 rounded-full h-8 w-8 flex items-center justify-center z-10"
+          className="font-bold bg-amber-50 cursor-pointer shadow-md absolute right-2 text-black hover:bg-yellow-300 rounded-full h-8 w-8 flex items-center justify-center z-10"
           aria-label="Next notification"
         >
           &gt;
