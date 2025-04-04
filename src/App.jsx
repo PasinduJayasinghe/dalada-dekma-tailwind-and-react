@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import Notification from './components/Notification.jsx';
-import Banner from './components/Banner.jsx';
+import Banner from './components/Header.jsx';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CategoryContainer from './components/CategoryContainer.jsx';
 import Footer from './components/Footer.jsx';
