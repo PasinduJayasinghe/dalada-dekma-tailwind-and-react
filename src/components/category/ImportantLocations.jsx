@@ -2,61 +2,39 @@ import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-const LOCATION_DATA = [
-  {
-    id: 1,
-    name: "ප්‍රධාන දොරටුව",
-    coordinates: [7.2906, 80.6337],
-    timestamp: "March 28, 2024 - 10:00 AM",
-    description: "Located at Sri Dalada Maligawa main gate. Please arrive 30 minutes before your scheduled time."
-  },
-  {
-    id: 2,
-    name: "තොරතුරු කේන්ද්‍රය",
-    coordinates: [7.2910, 80.6340],
-    timestamp: "March 28, 2024 - 9:30 AM",
-    description: "Visit our information center near the main entrance for any assistance."
-  },
-  {
-    id: 3,
-    name: "ආපනශාලාව",
-    coordinates: [7.2920, 80.6350],
-    timestamp: "March 28, 2024 - 11:00 AM",
-    description: "Refreshments and meals available from 7:00 AM to 8:00 PM."
-  },
-  {
-    id: 4,
-    name: "වාහන නැවැත්වීම්",
-    coordinates: [7.2930, 80.6360],
-    timestamp: "March 28, 2024 - 12:00 PM",
-    description: "Designated parking areas available at Kandy Lake View Parking and City Center Parking."
-  },
-];
-
-const DEFAULT_CENTER = [7.2906, 80.6337];
+const DEFAULT_CENTER = [7.2906, 80.6337]; // If no locations are found, default to Sri Lanka's coordinates
 
 function ImportantLocations() {
+  // State to store locations data
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fetch data from API when component mounts
   useEffect(() => {
-    const fetchLocations = async () => {
+    const fetchLocationsData = async () => {
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
-        setLocations(LOCATION_DATA);
+        setLoading(true);
+        const response = await fetch("/api/locations"); // Replace with your API endpoint
+
+        if (!response.ok) {
+          throw new Error(`API request failed with status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setLocations(data);
+        setLoading(false);
+        setError(null); // Clear any previous error
       } catch (err) {
-        console.error("Error fetching locations:", err);
-        setError("Failed to load locations");
-      } finally {
+        setError(err.message);
         setLoading(false);
       }
     };
 
-    fetchLocations();
+    fetchLocationsData();
   }, []);
 
+  // Center calculation based on locations
   const calculateCenter = () => {
     if (locations.length === 0) return DEFAULT_CENTER;
     
@@ -67,9 +45,11 @@ function ImportantLocations() {
     return [sum[0] / locations.length, sum[1] / locations.length];
   };
 
-  if (loading) return <div className="text-center py-8">Loading locations...</div>;
-  if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
-  if (locations.length === 0) return <div className="text-center py-8">No locations found</div>;
+  const center = calculateCenter();
+
+  if (loading) return <div className="text-center py-8">ස්ථාන තොරතුරු පූරනය වෙමින්වෙමින්...</div>;
+  if (error) return <div className="text-center py-8 text-red-500">දත්ත ලබා ගැනීමේ දෝෂයකි: {error}</div>;
+  if (locations.length === 0) return <div className="text-center py-8">ස්ථාන තොරතුරු යාවත්කාලීන කිරීම් නොමැත.</div>;
 
   return (
     <div className="px-4 py-6">
