@@ -1,46 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function AdminDashboard() {
   const [activeSection, setActiveSection] = useState('announcements');
+  const [notices, setNotices] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [subscribers, setSubscribers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   
-  // Sample data
-  const announcementData = [
-    { id: 1, title: 'Entry Requirements', content: 'Please bring your ID and follow the security protocols at the entrance.', date: 'March 28, 2024 - 9:00 AM', category: 'Important Notices' },
-    { id: 2, title: 'Weather Advisory', content: 'Umbrellas and rain protection recommended due to possible light showers.', date: 'March 28, 2024 - 8:30 AM', category: 'Important Notices' }
-  ];
-  
-  const trafficData = [
-    { id: 1, title: 'Road Closures', content: 'Main roads leading to Sri Dalada Maligawa will be closed from 6:00 AM to 8:00 PM.', date: 'March 28, 2024 - 8:00 AM', category: 'Traffic Updates' },
-    { id: 2, title: 'Parking Information', content: 'Designated parking areas available at Kandy Lake View Parking and City Center Parking.', date: 'March 28, 2024 - 7:30 AM', category: 'Traffic Updates' }
-  ];
-  
-  const locationData = [
-    { id: 1, title: 'Main Entrance', content: 'Located at Sri Dalada Maligawa main gate. Please arrive 30 minutes before your scheduled time.', date: 'March 28, 2024 - 10:00 AM', category: 'Important Locations' },
-    { id: 2, title: 'Information Center', content: 'Visit our information center near the main entrance for any assistance.', date: 'March 28, 2024 - 9:30 AM', category: 'Important Locations' }
-  ];
-  
-  const notificationData = [
-    { id: 1, content: 'වාහන නැවැත්වීම් මධ්‍ය්ස්ථානයේ ඉඩ පහසුකම් ඇත' },
-    { id: 2, content: 'භාණ්ඩ පිලිබදව සුපරික්ෂාකාරී වන්න' },
-    { id: 3, content: 'කසල නිසි ස්ථානවල බැහැර කිරීමට කාරුණික වන්න' }
-  ];
-  
-  const subscriberData = [
-    { id: 1, name: 'John Doe', phone: '123-456-7890', date: 'March 25, 2024' },
-    { id: 2, name: 'Jane Smith', phone: '234-567-8901', date: 'March 26, 2024' },
-    { id: 3, name: 'Robert Johnson', phone: '345-678-9012', date: 'March 27, 2024' }
-  ];
-  
-  // Form state for editing/adding items
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    category: 'Important Notices',
-    date: ''
+    categoryId: 1, // Default to first category
   });
-  
+
+  // Fetch data based on active section
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        switch(activeSection) {
+          case 'announcements':
+            const noticesRes = await fetch('https://your-api-url/api/notices');
+            const noticesData = await noticesRes.json();
+            setNotices(noticesData);
+            break;
+          case 'notifications':
+            const notifsRes = await fetch('https://your-api-url/api/notifications');
+            const notifsData = await notifsRes.json();
+            setNotifications(notifsData);
+            break;
+          case 'subscribers':
+            const subsRes = await fetch('https://your-api-url/api/subscribers');
+            const subsData = await subsRes.json();
+            setSubscribers(subsData);
+            break;
+          default:
+            break;
+        }
+      } catch (err) {
+        setError('Failed to fetch data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [activeSection]);
+
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({
@@ -49,32 +58,113 @@ function AdminDashboard() {
     }));
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Form submitted! In a real application, this would save to the database.');
-    // Reset form
-    setFormData({
-      title: '',
-      content: '',
-      category: 'Important Notices',
-      date: ''
-    });
+    setIsLoading(true);
+    
+    try {
+      let endpoint = '';
+      let body = {};
+      
+      switch(activeSection) {
+        case 'announcements':
+          endpoint = 'notices';
+          body = {
+            title: formData.title,
+            content: formData.content,
+            categoryId: parseInt(formData.categoryId)
+          };
+          break;
+        case 'notifications':
+          endpoint = 'notifications';
+          body = {
+            content: formData.content,
+            isActive: true
+          };
+          break;
+        default:
+          break;
+      }
+
+      const response = await fetch(`https://your-api-url/api/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save');
+      }
+
+      // Refresh data
+      setFormData({
+        title: '',
+        content: '',
+        categoryId: 1
+      });
+      
+      // Trigger data refetch
+      const newData = await response.json();
+      if (activeSection === 'announcements') {
+        setNotices(prev => [...prev, newData]);
+      } else if (activeSection === 'notifications') {
+        setNotifications(prev => [...prev, newData]);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Handle logout functionality
+  const handleDelete = async (id, type) => {
+    if (!window.confirm('Are you sure you want to delete this item?')) return;
+    
+    try {
+      const response = await fetch(`https://your-api-url/api/${type}/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (!response.ok) {
+        throw new Error('Delete failed');
+      }
+
+      // Update state
+      if (type === 'notices') {
+        setNotices(prev => prev.filter(item => item.id !== id));
+      } else if (type === 'notifications') {
+        setNotifications(prev => prev.filter(item => item.id !== id));
+      } else if (type === 'subscribers') {
+        setSubscribers(prev => prev.filter(item => item.id !== id));
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const handleLogout = () => {
+    localStorage.removeItem('admin');
     navigate('/');
   };
-  
-  // Render the appropriate content based on active section
+
   const renderContent = () => {
+    if (isLoading) {
+      return <div className="text-center py-8">Loading...</div>;
+    }
+
+    if (error) {
+      return <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">{error}</div>;
+    }
+
     switch(activeSection) {
       case 'announcements':
         return (
           <div>
             <h2 className="text-xl font-bold mb-4">Manage Announcements</h2>
             <div className="mb-6 bg-white p-4 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-3">Add/Edit Announcement</h3>
+              <h3 className="text-lg font-semibold mb-3">Add Announcement</h3>
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -91,14 +181,14 @@ function AdminDashboard() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                     <select
-                      name="category"
-                      value={formData.category}
+                      name="categoryId"
+                      value={formData.categoryId}
                       onChange={handleFormChange}
                       className="w-full p-2 border border-gray-300 rounded"
                     >
-                      <option value="Important Notices">Important Notices</option>
-                      <option value="Traffic Updates">Traffic Updates</option>
-                      <option value="Important Locations">Important Locations</option>
+                      <option value="1">Important Notices</option>
+                      <option value="2">Traffic Updates</option>
+                      <option value="3">Important Locations</option>
                     </select>
                   </div>
                   <div className="md:col-span-2">
@@ -116,8 +206,9 @@ function AdminDashboard() {
                   <button 
                     type="submit" 
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    disabled={isLoading}
                   >
-                    Save Announcement
+                    {isLoading ? 'Saving...' : 'Save Announcement'}
                   </button>
                 </div>
               </form>
@@ -135,17 +226,24 @@ function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {[...announcementData, ...trafficData, ...locationData].map(item => (
-                    <tr key={`${item.category}-${item.id}`}>
-                      <td className="px-6 py-4 whitespace-nowrap">{item.title}</td>
+                  {notices.map(notice => (
+                    <tr key={notice.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">{notice.title}</td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900 max-w-xs truncate">{item.content}</div>
+                        <div className="text-sm text-gray-900 max-w-xs truncate">{notice.content}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">{item.date}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{item.category}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {new Date(notice.createdDate).toLocaleString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">{notice.categoryName}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <button className="text-indigo-600 hover:text-indigo-900 mr-3">Edit</button>
-                        <button className="text-red-600 hover:text-red-900">Delete</button>
+                        <button 
+                          className="text-red-600 hover:text-red-900"
+                          onClick={() => handleDelete(notice.id, 'notices')}
+                        >
+                          Delete
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -177,8 +275,9 @@ function AdminDashboard() {
                   <button 
                     type="submit" 
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    disabled={isLoading}
                   >
-                    Add Notification
+                    {isLoading ? 'Adding...' : 'Add Notification'}
                   </button>
                 </div>
               </form>
@@ -194,15 +293,20 @@ function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {notificationData.map(item => (
-                    <tr key={item.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">{item.id}</td>
+                  {notifications.map(notification => (
+                    <tr key={notification.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">{notification.id}</td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900">{item.content}</div>
+                        <div className="text-sm text-gray-900">{notification.content}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <button className="text-indigo-600 hover:text-indigo-900 mr-3">Edit</button>
-                        <button className="text-red-600 hover:text-red-900">Delete</button>
+                        <button 
+                          className="text-red-600 hover:text-red-900"
+                          onClick={() => handleDelete(notification.id, 'notifications')}
+                        >
+                          Delete
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -227,14 +331,21 @@ function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {subscriberData.map(item => (
-                    <tr key={item.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{item.phone}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{item.date}</td>
+                  {subscribers.map(subscriber => (
+                    <tr key={subscriber.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">{subscriber.name}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{subscriber.phoneNumber}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {new Date(subscriber.subscriptionDate).toLocaleDateString()}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <button className="text-indigo-600 hover:text-indigo-900 mr-3">View Details</button>
-                        <button className="text-red-600 hover:text-red-900">Delete</button>
+                        <button 
+                          className="text-red-600 hover:text-red-900"
+                          onClick={() => handleDelete(subscriber.id, 'subscribers')}
+                        >
+                          Delete
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -251,12 +362,10 @@ function AdminDashboard() {
   
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
       <header className="bg-[#1a2332] text-white py-4 px-6 shadow-md">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
           <div>
-            <span className="mr-4">Welcome, Admin</span>
             <button 
               className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
               onClick={handleLogout}
@@ -268,7 +377,6 @@ function AdminDashboard() {
       </header>
       
       <div className="flex">
-        {/* Sidebar */}
         <aside className="w-64 bg-[#1a2332] min-h-screen text-white p-4">
           <nav>
             <ul>
@@ -304,16 +412,8 @@ function AdminDashboard() {
               </li>
             </ul>
           </nav>
-          
-          <div className="mt-auto pt-10">
-            <div className="border-t border-gray-700 pt-4">
-              <p className="text-sm text-gray-400">© 2025 Bitzify</p>
-              <p className="text-sm text-gray-400">All rights reserved.</p>
-            </div>
-          </div>
         </aside>
         
-        {/* Main content */}
         <main className="flex-1 p-6">
           {renderContent()}
         </main>

@@ -2,29 +2,7 @@ import React from "react";
 import Grid from "../Grid";
 
 function Announcements() {
-  // Store announcements data in an array
-  const announcements = [
-    {
-      timestamp: "March 28, 2024 - 9:00 AM",
-      title: "ඇතුල්වීමේ ලිපිගොනු",
-      content: "කරුණාකර ඔබගේ හැඳුනුම්පත රැගෙන පිවිසුමේ ආරක්ෂක ප්‍රොටෝකෝල අනුගමනය කරන්න."
-    },
-    {
-      timestamp: "March 28, 2024 - 8:30 AM",
-      title: "කාලගුණ උපදේශනය",
-      content: "වැසි ඇති විය හැකි බැවින් රැගෙන ඒමට කාරුණික වන්න."
-    },
-    {
-      timestamp: "March 28, 2024 - 9:00 AM",
-      title: "ඇතුල්වීමේ ලිපිගොනු",
-      content: "කරුණාකර ඔබගේ හැඳුනුම්පත රැගෙන පිවිසුමේ ආරක්ෂක ප්‍රොටෝකෝල අනුගමනය කරන්න."
-    },
-    {
-      timestamp: "March 28, 2024 - 9:00 AM",
-      title: "ඇතුල්වීමේ ලිපිගොනු",
-      content: "කරුණාකර ඔබගේ හැඳුනුම්පත රැගෙන පිවිසුමේ ආරක්ෂක ප්‍රොටෝකෝල අනුගමනය කරන්න."
-    }
-  ];
+
 
   return (
     <div>
