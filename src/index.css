@@ -1,2 +1,7 @@
 @import "tailwindcss";
 
+@font-face {
+    font-family: "Iskolapotha";
+    src: url("../src/assets/fonts/ISKPOTA.TTF") format("truetype");
+    font-weight: normal;
+}

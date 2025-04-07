@@ -6,17 +6,19 @@ import CategoryContainer from './components/CategoryContainer.jsx';
 import Footer from './components/Footer.jsx';
 import AdminLogin from "./components/admin/AdminLogin.jsx";
 import AdminDashboard from './components/admin/AdminDashboard.jsx';
+import DaladaBufferEffect from './components/DaladaBufferEffect.jsx';
 
 // Layout component for the main public site
 const PublicLayout = () => {
   const [databaseNotifications, setDatabaseNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showBuffer, setShowBuffer] = useState(true);
 
   // Default hardcoded notifications
   const staticNotifications = [
     "වාහන නැවැත්වීම් මධ්‍ය්ස්ථානයේ ඉඩ පහසුකම් ඇත",
     "භාණ්ඩ පිලිබදව සුපරික්ෂාකාරී වන්න",
-    "කසල නිසි ස්ථානවල බැහැර කිරීමට කාරුණික වන්න" 
+    "කසල නිසි ස්ථානවල බැහැර කිරීමට කාරුණික වන්න"
   ];
 
   // Fetch notifications from the database
@@ -34,6 +36,11 @@ const PublicLayout = () => {
         console.error('Error fetching notifications:', error);
       } finally {
         setIsLoading(false);
+        
+        // Hide buffer effect after data loads and a short delay
+        setTimeout(() => {
+          setShowBuffer(false);
+        }, 2500);
       }
     };
 
@@ -42,11 +49,12 @@ const PublicLayout = () => {
 
   return (
     <>
+      {showBuffer && <DaladaBufferEffect />}
       <Banner />
       {!isLoading && (
-        <Notification 
-          messages={staticNotifications} 
-          databaseNotifications={databaseNotifications} 
+        <Notification
+          messages={staticNotifications}
+          databaseNotifications={databaseNotifications}
         />
       )}
       <CategoryContainer />
@@ -61,7 +69,7 @@ function App() {
       <Routes>
         {/* Public Route with Banner and Notification */}
         <Route path="/" element={<PublicLayout />} />
-
+        
         {/* Admin Routes - no Banner/Notification */}
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />

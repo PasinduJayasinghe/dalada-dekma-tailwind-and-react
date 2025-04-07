@@ -64,9 +64,9 @@ function Footer() {
     <footer className="bg-gray-800 text-white py-9 cursor-default">
       <div className="container mx-auto px-6">
         {/* Main content row */}
-        <div className="flex flex-col lg:flex-row justify-between items-start">
+        <div className="flex flex-col lg:flex-row justify-between space-x-[15%] items-start">
           {/* Subscription Form */}
-          <div className="w-full lg:w-1/3 mb-6 lg:mb-0">
+          <div className="w-full lg:w-1/3 mb-0 lg:mb-0">
             <h3 className="text-xl font-bold mb-4">Subscribe to Updates</h3>
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
@@ -112,52 +112,55 @@ function Footer() {
           </div>
           
           {/* Vertical divider - only visible on larger screens */}
-          <div className="hidden lg:block h-60 border-l border-gray-600 mx-8"></div>
+          <div className="hidden lg:block h-48 border-l border-gray-600 mx-8"></div>
           
           {/* Contact Details */}
-          <div className="w-full lg:w-1/3 mb-6 lg:mb-0">
-            <h3 className="text-xl font-bold mb-4">Contact Us</h3>
-            <div className="space-y-3">
-              <div className="flex items-center">
-                <FaPhone className="mr-3 text-[#fbb304]" />
-                <span>+94 76 123 4567</span>
-              </div>
-              <div className="flex items-center">
-                <FaEnvelope className="mr-3 text-[#fbb304]" />
-                <span>info@bitzify.com</span>
+          <div className=" hidden grid-cols-1 lg:grid-cols-2 w-1/2 gap-6 mb-6 text-right lg:grid justify-items-end justify-center">
+            {/* Contact Info */}
+            <div>
+              <h3 className="text-xl font-bold mb-4">Contact Us</h3>
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <FaPhone className="mr-3 text-[#fbb304]" />
+                  <span>+94 76 123 4567</span>
+                </div>
+                <div className="flex items-center">
+                  <FaEnvelope className="mr-3 text-[#fbb304]" />
+                  <span>info@bitzify.com</span>
+                </div>
               </div>
             </div>
-            
-            <h3 className="text-xl font-bold mt-6 mb-4">Follow Us</h3>
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-[#fbb304] transition duration-300">
-                <FaFacebook size={20} />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-[#fbb304] transition duration-300">
-                <FaTwitter size={20} />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-[#fbb304] transition duration-300">
-                <FaInstagram size={20} />
-              </a>
-              <a href="#" className="text-gray-300 hover:text-[#fbb304] transition duration-300">
-                <FaLinkedin size={20} />
-              </a>
+
+            {/* Social & Admin */}
+            <div>
+              <h3 className="text-xl font-bold mt-6 lg:mt-0 mb-4">Follow Us</h3>
+              <div className="flex space-x-4 mb-4">
+                <a href="#" className="text-gray-300 hover:text-[#fbb304] transition duration-300">
+                  <FaFacebook size={20} />
+                </a>
+                <a href="#" className="text-gray-300 hover:text-[#fbb304] transition duration-300">
+                  <FaTwitter size={20} />
+                </a>
+                <a href="#" className="text-gray-300 hover:text-[#fbb304] transition duration-300">
+                  <FaInstagram size={20} />
+                </a>
+                <a href="#" className="text-gray-300 hover:text-[#fbb304] transition duration-300">
+                  <FaLinkedin size={20} />
+                </a>
+              </div>
+              {/* Admin Login Button */}
+              <button 
+                onClick={handleAdminLogin}
+                className="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700 transition duration-300 cursor-pointer"
+              >
+                Admin Login
+              </button>
             </div>
-          </div>
-          
-          {/* Admin Login Button */}
-          <div className="w-full lg:w-auto mt-4 lg:mt-0 self-end lg:self-start">
-            <button 
-              onClick={handleAdminLogin}
-              className="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700 transition duration-300 cursor-pointer"
-            >
-              Admin Login
-            </button>
           </div>
         </div>
-        
+
         {/* Copyright */}
-        <div className="border-t border-gray-700 mt-10 pt-6 text-center">
+        <div className="border-t border-gray-700 mt-10 pt-6 mb-0 text-center">
           <p className='text-sm'>&copy; {new Date().getFullYear()} Bitzify. All rights reserved.</p>
         </div>
       </div>
