@@ -16,6 +16,14 @@ function AdminDashboard() {
     categoryId: 1, // Default to first category
   });
 
+  // Map of category IDs to category names
+  const categoryMap = {
+    1: "Important Notices",
+    2: "Traffic Updates",
+    3: "Important Locations",
+    5:"New Updates"
+  };
+
   // Fetch data based on active section
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +31,7 @@ function AdminDashboard() {
       try {
         switch(activeSection) {
           case 'announcements':
-            const noticesRes = await fetch('https://your-api-url/api/notices');
+            const noticesRes = await fetch('https://localhost:7249/api/Notices/category/2');
             const noticesData = await noticesRes.json();
             setNotices(noticesData);
             break;
@@ -69,11 +77,18 @@ function AdminDashboard() {
       switch(activeSection) {
         case 'announcements':
           endpoint = 'notices';
+          // Get the current date in a formatted string (yyyy-MM-dd)
+          const currentDate = new Date().toISOString().split('T')[0];
+          
           body = {
             title: formData.title,
             content: formData.content,
-            categoryId: parseInt(formData.categoryId)
+            categoryId: Number(formData.categoryId),
+            categoryName: categoryMap[formData.categoryId], // Add CategoryName
+            formattedDate: currentDate // Add FormattedDate
           };
+          console.log('Sending request to:', `https://localhost:7249/api/${endpoint}`);
+          console.log('Request body:', body);
           break;
         case 'notifications':
           endpoint = 'notifications';
@@ -86,7 +101,7 @@ function AdminDashboard() {
           break;
       }
 
-      const response = await fetch(`https://your-api-url/api/${endpoint}`, {
+      const response = await fetch(`https://localhost:7249/api/${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +110,9 @@ function AdminDashboard() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save');
+        const errorData = await response.text();
+        console.error('Server response:', errorData);
+        throw new Error(`Failed to save: ${response.status} ${response.statusText}`);
       }
 
       // Refresh data
@@ -123,7 +140,7 @@ function AdminDashboard() {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
     
     try {
-      const response = await fetch(`https://your-api-url/api/${type}/${id}`, {
+      const response = await fetch(`https://localhost:7249/api/${type}/${id}`, {
         method: 'DELETE'
       });
 
@@ -189,6 +206,7 @@ function AdminDashboard() {
                       <option value="1">Important Notices</option>
                       <option value="2">Traffic Updates</option>
                       <option value="3">Important Locations</option>
+                      <option value="5">New Updates</option>
                     </select>
                   </div>
                   <div className="md:col-span-2">
