@@ -5,7 +5,6 @@ function AdminDashboard() {
   const [activeSection, setActiveSection] = useState('announcements');
   const [notices, setNotices] = useState([]);
   const [notifications, setNotifications] = useState([]);
-  const [subscribers, setSubscribers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -13,15 +12,15 @@ function AdminDashboard() {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    categoryId: 1, // Default to first category
+    categoryId: 6, // Default to first category
   });
 
   // Map of category IDs to category names
   const categoryMap = {
-    1: "Important Notices",
+    6: "Important Notices",
     2: "Traffic Updates",
     3: "Important Locations",
-    5:"New Updates"
+    5: "New Updates"
   };
 
   // Fetch data based on active section
@@ -36,20 +35,15 @@ function AdminDashboard() {
             setNotices(noticesData);
             break;
           case 'notifications':
-            const notifsRes = await fetch('https://your-api-url/api/notifications');
+            const notifsRes = await fetch('https://localhost:7249/api/Notifications');
             const notifsData = await notifsRes.json();
             setNotifications(notifsData);
-            break;
-          case 'subscribers':
-            const subsRes = await fetch('https://your-api-url/api/subscribers');
-            const subsData = await subsRes.json();
-            setSubscribers(subsData);
             break;
           default:
             break;
         }
       } catch (err) {
-        setError('Failed to fetch data');
+        setError('Failed to fetch data: ' + err.message);
       } finally {
         setIsLoading(false);
       }
@@ -76,22 +70,19 @@ function AdminDashboard() {
       
       switch(activeSection) {
         case 'announcements':
-          endpoint = 'notices';
-          // Get the current date in a formatted string (yyyy-MM-dd)
+          endpoint = 'Notices';
           const currentDate = new Date().toISOString().split('T')[0];
           
           body = {
             title: formData.title,
             content: formData.content,
             categoryId: Number(formData.categoryId),
-            categoryName: categoryMap[formData.categoryId], // Add CategoryName
-            formattedDate: currentDate // Add FormattedDate
+            categoryName: categoryMap[formData.categoryId],
+            formattedDate: currentDate
           };
-          console.log('Sending request to:', `https://localhost:7249/api/${endpoint}`);
-          console.log('Request body:', body);
           break;
         case 'notifications':
-          endpoint = 'notifications';
+          endpoint = 'Notifications';
           body = {
             content: formData.content,
             isActive: true
@@ -111,23 +102,24 @@ function AdminDashboard() {
 
       if (!response.ok) {
         const errorData = await response.text();
-        console.error('Server response:', errorData);
-        throw new Error(`Failed to save: ${response.status} ${response.statusText}`);
+        throw new Error(`Failed to save: ${errorData}`);
       }
 
-      // Refresh data
+      // Reset form and refresh data
       setFormData({
         title: '',
         content: '',
-        categoryId: 1
+        categoryId: 6
       });
       
-      // Trigger data refetch
-      const newData = await response.json();
+      // Refetch data to update the list
+      const refetchRes = await fetch(`https://localhost:7249/api/${endpoint}`);
+      const newData = await refetchRes.json();
+      
       if (activeSection === 'announcements') {
-        setNotices(prev => [...prev, newData]);
+        setNotices(newData);
       } else if (activeSection === 'notifications') {
-        setNotifications(prev => [...prev, newData]);
+        setNotifications(newData);
       }
     } catch (err) {
       setError(err.message);
@@ -140,7 +132,8 @@ function AdminDashboard() {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
     
     try {
-      const response = await fetch(`https://localhost:7249/api/${type}/${id}`, {
+      const endpoint = type === 'notices' ? 'Notices' : 'Notifications';
+      const response = await fetch(`https://localhost:7249/api/${endpoint}/${id}`, {
         method: 'DELETE'
       });
 
@@ -153,9 +146,28 @@ function AdminDashboard() {
         setNotices(prev => prev.filter(item => item.id !== id));
       } else if (type === 'notifications') {
         setNotifications(prev => prev.filter(item => item.id !== id));
-      } else if (type === 'subscribers') {
-        setSubscribers(prev => prev.filter(item => item.id !== id));
       }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const toggleNotificationStatus = async (id) => {
+    try {
+      const response = await fetch(`https://localhost:7249/api/Notifications/${id}/toggle`, {
+        method: 'PATCH'
+      });
+
+      if (!response.ok) {
+        throw new Error('Toggle failed');
+      }
+
+      // Update the specific notification's status
+      setNotifications(prev => prev.map(notification => 
+        notification.id === id 
+          ? { ...notification, isActive: !notification.isActive } 
+          : notification
+      ));
     } catch (err) {
       setError(err.message);
     }
@@ -168,11 +180,25 @@ function AdminDashboard() {
 
   const renderContent = () => {
     if (isLoading) {
-      return <div className="text-center py-8">Loading...</div>;
+      return (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      );
     }
 
     if (error) {
-      return <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">{error}</div>;
+      return (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {error}
+          <button 
+            onClick={() => setError('')} 
+            className="float-right font-bold"
+          >
+            &times;
+          </button>
+        </div>
+      );
     }
 
     switch(activeSection) {
@@ -202,8 +228,9 @@ function AdminDashboard() {
                       value={formData.categoryId}
                       onChange={handleFormChange}
                       className="w-full p-2 border border-gray-300 rounded"
+                      required
                     >
-                      <option value="1">Important Notices</option>
+                      <option value="6">Important Notices</option>
                       <option value="2">Traffic Updates</option>
                       <option value="3">Important Locations</option>
                       <option value="5">New Updates</option>
@@ -255,7 +282,6 @@ function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">{notice.categoryName}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button className="text-indigo-600 hover:text-indigo-900 mr-3">Edit</button>
                         <button 
                           className="text-red-600 hover:text-red-900"
                           onClick={() => handleDelete(notice.id, 'notices')}
@@ -274,20 +300,19 @@ function AdminDashboard() {
       case 'notifications':
         return (
           <div>
-            <h2 className="text-xl font-bold mb-4">Manage Notification Bar</h2>
+            <h2 className="text-xl font-bold mb-4">Manage Notifications</h2>
             <div className="mb-6 bg-white p-4 rounded-lg shadow">
               <h3 className="text-lg font-semibold mb-3">Add New Notification</h3>
               <form onSubmit={handleSubmit}>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Notification Text</label>
-                  <input
-                    type="text"
+                  <textarea
                     name="content"
                     value={formData.content}
                     onChange={handleFormChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full p-2 border border-gray-300 rounded h-24"
                     required
-                  />
+                  ></textarea>
                 </div>
                 <div className="mt-4">
                   <button 
@@ -305,62 +330,46 @@ function AdminDashboard() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Content</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {notifications.map(notification => (
                     <tr key={notification.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">{notification.id}</td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900">{notification.content}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button className="text-indigo-600 hover:text-indigo-900 mr-3">Edit</button>
-                        <button 
-                          className="text-red-600 hover:text-red-900"
-                          onClick={() => handleDelete(notification.id, 'notifications')}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
-        
-      case 'subscribers':
-        return (
-          <div>
-            <h2 className="text-xl font-bold mb-4">Manage Subscribers</h2>
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Subscribed</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {subscribers.map(subscriber => (
-                    <tr key={subscriber.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">{subscriber.name}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{subscriber.phoneNumber}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {new Date(subscriber.subscriptionDate).toLocaleDateString()}
+                        <span 
+                          className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                            notification.isActive 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
+                          {notification.isActive ? 'Active' : 'Inactive'}
+                        </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button className="text-indigo-600 hover:text-indigo-900 mr-3">View Details</button>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {new Date(notification.createdDate).toLocaleString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                         <button 
-                          className="text-red-600 hover:text-red-900"
-                          onClick={() => handleDelete(subscriber.id, 'subscribers')}
+                          onClick={() => toggleNotificationStatus(notification.id)}
+                          className={`px-3 py-1 rounded ${
+                            notification.isActive
+                              ? 'bg-yellow-500 text-white hover:bg-yellow-600'
+                              : 'bg-green-500 text-white hover:bg-green-600'
+                          }`}
+                        >
+                          {notification.isActive ? 'Deactivate' : 'Activate'}
+                        </button>
+                        <button 
+                          className="text-red-600 hover:text-red-900 px-3 py-1 border border-red-600 rounded hover:bg-red-50"
+                          onClick={() => handleDelete(notification.id, 'notifications')}
                         >
                           Delete
                         </button>
@@ -415,17 +424,7 @@ function AdminDashboard() {
                     ? 'bg-blue-600 font-medium' 
                     : 'hover:bg-gray-700'}`}
                 >
-                  Notification Bar
-                </button>
-              </li>
-              <li className="mb-2">
-                <button 
-                  onClick={() => setActiveSection('subscribers')}
-                  className={`w-full text-left py-2 px-4 rounded ${activeSection === 'subscribers' 
-                    ? 'bg-blue-600 font-medium' 
-                    : 'hover:bg-gray-700'}`}
-                >
-                  Subscribers
+                  Manage Notifications
                 </button>
               </li>
             </ul>
