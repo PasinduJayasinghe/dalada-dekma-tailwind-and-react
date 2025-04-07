@@ -9,6 +9,8 @@ function Footer() {
     phone: ''
   });
   const [subscriptionStatus, setSubscriptionStatus] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,14 +20,40 @@ function Footer() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Subscription data:', formData);
-    setSubscriptionStatus('Thank you for subscribing! You can connect with Bitzify for digital solutions.');
-    setFormData({ name: '', phone: '' });
-    setTimeout(() => {
-      setSubscriptionStatus('');
-    }, 5000);
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      const response = await fetch('https://localhost:7249/api/Subscribers', {  // Fixed URL (added colon after https)
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Name: formData.name,
+          PhoneNumber: formData.phone
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Subscription failed');
+      }
+
+      setSubscriptionStatus('Thank you for subscribing! You can connect with Bitzify for digital solutions.');
+      setFormData({ name: '', phone: '' });
+    } catch (err) {
+      setError(err.message || 'Failed to subscribe. Please try again.');
+      console.error('Subscription error:', err);  // Added error logging
+    } finally {
+      setIsLoading(false);
+      setTimeout(() => {
+        setSubscriptionStatus('');
+        setError('');
+      }, 5000);
+    }
   };
 
   const handleAdminLogin = () => {
@@ -68,12 +96,17 @@ function Footer() {
               <button 
                 type="submit" 
                 className="bg-[#fbb304] text-black font-bold px-6 py-2 rounded hover:bg-yellow-500 transition duration-300"
+                disabled={isLoading}
               >
-                Subscribe
+                {isLoading ? 'Subscribing...' : 'Subscribe'}
               </button>
               
               {subscriptionStatus && (
                 <p className="mt-3 text-green-400">{subscriptionStatus}</p>
+              )}
+              
+              {error && (
+                <p className="mt-3 text-red-400">{error}</p>
               )}
             </form>
           </div>

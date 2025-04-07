@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function AdminLogin() {
   const [credentials, setCredentials] = useState({
@@ -6,6 +7,8 @@ function AdminLogin() {
     password: ''
   });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,23 +18,43 @@ function AdminLogin() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     
-    // Simple validation
     if (!credentials.username || !credentials.password) {
       setError('Please enter both username and password');
       return;
     }
+
+    setIsLoading(true);
     
-    // In a real application, you would authenticate with an API here
-    console.log('Login attempt with:', credentials);
-    
-    // For demo purposes, simulate successful login and redirect
-    if (credentials.username === 'admin' && credentials.password === 'password') {
-      window.location.href = '/admin/dashboard';
-    } else {
+    try {
+      const response = await fetch('https://localhost:7249/api/Admin/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+        credentials: 'include', // Add this line
+        mode: 'cors' // Add this line
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      
+      // Store the admin data in localStorage (temporary)
+      localStorage.setItem('admin', JSON.stringify(data));
+      
+      // Redirect to dashboard
+      navigate('/admin/dashboard');
+    } catch (err) {
       setError('Invalid username or password');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -64,6 +87,7 @@ function AdminLogin() {
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter your username"
+                  required
                 />
               </div>
               
@@ -79,46 +103,19 @@ function AdminLogin() {
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter your password"
+                  required
                 />
-              </div>
-              
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="remember"
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded"
-                  />
-                  <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
-                    Remember me
-                  </label>
-                </div>
-                
-                <a href="#" className="text-sm text-blue-600 hover:underline">
-                  Forgot password?
-                </a>
               </div>
               
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors"
+                disabled={isLoading}
+                className={`w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                Login
+                {isLoading ? 'Logging in...' : 'Login'}
               </button>
             </form>
           </div>
-          
-          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 text-center">
-            <p className="text-sm text-gray-600">
-              Need help? <a href="#" className="text-blue-600 hover:underline">Contact support</a>
-            </p>
-          </div>
-        </div>
-        
-        <div className="text-center mt-6">
-          <a href="/" className="text-sm text-gray-600 hover:underline">
-            &larr; Back to main site
-          </a>
         </div>
       </div>
     </div>
