@@ -2,7 +2,7 @@ import React from "react";
 
 function Banner() {
   return (
-    <div className="w-full h-32 flex items-center justify-center md:justify-between px-8 relative overflow-hidden bg-gradient-to-r from-[#220901] to-[#621708] shadow-lg border-b-4 border-[#F6AA1C]">
+    <div className="w-full h-32 flex items-center justify-center md:justify-between px-8 relative overflow-hidden bg-gradient-to-r from-[#220901] to-[#621708] shadow-lg border-b-4 border-[#F6AA1C] cursor-default">
       {/* Main Logo with artistic effects */}
       <div className="flex items-center space-x-4">
         <div className="relative group inline-flex items-center justify-center">

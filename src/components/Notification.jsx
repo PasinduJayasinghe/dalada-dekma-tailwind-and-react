@@ -97,7 +97,7 @@ function Notification({ staticMessages = [], interval = 5000 }) {
   if (displayMessages.length === 0) return null;
 
   return (
-    <div className="notification-container">
+    <div className="notification-container cursor-default">
       <div className="notification-bar">
         {displayMessages.length > 1 && (
           <button
