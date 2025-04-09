@@ -95,7 +95,7 @@ function Footer() {
               
               <button 
                 type="submit" 
-                className="bg-[#fbb304] text-black font-bold px-6 py-2 rounded hover:bg-yellow-500 transition duration-300"
+                className="bg-[#fbb304] hover:bg-[#ffcf5b] text-black font-bold px-6 py-2 rounded hover:bg-yellow-500 transition duration-300 cursor-pointer"
                 disabled={isLoading}
               >
                 {isLoading ? 'Subscribing...' : 'Subscribe'}

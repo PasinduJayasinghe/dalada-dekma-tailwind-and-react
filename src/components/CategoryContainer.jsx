@@ -83,14 +83,14 @@ function CategoryContainer() {
               <div 
                 key={category.id}
                 onClick={() => handleTileClick(category.id)}
-                className="grid sm:grid-cols-2 bg-[#800000] hover:bg-yellow-300 text-white hover:text-black p-4 rounded-lg shadow cursor-pointer hover:shadow-xl transition-all duration-300"
+                className="grid sm:grid-cols-2 bg-[#800000] hover:bg-yellow-300 h-56 text-white hover:text-black p-4 rounded-lg shadow cursor-pointer hover:shadow-xl transition-all duration-300"
               >
                 <div className="flex flex-col justify-center items-center sm:items-start">
                   <h2 className="text-2xl sm:text-3xl font-extrabold mb-2">{category.title}</h2>
                   <p className="text-md sm:text-lg mb-4 font-extralight">{category.description}</p>
                 </div>
                 <div className="flex justify-center items-center">
-                  <div className="p-3 bg-white rounded-full w-28 md:w-24 sm:w-20 md:h-24 sm:h-20 flex items-center justify-center text-[#800000]">
+                  <div className="p-3 bg-white rounded-full w-28 md:w-24 sm:w-20 md:h-20 sm:h-20 flex items-center justify-center text-[#800000]">
                     <Icon size={40} />
                   </div>
                 </div>
