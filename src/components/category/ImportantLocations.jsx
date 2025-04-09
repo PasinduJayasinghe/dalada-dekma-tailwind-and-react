@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import AnimationSequence from "../Animation/AnimationSequence";
 
 const LOCATION_DATA = [
   {
@@ -71,7 +72,7 @@ function ImportantLocations() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
         <span className="ml-4">Loading announcements...</span>
       </div>
     );
@@ -82,40 +83,88 @@ function ImportantLocations() {
 
   return (
     <div className="px-4 py-6">
-      <h2 className="text-2xl font-bold text-center mb-6 pb-2 border-b border-gray-300">
-        වැදගත් ස්ථාන
+      <h2 className="text-2xl font-bold text-center mb-6 pb-2 border-b border-amber-300" style={{ fontFamily: "TharuDigitalRun"}}>
+        {'jeo.;a ia:dk'}
       </h2>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {locations.map(location => (
-          <LocationCard key={location.id} location={location} />
-        ))}
+        <AnimationSequence 
+          direction="right" 
+          baseDelay={100} 
+          staggerDelay={150} 
+          duration={800} 
+          distance={30} 
+          easing="ease-out"
+          className="contents"
+        >
+          {locations.map(location => (
+            <LocationCard key={location.id} location={location} />
+          ))}
+        </AnimationSequence>
       </div>
     </div>
   );
 }
 
 const LocationCard = ({ location }) => (
-  <div className="bg-yellow-50 p-4 rounded-lg shadow-md">
-    <p className="text-sm text-gray-600 mb-2">{location.timestamp}</p>
-    <div className="bg-yellow-500 p-3 rounded-lg">
-      <h3 className="text-lg font-bold text-black text-center">{location.name}</h3>
+  <div className="bg-[#f6aa1c] bg-opacity-10 p-4 rounded-lg shadow-lg border border-[#220901] border-opacity-20 transition-all hover:shadow-xl hover:scale-[1.01]">
+    <p className="text-sm text-[#220901] opacity-80 mb-2 font-medium">
+      {location.timestamp}
+    </p>
+    
+    <div 
+      className="bg-gradient-to-r from-[#941B0C] to-[#BC3908] p-3 rounded-lg shadow-inner"
+      style={{ boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)' }}
+    >
+      <h3 
+        className="text-lg font-bold text-[#f6aa1c] text-center tracking-wide"
+        style={{ 
+          fontFamily: "NotoSansSinhala",
+          textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+        }}
+      >
+        {location.name}
+      </h3>
     </div>
-    <div className="h-40 w-full mt-2 rounded-lg overflow-hidden">
+    
+    <div className="h-40 w-full mt-3 rounded-lg overflow-hidden border-2 border-[#621708] border-opacity-30">
       <MapContainer
         center={location.coordinates}
         zoom={16}
-        style={{ height: "100%", width: "100%" }}
+        style={{ 
+          height: "100%", 
+          width: "100%",
+          filter: 'sepia(20%) saturate(120%)' // Vintage map effect
+        }}
         scrollWheelZoom={false}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-        <Marker position={location.coordinates}>
-          <Popup>{location.name}</Popup>
+        <Marker 
+          position={location.coordinates}
+          icon={new L.Icon({
+            iconUrl: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23BC3908"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+          })}
+        >
+          <Popup className="font-bold text-[#621708]">
+            {location.name}
+          </Popup>
         </Marker>
       </MapContainer>
+    </div>
+    
+    <div className="flex justify-between mt-3 text-xs">
+      <span className="text-[#220901] opacity-70">
+        Lat: {location.coordinates[0].toFixed(4)}
+      </span>
+      <span className="text-[#220901] opacity-70">
+        Lng: {location.coordinates[1].toFixed(4)}
+      </span>
     </div>
   </div>
 );
