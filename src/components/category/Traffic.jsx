@@ -43,8 +43,9 @@ function Traffic() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "TharuDigitalRun"}}>
-        {'r: jdyk ;onoh'}
+      <h2 className="text-4xl font-bold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
+        {/* {'r: jdyk ;onoh'} */}
+        වාහන තොරතුරු හා වාහන නතර කිරීම
       </h2>
       {trafficUpdates.length === 0 ? (
         <div className="text-center py-8 text-gray-500">

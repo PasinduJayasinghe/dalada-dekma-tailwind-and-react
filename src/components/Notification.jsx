@@ -9,7 +9,46 @@ function Notification({ staticMessages = [], interval = 5000 }) {
   const [databaseNotifications, setDatabaseNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch notifications from the database
+  // Dummy data for Sri Dalada Perahera notifications
+  useEffect(() => {
+    const loadingTimer = setTimeout(() => {
+      const dummyNotifications = [
+        {
+          id: 1,
+          content: "ශ්‍රී දළදා මාළිගාව විවෘත වේලාවන්: උදෑසන 5.30 සිට සවස 8.00 දක්වා",
+          isActive: true
+        },
+        {
+          id: 2,
+          content: "දළදා පෙරහැර ආරම්භය: ලබන අගහරුවාදා සවස 7.00 ට",
+          isActive: true
+        },
+        {
+          id: 3,
+          content: "පූජා සඳහා විශේෂ පූජා භාණ්ඩ ගෙන ඒමෙන් වලකින්න",
+          isActive: true
+        },
+        {
+          id: 4,
+          content: "ප්‍රධාන ප්‍රදර්ශන ශාලාවේ පිවිසුම් ටිකට්ටු ලබා ගැනීම සඳහා පූර්ව ඇණවුම් කරන්න",
+          isActive: true
+        },
+        {
+          id: 5,
+          content: "ආරක්ෂක පරීක්ෂණ සඳහා පැමිණෙන සියලුම භක්තිකයින් සාදරයෙන් පිළිගනිමු",
+          isActive: true
+        }
+      ];
+
+      setDatabaseNotifications(dummyNotifications);
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(loadingTimer);
+  }, []);
+
+  /*
+  // Original API call code (commented)
   useEffect(() => {
     const controller = new AbortController();
     
@@ -40,10 +79,11 @@ function Notification({ staticMessages = [], interval = 5000 }) {
     
     return () => controller.abort();
   }, []);
+  */
 
   // Combine and memoize messages
   const displayMessages = useMemo(() => {
-    if (isLoading) return staticMessages.length > 0 ? staticMessages : ['Loading notifications...'];
+    if (isLoading) return staticMessages.length > 0 ? staticMessages : ['ප්‍රකාශන ලබා ගැනීමට සූදානම් වෙමින්...'];
     
     const activeDbNotifications = Array.isArray(databaseNotifications)
       ? databaseNotifications
@@ -52,7 +92,7 @@ function Notification({ staticMessages = [], interval = 5000 }) {
       : [];
 
     const combined = [...staticMessages, ...activeDbNotifications];
-    return combined.length > 0 ? combined : ['No notifications available'];
+    return combined.length > 0 ? combined : ['පවතින ප්‍රකාශන නොමැත'];
   }, [staticMessages, databaseNotifications, isLoading]);
 
   // Auto-rotation effect
@@ -103,7 +143,7 @@ function Notification({ staticMessages = [], interval = 5000 }) {
           <button
             onClick={goToPrevious}
             className="nav-button prev-button"
-            aria-label="Previous notification"
+            aria-label="පසු ප්‍රකාශය"
           >
             <BsChevronCompactLeft size={20} />
           </button>
@@ -112,7 +152,7 @@ function Notification({ staticMessages = [], interval = 5000 }) {
         <div className="messages-container">
           <div
             className={`message ${isAnimating ? (slideDirection === 'left' ? 'slide-out-left' : 'slide-out-right') : ''}`}
-            style={{ fontFamily : "NotoSansSinhala" }}
+            style={{ fontFamily: "NotoSansSinhala" }}
           >
             {displayMessages[currentIndex]}
           </div>
@@ -120,6 +160,7 @@ function Notification({ staticMessages = [], interval = 5000 }) {
           {isAnimating && (
             <div
               className={`message ${slideDirection === 'left' ? 'slide-in-left' : 'slide-in-right'}`}
+              style={{ fontFamily: "NotoSansSinhala" }}
             >
               {displayMessages[
                 (currentIndex + (slideDirection === 'right' ? -1 : 1) + displayMessages.length) % 
@@ -133,7 +174,7 @@ function Notification({ staticMessages = [], interval = 5000 }) {
           <button
             onClick={goToNext}
             className="nav-button next-button"
-            aria-label="Next notification"
+            aria-label="මීළඟ ප්‍රකාශය"
           >
             <BsChevronCompactRight size={20} />
           </button>

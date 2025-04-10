@@ -133,7 +133,7 @@ function Footer() {
           </div>
           
           {/* Vertical divider - only visible on larger screens */}
-          <div className="hidden lg:block h-48 border-l border-[#941B0C] mx-8 opacity-60"></div>
+          <div className="hidden lg:block h-56 border-l border-[#941B0C] mx-8 opacity-60"></div>
           
           {/* Contact Details - Right Section */}
           <div className="hidden md:block w-full lg:w-2/5">

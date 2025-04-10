@@ -29,7 +29,7 @@ const DaladaBufferEffect = () => {
   }, []);
   
   return (
-    <div className={`fixed inset-0 z-40 flex items-center justify-center bg-amber-800 ${loaded ? 'pointer-events-none' : ''}`}
+    <div className={`fixed inset-0 z-50 flex items-center justify-center bg-amber-800 ${loaded ? 'pointer-events-none' : ''}`}
     style={{
         opacity: bufferOpacity,
         transform: `scale(${bufferScale})`,
