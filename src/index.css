@@ -1,2 +1,25 @@
 @import "tailwindcss";
 
+@font-face {
+    font-family: "Iskolapotha";
+    src: url("../src/assets/fonts/ISKPOTA.TTF") format("truetype");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "TharuDigitalSansala";
+    src: url("../src/assets/fonts/tharu_digital_sansala.ttf") format("truetype");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "NotoSansSinhala";
+    src: url("../src/assets/fonts/NotoSansSinhala-VariableFont_wdth\,wght.ttf") format("truetype");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "TharuDigitalRun";
+    src: url("../src/assets/fonts/tharu_digital_run.ttf") format("truetype");
+    font-weight: normal;
+}

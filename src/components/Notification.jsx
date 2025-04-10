@@ -1,31 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import './notification.css';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
+import './notification.css';
 
-function Notification({ messages = [], databaseNotifications = [], interval = 3000 }) {
+function Notification({ staticMessages = [], interval = 5000 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState('left');
   const [isAnimating, setIsAnimating] = useState(false);
-  const [displayMessages, setDisplayMessages] = useState([]);
+  const [databaseNotifications, setDatabaseNotifications] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Combine hardcoded messages with active database notifications
+  // Fetch notifications from the database
   useEffect(() => {
-    const activeDbNotifications = databaseNotifications
-      .filter(notification => notification.isActive)
-      .map(notification => notification.content);
+    const controller = new AbortController();
     
-    const combined = [...messages, ...activeDbNotifications];
-    setDisplayMessages(combined.length > 0 ? combined : []);
-  }, [messages, databaseNotifications]);
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/notifications', {
+          signal: controller.signal
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setDatabaseNotifications(data);
+        } else {
+          console.error('Failed to fetch notifications');
+          setDatabaseNotifications([]);
+        }
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error('Error fetching notifications:', error);
+          setDatabaseNotifications([]);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchNotifications();
+    
+    return () => controller.abort();
+  }, []);
 
+  // Combine and memoize messages
+  const displayMessages = useMemo(() => {
+    if (isLoading) return staticMessages.length > 0 ? staticMessages : ['Loading notifications...'];
+    
+    const activeDbNotifications = Array.isArray(databaseNotifications)
+      ? databaseNotifications
+          .filter(notification => notification.isActive)
+          .map(notification => notification.content)
+      : [];
+
+    const combined = [...staticMessages, ...activeDbNotifications];
+    return combined.length > 0 ? combined : ['No notifications available'];
+  }, [staticMessages, databaseNotifications, isLoading]);
+
+  // Auto-rotation effect
   useEffect(() => {
-    if (displayMessages.length > 1 && interval > 0) {
-      const timer = setInterval(() => {
+    if (displayMessages.length <= 1) return;
+    
+    const timer = setInterval(() => {
+      if (!isAnimating) {
         goToNextAuto();
-      }, interval);
-      return () => clearInterval(timer);
-    }
-  }, [displayMessages, interval, currentIndex]);
+      }
+    }, interval);
+    
+    return () => clearInterval(timer);
+  }, [displayMessages, interval, isAnimating]);
 
   const goToPrevious = () => {
     if (displayMessages.length <= 1 || isAnimating) return;
@@ -33,7 +74,7 @@ function Notification({ messages = [], databaseNotifications = [], interval = 30
     setIsAnimating(true);
     setSlideDirection('right');
     setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex - 1 + displayMessages.length) % displayMessages.length);
+      setCurrentIndex(prev => (prev - 1 + displayMessages.length) % displayMessages.length);
       setIsAnimating(false);
     }, 300);
   };
@@ -44,76 +85,60 @@ function Notification({ messages = [], databaseNotifications = [], interval = 30
     setIsAnimating(true);
     setSlideDirection('left');
     setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % displayMessages.length);
+      setCurrentIndex(prev => (prev + 1) % displayMessages.length);
       setIsAnimating(false);
     }, 300);
   };
 
   const goToNextAuto = () => {
-    if (displayMessages.length <= 1 || isAnimating) return;
-    
-    setIsAnimating(true);
-    setSlideDirection('left');
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % displayMessages.length);
-      setIsAnimating(false);
-    }, 300);
+    goToNext();
   };
 
   if (displayMessages.length === 0) return null;
 
   return (
-    <div className="notification-bar cursor-default bg-amber-500 text-black py-4 px-8 flex items-center justify-center overflow-hidden relative min-h-[60px]">
-      {/* Left navigation arrow */}
-      {displayMessages.length > 1 && (
-        <button
-          onClick={goToPrevious}
-          className="font-bold bg-amber-100 hover:bg-amber-200 cursor-pointer shadow-md absolute left-2 text-black rounded-full h-8 w-8 flex items-center justify-center z-10 transition-colors duration-200"
-          aria-label="Previous notification"
-        >
-          <BsChevronCompactLeft size={20} className="ml-0.5" />
-        </button>
-      )}
+    <div className="notification-container cursor-default">
+      <div className="notification-bar">
+        {displayMessages.length > 1 && (
+          <button
+            onClick={goToPrevious}
+            className="nav-button prev-button"
+            aria-label="Previous notification"
+          >
+            <BsChevronCompactLeft size={20} />
+          </button>
+        )}
 
-      {/* Notification text container */}
-      <div className="relative w-full h-full overflow-hidden flex items-center justify-center">
-        {/* Current notification text */}
-        <div
-          className={`notification-text text-center text-sm sm:text-base md:text-lg font-bold uppercase tracking-wide w-full ${
-            isAnimating
-              ? slideDirection === 'left'
-                ? 'animate-slide-out-left'
-                : 'animate-slide-out-right'
-              : ''
-          }`}
-        >
-          {displayMessages[currentIndex]}
+        <div className="messages-container">
+          <div
+            className={`message ${isAnimating ? (slideDirection === 'left' ? 'slide-out-left' : 'slide-out-right') : ''}`}
+            style={{ fontFamily : "NotoSansSinhala" }}
+          >
+            {displayMessages[currentIndex]}
+          </div>
+
+          {isAnimating && (
+            <div
+              className={`message ${slideDirection === 'left' ? 'slide-in-left' : 'slide-in-right'}`}
+            >
+              {displayMessages[
+                (currentIndex + (slideDirection === 'right' ? -1 : 1) + displayMessages.length) % 
+                displayMessages.length
+              ]}
+            </div>
+          )}
         </div>
 
-        {/* Next notification text (for animation) */}
-        {isAnimating && (
-          <div
-            className={`notification-text text-center text-sm sm:text-base md:text-lg font-bold uppercase tracking-wide w-full ${
-              slideDirection === 'left'
-                ? 'animate-slide-in-left'
-                : 'animate-slide-in-right'
-            }`}
+        {displayMessages.length > 1 && (
+          <button
+            onClick={goToNext}
+            className="nav-button next-button"
+            aria-label="Next notification"
           >
-            {displayMessages[(currentIndex + (slideDirection === 'right' ? -1 : 1) + displayMessages.length) % displayMessages.length]}
-          </div>
+            <BsChevronCompactRight size={20} />
+          </button>
         )}
       </div>
-
-      {/* Right navigation arrow */}
-      {displayMessages.length > 1 && (
-        <button
-          onClick={goToNext}
-          className="font-bold bg-amber-100 hover:bg-amber-200 cursor-pointer shadow-md absolute right-2 text-black rounded-full h-8 w-8 flex items-center justify-center z-10 transition-colors duration-200"
-          aria-label="Next notification"
-        >
-          <BsChevronCompactRight size={20} className="mr-0.5" />
-        </button>
-      )}
     </div>
   );
 }

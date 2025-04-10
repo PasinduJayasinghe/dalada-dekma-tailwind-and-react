@@ -28,7 +28,7 @@ function Traffic() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
       </div>
     );
   }
@@ -43,23 +43,33 @@ function Traffic() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4 border-b pb-2 border-gray-300 text-center">
-        රථ වාහන තදබදය පිලිබද තොරතුරු
+      <h2 className="text-2xl font-bold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "TharuDigitalRun"}}>
+        {'r: jdyk ;onoh'}
       </h2>
       {trafficUpdates.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           No traffic updates available at the moment.
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
-          {trafficUpdates.map((update, index) => (
-            <Grid key={index} timestamp={update.createdDate}>
-              <div>
-                <h3 className="text-lg font-bold mb-2">{update.title}</h3>
-                <p className="whitespace-pre-line">{update.content}</p>
-              </div>
-            </Grid>
-          ))}
+        <div className="grid grid-cols-2 lg:grid-cols-2 gap-4">
+          <AnimationSequence 
+            direction="right" 
+            baseDelay={100} 
+            staggerDelay={150} 
+            duration={800} 
+            distance={30} 
+            easing="ease-out"
+            className="contents"
+          >
+            {trafficUpdates.map((update, index) => (
+              <Grid key={index} timestamp={update.createdDate}>
+                <div style={{ fontFamily : "NotoSansSinhala" }}>
+                  <h3 className="text-lg font-bold mb-2">{update.title}</h3>
+                  <p className="whitespace-pre-line">{update.content}</p>
+                </div>
+              </Grid>
+            ))}
+          </AnimationSequence>
         </div>
       )}
     </div>
