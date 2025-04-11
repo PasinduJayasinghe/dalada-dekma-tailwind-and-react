@@ -30,13 +30,12 @@ function AdminLogin() {
     setIsLoading(true);
     
     try {
-      const response = await fetch('http://localhost:5000/api/admin/login', { // Update port as needed
+      const response = await fetch('http://localhost:5000/api/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(credentials),
-        credentials: 'include', // This is crucial for cookies
+        body: JSON.stringify(credentials)
       });
   
       const data = await response.json();
@@ -45,9 +44,9 @@ function AdminLogin() {
         throw new Error(data.message || 'Login failed');
       }
       
-      // Store the token in localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('admin', JSON.stringify(data.admin));
+      // Store token and admin data
+      localStorage.setItem('adminToken', data.token);
+      localStorage.setItem('adminData', JSON.stringify(data.admin));
       
       // Redirect to dashboard
       navigate('/admin/dashboard');

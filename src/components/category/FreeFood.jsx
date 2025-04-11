@@ -1,87 +1,88 @@
 import React, { useState, useEffect } from "react";
-import Grid from "../Grid";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 import AnimationSequence from "../Animation/AnimationSequence";
+import Grid from "../Grid";
 
 function FreeFood() {
+  const [activeTab, setActiveTab] = useState("services"); // 'services' or 'locations'
+  const [foodLocations, setFoodLocations] = useState([]);
   const [foodServices, setFoodServices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Simulate loading delay
-    const loadingTimer = setTimeout(() => {
-      // Dummy free food services data
-      const dummyFoodServices = [
-        {
-          id: 1,
-          title: "දළදා මාළිගාව අසල දාන ශාලාව",
-          content: "උදෑසන 7:00 සිට සවස 2:00 දක්වා දහවල් ආහාර නොමිලේ බෙදා දෙනු ලැබේ. බත්, පරිප්පු, වියළි මාළු, පලතුරු ඇතුළු ආහාර වේල සපයනු ලැබේ.",
-          createdDate: "2025-04-09T08:30:00"
-        },
-        {
-          id: 2,
-          title: "මහනුවර පොදු පුස්තකාලය අසල",
-          content: "අලුත් අවුරුදු සමය නිමිත්තෙන් අප්‍රේල් 10-14 දිනවල උදෑසන 9:00 සිට නොමිලේ තේ හා බිස්කට් බෙදා දෙනු ලැබේ.",
-          createdDate: "2025-04-08T10:45:00"
-        },
-        {
-          id: 3,
-          title: "කඩුගන්නාව සිරි සුමන පිරිවෙන",
-          content: "සෑම සෙනසුරාදා දිනකම උදෑසන 10:00 සිට සවස 1:00 දක්වා දාන ශාලාව විවෘතව පවතී. සියලුම අමුත්තන්ට ස්වාගතයි.",
-          createdDate: "2025-04-07T14:00:00"
-        },
-        {
-          id: 4,
-          title: "සිංහ සමාජ සේවා ව්‍යාපෘතිය",
-          content: "අසරණ පුද්ගලයින් සඳහා දිනපතා රාත්‍රී 7:00 සිට 9:00 දක්වා මහනුවර නගර ශාලාව අසල ආහාර පැකට් සහ පානීය ජලය බෙදා දෙනු ලැබේ.",
-          createdDate: "2025-04-06T16:20:00"
-        },
-        {
-          id: 5,
-          title: "සමගි ප්‍රජා දායකත්ව වැඩසටහන",
-          content: "සෑම ඉරිදා දිනක උදෑසන 8:00 සිට 11:00 දක්වා අඩු ආදායම්ලාභි පවුල් සඳහා සතියක ආහාර සැපයුම් ලබා දීම සිදු කෙරේ. ලියාපදිංචි වීම සඳහා විහාරස්ථානයේ කාර්යාලය අමතන්න.",
-          createdDate: "2025-04-05T09:30:00"
-        }
-      ];
+  // Update the useEffect hook for locations
+useEffect(() => {
+  let loadingTimer;
+  let fetchInterval;
 
-      // Sort food services by date (newest first)
-      const sortedData = dummyFoodServices.sort((a, b) =>
-        new Date(b.createdDate) - new Date(a.createdDate)
-      );
-      
-      setFoodServices(sortedData);
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(loadingTimer);
-
-    /* Original API call code preserved as a comment:
-    const fetchFoodServices = async () => {
-      try {
-        const response = await fetch('https://localhost:7249/api/Notices/category/2');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        // Sort services by date (newest first)
-        const sortedData = data.sort((a, b) =>
-          new Date(b.createdDate) - new Date(a.createdDate)
-        );
-        setFoodServices(sortedData);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
+  const fetchFoodLocations = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/locations/category/2'); // Category 2 for free food
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
+      const data = await response.json();
+      setFoodLocations(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    fetchFoodServices();
+  loadingTimer = setTimeout(() => {
+    fetchFoodLocations();
+    fetchInterval = setInterval(fetchFoodLocations, 300000);
+  }, 500);
 
-    // Optional: Set up auto-refresh every 5 minutes
-    const interval = setInterval(fetchFoodServices, 300000);
-    return () => clearInterval(interval);
-    */
+  return () => {
+    clearTimeout(loadingTimer);
+    clearInterval(fetchInterval);
+  };
+}, []);
+
+  useEffect(() => {
+      let loadingTimer;
+      let fetchInterval;
+    
+      const fetchFoodServices = async () => {
+        try {
+          const response = await fetch('http://localhost:5000/api/notices/category/2'); // Category 2 for free food
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          const sortedData = data.sort((a, b) =>
+            new Date(b.createdDate) - new Date(a.createdDate)
+          );
+          setFoodServices(sortedData);
+          setError(null);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+    
+      loadingTimer = setTimeout(() => {
+        fetchFoodServices();
+        fetchInterval = setInterval(fetchFoodServices, 300000);
+      }, 500);
+
+    return () => {
+      clearTimeout(loadingTimer);
+      clearInterval(fetchInterval);
+    }
   }, []);
+
+  const openInGoogleMaps = (coordinates) => {
+    const [lat, lng] = coordinates;
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    window.open(googleMapsUrl, '_blank');
+  };
 
   if (isLoading) {
     return (
@@ -101,19 +102,66 @@ function FreeFood() {
   }
 
   return (
-    <div>
+    <div className="px-4 py-6">
       <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
         {'fkdñf,a wdydr'}
         {/* නොමිලේ ආහාර */}
       </h2>
-      {foodServices.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          No free food services available at the moment.
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+
+      {/* Navigation Tabs */}
+      <div className="flex border-b border-gray-200 mb-6">
+        <button
+          className={`py-2 px-4 font-medium ${activeTab === 'services' ? 'text-amber-600 border-b-2 border-amber-500' : 'text-gray-500'}`}
+          onClick={() => setActiveTab('services')}
+          style={{ fontFamily: "NotoSansSinhala" }}
+        >
+          ආහාර සේවා
+        </button>
+        <button
+          className={`py-2 px-4 font-medium ${activeTab === 'locations' ? 'text-amber-600 border-b-2 border-amber-500' : 'text-gray-500'}`}
+          onClick={() => setActiveTab('locations')}
+          style={{ fontFamily: "NotoSansSinhala" }}
+        >
+          ස්ථාන සිතියම්
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'services' && (
+        <>
+          {foodServices.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              No free food services available at the moment.
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              <AnimationSequence 
+                direction="right" 
+                baseDelay={100} 
+                staggerDelay={150} 
+                duration={800} 
+                distance={30} 
+                easing="ease-out"
+                className="contents"
+              >
+                {foodServices.map((service) => (
+                  <Grid key={service.id} timestamp={service.createdDate}>
+                    <div style={{ fontFamily: "NotoSansSinhala" }}>
+                      <h3 className="text-lg font-bold mb-2">{service.title}</h3>
+                      <p className="whitespace-pre-line">{service.content}</p>
+                    </div>
+                  </Grid>
+                ))}
+              </AnimationSequence>
+            </div>
+          )}
+        </>
+      )}
+
+      {activeTab === 'locations' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimationSequence 
-            direction="right" 
+            direction="up" 
             baseDelay={100} 
             staggerDelay={150} 
             duration={800} 
@@ -121,14 +169,56 @@ function FreeFood() {
             easing="ease-out"
             className="contents"
           >
-          {foodServices.map((service) => (
-            <Grid key={service.id} timestamp={service.createdDate}>
-              <div style={{ fontFamily : "NotoSansSinhala" }}>
-                <h3 className="text-lg font-bold mb-2">{service.title}</h3>
-                <p className="whitespace-pre-line">{service.content}</p>
+            {foodLocations.map(location => (
+              <div 
+                key={location.id} 
+                className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow"
+              >
+                <div className="h-48">
+                  <MapContainer
+                    center={location.coordinates}
+                    zoom={16}
+                    style={{ height: "100%", width: "100%" }}
+                    scrollWheelZoom={false}
+                    className="rounded-t-lg"
+                  >
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    />
+                    <Marker 
+                      position={location.coordinates}
+                      icon={L.icon({
+                        iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34]
+                      })}
+                    >
+                      <Popup>{location.name}</Popup>
+                    </Marker>
+                  </MapContainer>
+                </div>
+                <div className="p-4" style={{ fontFamily: "NotoSansSinhala" }}>
+                  <h4 className="text-lg font-bold mb-2">{location.name}</h4>
+                  <p className="text-gray-700 mb-2">{location.description}</p>
+                  <div className="flex justify-between text-sm">
+                    <span className="font-medium text-amber-600">වේලාව: {location.hours}</span>
+                    <span className="font-medium text-amber-600">දුරකථන: {location.contact}</span>
+                  </div>
+                  <button 
+                    onClick={() => openInGoogleMaps(location.coordinates)}
+                    className="mt-3 w-full bg-amber-500 hover:bg-amber-600 text-white py-2 px-4 rounded transition-colors flex items-center justify-center"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    පිහිටීම බලන්න
+                  </button>
+                </div>
               </div>
-            </Grid>
-          ))}
+            ))}
           </AnimationSequence>
         </div>
       )}

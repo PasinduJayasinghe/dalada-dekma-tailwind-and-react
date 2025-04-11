@@ -2,21 +2,18 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Announcements from "./category/announcements";
 import ImportantLocations from "./category/ImportantLocations";
-import Traffic from "./category/traffic";
-import Police from "./category/police"; // Fixed import name
+import Police from "./category/Security";
 import FreeFood from "./category/FreeFood";
 import SanitaryFacilities from "./category/SanitaryFacilities";
 import MedicalServices from "./category/MedicalServices";
 import LostAndFound from "./category/LostAndFound";
 import VehicleInfo from "./category/VehicleInfo";
-import FireSafety from "./category/FireSafety";
 import WaterDistribution from "./category/WaterDistribution";
-import WorshipServices from "./category/WorshipServices";
+import FAQ from "./category/FAQ";
 import WeatherReports from "./category/WeatherReports";
 import InfoCenter from "./category/InfoCenter";
 import Background from "../assets/images/daladamaligawa5.png";
-import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaFire, FaWater, FaCloudSun, FaInfoCircle } from "react-icons/fa";
-import { faDharmachakra } from '@fortawesome/free-solid-svg-icons';
+import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaFire, FaWater, FaCloudSun, FaInfoCircle, FaQuestion } from "react-icons/fa";
 import AnimationSequence from "./Animation/AnimationSequence";
 
 function CategoryContainer() {
@@ -38,59 +35,51 @@ function CategoryContainer() {
       icon: FaMapMarkerAlt
     },{
       id: "police",
-      title: "පොලිස් නිවේදන",
-      title_fon: "fmd,sia ksfõok",
-      description: "Police updates and information",
+      title: "ආරක්ෂක නිවේදන",
+      title_fon: "wdrlaIl ksfõok",
+      description: "Security Messages",
       component: Police, 
       icon: FaTrafficLight
     },
     {
       id: "freefood",
-      title: "නොමිලේ ආහාර",
-      title_fon: "fkdñf,a wdydr",
-      description: "Free food services",
+      title: "දන්සැල්",
+      title_fon: "okaie,a",
+      description: "Danzal Zone",
       component: FreeFood,
       icon: FaUtensils
     },
     {
       id: "sanitary",
-      title: "සනීපාරක්ෂක පහසුකම් / වැසිකිලි",
-      title_fon: "ikSmdrlaIl myiqlï $ jeisls,s",
-      description: "Sanitary facilities and toilets",
+      title: "සනීපාරක්ෂක",
+      title_fon: "ikSmdrlaIl",
+      description: "Sanitary",
       component: SanitaryFacilities,
       icon: FaToilet
     },
     {
       id: "medical",
-      title: "හදිසි වෛද්‍ය සේවා",
+      title: "හදිසි වෛද්‍ය සේවා හා කදවුරු",
       title_fon: "yosis ffjoH fiajd",
-      description: "Emergency medical services",
+      description: "Emergency medical services & Camps",
       component: MedicalServices,
       icon: FaMedkit
     },
     {
       id: "lostfound",
-      title: "නැතිවීම් හා සොයාගැනීම්",
-      title_fon: "ke;sùï yd fidhd.ekSï",
-      description: "Lost and found items",
+      title: "අතරමන් වූවන් සොයා ගැනීම",
+      title_fon: "w;ruka jQjka fidhd .ekSu",
+      description: "Find Lost Person",
       component: LostAndFound,
       icon: FaSearch
     },
     {
       id: "vehicles",
-      title: "වාහන තොරතුරු හා වාහන නතර කිරීම්",
-      title_fon: "jdyk f;dr;=re yd jdyk k;r lsÍï",
-      description: "Vehicle information and parking",
+      title: "වාහන නතර කිරීම් / ප්‍රවාහන සේවාසේවා",
+      title_fon: "jdyk k;r lsÍï yd m%jdyk fiajd",
+      description: "Vehicle Parking & Transport",
       component: VehicleInfo,
       icon: FaCar
-    },
-    {
-      id: "fire",
-      title: "ගිනි ආරක්ෂක",
-      title_fon: ".sks wdrlaIl",
-      description: "Fire safety",
-      component: FireSafety,
-      icon: FaFire
     },
     {
       id: "water",
@@ -101,12 +90,12 @@ function CategoryContainer() {
       icon: FaWater
     },
     {
-      id: "worship",
-      title: "තේවාවන් හා වන්දනා",
-      title_fon: "f;ajdjka yd jkaokd",
-      description: "Services and worship",
-      component: WorshipServices,
-      icon: faDharmachakra
+      id: "faq",
+      title: "නිතර අසන පැනපැන",
+      title_fon: "ks;r wik mek",
+      description: "Frequently Asked Questions",
+      component: FAQ,
+      icon: FaQuestion
     },
     {
       id: "weather",
@@ -178,7 +167,7 @@ function CategoryContainer() {
             <AnimationSequence 
               direction="right" 
               baseDelay={100} 
-              staggerDelay={150} 
+              staggerDelay={100} 
               duration={800} 
               distance={30} 
               easing="ease-out"

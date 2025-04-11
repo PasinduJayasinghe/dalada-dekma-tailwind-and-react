@@ -8,6 +8,7 @@ import CategoryContainer from './components/CategoryContainer';
 import Footer from './components/Footer';
 import AdminLogin from "./components/admin/AdminLogin";
 import AdminDashboard from './components/admin/AdminDashboard';
+import AuthWrapper from './components/hooks/AuthWrapper';
 import DaladaBufferEffect from './components/DaladaBufferEffect';
 
 // Layout component for the main public site
@@ -42,7 +43,11 @@ function App() {
         
         {/* Admin Routes - no Banner/Notification */}
         <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/dashboard" element={
+          <AuthWrapper>
+            <AdminDashboard />
+          </AuthWrapper>
+        } />
       </Routes>
     </Router>
   );

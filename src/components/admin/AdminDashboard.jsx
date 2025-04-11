@@ -1,439 +1,78 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import AdminHeader from "./AdminHeader";
+import AdminSidebar from "./AdminSidebar.jsx";
+import AnnouncementsSection from "./sections/AnnouncementsSection .jsx";
+import NotificationsSection from "./sections/NotificationsSection .jsx";
+import LocationsSection from "./sections/LocationsSection .jsx";
 
 function AdminDashboard() {
-  const [activeSection, setActiveSection] = useState('announcements');
-  const [notices, setNotices] = useState([]);
-  const [notifications, setNotifications] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [activeSection, setActiveSection] = useState("announcements");
+  const [data, setData] = useState([]);
   const navigate = useNavigate();
-  
-  const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    categoryId: 6, // Default to first category
-  });
 
-  // Map of category IDs to category names
-  const categoryMap = {
-    6: "Important Notices",
-    2: "Traffic Updates",
-    3: "Important Locations",
-    5: "New Updates"
-  };
-
-  // Fetch data based on active section
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
+      const token = localStorage.getItem("adminToken");
+      if (!token) {
+        navigate("/admin");
+        return;
+      }
+
       try {
-        switch(activeSection) {
-          case 'announcements':
-            const noticesRes = await fetch('https://localhost:7249/api/Notices/category/2');
-            const noticesData = await noticesRes.json();
-            setNotices(noticesData);
-            break;
-          case 'notifications':
-            const notifsRes = await fetch('https://localhost:7249/api/Notifications');
-            const notifsData = await notifsRes.json();
-            setNotifications(notifsData);
-            break;
-          default:
-            break;
+        const response = await fetch("http://localhost:5000/api/admin/data", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 401) {
+          // Token expired or invalid
+          localStorage.removeItem("adminToken");
+          navigate("/admin");
+          return;
         }
-      } catch (err) {
-        setError('Failed to fetch data: ' + err.message);
-      } finally {
-        setIsLoading(false);
+
+        const data = await response.json();
+        setData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [activeSection]);
-
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    try {
-      let endpoint = '';
-      let body = {};
-      
-      switch(activeSection) {
-        case 'announcements':
-          endpoint = 'Notices';
-          const currentDate = new Date().toISOString().split('T')[0];
-          
-          body = {
-            title: formData.title,
-            content: formData.content,
-            categoryId: Number(formData.categoryId),
-            categoryName: categoryMap[formData.categoryId],
-            formattedDate: currentDate
-          };
-          break;
-        case 'notifications':
-          endpoint = 'Notifications';
-          body = {
-            content: formData.content,
-            isActive: true
-          };
-          break;
-        default:
-          break;
-      }
-
-      const response = await fetch(`https://localhost:7249/api/${endpoint}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        throw new Error(`Failed to save: ${errorData}`);
-      }
-
-      // Reset form and refresh data
-      setFormData({
-        title: '',
-        content: '',
-        categoryId: 6
-      });
-      
-      // Refetch data to update the list
-      const refetchRes = await fetch(`https://localhost:7249/api/${endpoint}`);
-      const newData = await refetchRes.json();
-      
-      if (activeSection === 'announcements') {
-        setNotices(newData);
-      } else if (activeSection === 'notifications') {
-        setNotifications(newData);
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDelete = async (id, type) => {
-    if (!window.confirm('Are you sure you want to delete this item?')) return;
-    
-    try {
-      const endpoint = type === 'notices' ? 'Notices' : 'Notifications';
-      const response = await fetch(`https://localhost:7249/api/${endpoint}/${id}`, {
-        method: 'DELETE'
-      });
-
-      if (!response.ok) {
-        throw new Error('Delete failed');
-      }
-
-      // Update state
-      if (type === 'notices') {
-        setNotices(prev => prev.filter(item => item.id !== id));
-      } else if (type === 'notifications') {
-        setNotifications(prev => prev.filter(item => item.id !== id));
-      }
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const toggleNotificationStatus = async (id) => {
-    try {
-      const response = await fetch(`https://localhost:7249/api/Notifications/${id}/toggle`, {
-        method: 'PATCH'
-      });
-
-      if (!response.ok) {
-        throw new Error('Toggle failed');
-      }
-
-      // Update the specific notification's status
-      setNotifications(prev => prev.map(notification => 
-        notification.id === id 
-          ? { ...notification, isActive: !notification.isActive } 
-          : notification
-      ));
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('admin');
-    navigate('/');
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminData");
+    navigate("/admin");
   };
 
-  const renderContent = () => {
-    if (isLoading) {
-      return (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
-      );
-    }
-
-    if (error) {
-      return (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-          <button 
-            onClick={() => setError('')} 
-            className="float-right font-bold"
-          >
-            &times;
-          </button>
-        </div>
-      );
-    }
-
-    switch(activeSection) {
-      case 'announcements':
-        return (
-          <div>
-            <h2 className="text-xl font-bold mb-4">Manage Announcements</h2>
-            <div className="mb-6 bg-white p-4 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-3">Add Announcement</h3>
-              <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={formData.title}
-                      onChange={handleFormChange}
-                      className="w-full p-2 border border-gray-300 rounded"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                    <select
-                      name="categoryId"
-                      value={formData.categoryId}
-                      onChange={handleFormChange}
-                      className="w-full p-2 border border-gray-300 rounded"
-                      required
-                    >
-                      <option value="6">Important Notices</option>
-                      <option value="2">Traffic Updates</option>
-                      <option value="3">Important Locations</option>
-                      <option value="5">New Updates</option>
-                    </select>
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
-                    <textarea
-                      name="content"
-                      value={formData.content}
-                      onChange={handleFormChange}
-                      className="w-full p-2 border border-gray-300 rounded h-24"
-                      required
-                    ></textarea>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <button 
-                    type="submit" 
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? 'Saving...' : 'Save Announcement'}
-                  </button>
-                </div>
-              </form>
-            </div>
-            
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Content</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {notices.map(notice => (
-                    <tr key={notice.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">{notice.title}</td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900 max-w-xs truncate">{notice.content}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {new Date(notice.createdDate).toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">{notice.categoryName}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button 
-                          className="text-red-600 hover:text-red-900"
-                          onClick={() => handleDelete(notice.id, 'notices')}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
-        
-      case 'notifications':
-        return (
-          <div>
-            <h2 className="text-xl font-bold mb-4">Manage Notifications</h2>
-            <div className="mb-6 bg-white p-4 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-3">Add New Notification</h3>
-              <form onSubmit={handleSubmit}>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Notification Text</label>
-                  <textarea
-                    name="content"
-                    value={formData.content}
-                    onChange={handleFormChange}
-                    className="w-full p-2 border border-gray-300 rounded h-24"
-                    required
-                  ></textarea>
-                </div>
-                <div className="mt-4">
-                  <button 
-                    type="submit" 
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? 'Adding...' : 'Add Notification'}
-                  </button>
-                </div>
-              </form>
-            </div>
-            
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Content</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {notifications.map(notification => (
-                    <tr key={notification.id}>
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900">{notification.content}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span 
-                          className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                            notification.isActive 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-gray-100 text-gray-800'
-                          }`}
-                        >
-                          {notification.isActive ? 'Active' : 'Inactive'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {new Date(notification.createdDate).toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                        <button 
-                          onClick={() => toggleNotificationStatus(notification.id)}
-                          className={`px-3 py-1 rounded ${
-                            notification.isActive
-                              ? 'bg-yellow-500 text-white hover:bg-yellow-600'
-                              : 'bg-green-500 text-white hover:bg-green-600'
-                          }`}
-                        >
-                          {notification.isActive ? 'Deactivate' : 'Activate'}
-                        </button>
-                        <button 
-                          className="text-red-600 hover:text-red-900 px-3 py-1 border border-red-600 rounded hover:bg-red-50"
-                          onClick={() => handleDelete(notification.id, 'notifications')}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
-        
+  const renderActiveSection = () => {
+    switch (activeSection) {
+      case "announcements":
+        return <AnnouncementsSection />;
+      case "notifications":
+        return <NotificationsSection />;
+      case "locations":
+        return <LocationsSection />;
       default:
-        return <div>Select a section from the sidebar</div>;
+        return <AnnouncementsSection />;
     }
   };
-  
+
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-[#1a2332] text-white py-4 px-6 shadow-md">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <div>
-            <button 
-              className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
-      
+      <AdminHeader onLogout={handleLogout} />
+
       <div className="flex">
-        <aside className="w-64 bg-[#1a2332] min-h-screen text-white p-4">
-          <nav>
-            <ul>
-              <li className="mb-2">
-                <button 
-                  onClick={() => setActiveSection('announcements')}
-                  className={`w-full text-left py-2 px-4 rounded ${activeSection === 'announcements' 
-                    ? 'bg-blue-600 font-medium' 
-                    : 'hover:bg-gray-700'}`}
-                >
-                  Manage Announcements
-                </button>
-              </li>
-              <li className="mb-2">
-                <button 
-                  onClick={() => setActiveSection('notifications')}
-                  className={`w-full text-left py-2 px-4 rounded ${activeSection === 'notifications' 
-                    ? 'bg-blue-600 font-medium' 
-                    : 'hover:bg-gray-700'}`}
-                >
-                  Manage Notifications
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </aside>
-        
-        <main className="flex-1 p-6">
-          {renderContent()}
-        </main>
+        <AdminSidebar
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+        />
+
+        <main className="flex-1 p-6">{renderActiveSection()}</main>
       </div>
     </div>
   );

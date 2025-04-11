@@ -1,73 +1,66 @@
 import React, { useState, useEffect } from "react";
 import Grid from "../Grid";
 import AnimationSequence from "../Animation/AnimationSequence";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
 function VehicleInfo() {
   const [vehicleInfo, setVehicleInfo] = useState([]);
+  const [parkingLocations, setParkingLocations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Simulate loading delay
-    const loadingTimer = setTimeout(() => {
-      // Dummy vehicle information data
-      const dummyVehicleInfo = [
-        {
-          id: 1,
-          title: "අලුත් අවුරුදු සමයේ රථවාහන සීමා",
-          content: "අප්‍රේල් 12-14 දිනවල නගර මධ්‍යයේ මෝටර් රථ ගමනාගමනය සීමා කර ඇත. පොදු ප්‍රවාහන සේවා භාවිතා කරන ලෙස ඉල්ලා සිටිමු. විශේෂ බස් රථ සේවා ක්‍රියාත්මක වේ.",
-          createdDate: "2025-04-10T09:30:00"
-        },
-        {
-          id: 2,
-          title: "නොමිලේ වාහන නවතා තැබීමේ පහසුකම්",
-          content: "අලුත් අවුරුදු සමය නිමිත්තෙන් මහනුවර වෙළඳ සංකීර්ණය අසල, බෝගම්බර ක්‍රීඩාංගණය සහ කන්ද උඩරට මහ රෝහල අසල ප්‍රදේශවල නොමිලේ වාහන නවතා තැබීමේ පහසුකම් ලබා දී ඇත.",
-          createdDate: "2025-04-09T14:45:00"
-        },
-        {
-          id: 3,
-          title: "විකල්ප මාර්ග - දළදා මාළිගාව ප්‍රදේශය",
-          content: "දළදා මාළිගාව ප්‍රදේශයට යාමට පහත විකල්ප මාර්ග භාවිතා කරන්න:\n1. කටුගස්තොට පාර හරහා\n2. අස්ගිරිය පාර හරහා\n3. මහනුවර-කන්දි මාර්ගය හරහා\nගමන් කිරීමට පෙර මාර්ග තත්ත්වය පරීක්ෂා කරන්න.",
-          createdDate: "2025-04-08T11:20:00"
-        },
-        {
-          id: 4,
-          title: "රාත්‍රී නැවතුම් තහනම",
-          content: "අප්‍රේල් 10-15 දිනවල රාත්‍රී 8:00 සිට උදෑසන 6:00 දක්වා පහත ප්‍රධාන මාර්ගවල වාහන නවතා තැබීම තහනම් කර ඇත:\n- ඩී.එස්. සේනානායක මාවත\n- කැන්දි පාර\n- දළදා වීදිය\n- ටී.බී. ජයා මාවත",
-          createdDate: "2025-04-07T16:30:00"
-        },
-        {
-          id: 5,
-          title: "ආබාධිත පුද්ගලයින් සඳහා වාහන නැවතුම්",
-          content: "ආබාධිත පුද්ගලයින් සඳහා වාහන නැවතුම් පහසුකම් පහත ස්ථානවල ලබා දී ඇත:\n- දළදා මාළිගාව පිවිසුම අසල\n- ජාතික කෞතුකාගාරය අසල\n- මහනුවර නගර සභාව ඉදිරිපිට\nකරුණාකර නිසි ආබාධිත හැඳුනුම්පත් ප්‍රදර්ශනය කරන්න.",
-          createdDate: "2025-04-06T09:15:00"
-        }
-      ];
+  // Update the useEffect hook to fetch from API instead of using dummy data
+useEffect(() => {
+  let loadingTimer;
+  let fetchInterval;
 
-      // Sort vehicle info by date (newest first)
-      const sortedData = dummyVehicleInfo.sort((a, b) =>
-        new Date(b.createdDate) - new Date(a.createdDate)
-      );
-      
-      setVehicleInfo(sortedData);
+  const fetchParkingLocations = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/locations/category/8'); // Category 8 for parking
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setParkingLocations(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
+  };
 
-    return () => clearTimeout(loadingTimer);
+  loadingTimer = setTimeout(() => {
+    fetchParkingLocations();
+    fetchInterval = setInterval(fetchParkingLocations, 300000); // Refresh every 5 minutes
+  }, 500);
 
-    /* Original API call code preserved as a comment:
+  return () => {
+    clearTimeout(loadingTimer);
+    clearInterval(fetchInterval);
+  };
+}, []);
+
+  const DEFAULT_CENTER = [7.2906, 80.6337];
+
+  useEffect(() => {
+    let loadingTimer;
+    let fetchInterval;
+
     const fetchVehicleInfo = async () => {
       try {
-        const response = await fetch('https://localhost:7249/api/Notices/category/7');
+        const response = await fetch('http://localhost:5000/api/notices/category/8');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        // Sort info by date (newest first)
         const sortedData = data.sort((a, b) =>
           new Date(b.createdDate) - new Date(a.createdDate)
         );
         setVehicleInfo(sortedData);
+        setError(null);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -75,13 +68,22 @@ function VehicleInfo() {
       }
     };
 
-    fetchVehicleInfo();
+    loadingTimer = setTimeout(() => {
+      fetchVehicleInfo();
+      fetchInterval = setInterval(fetchVehicleInfo, 300000);
+    }, 500);
 
-    // Optional: Set up auto-refresh every 5 minutes
-    const interval = setInterval(fetchVehicleInfo, 300000);
-    return () => clearInterval(interval);
-    */
+    return () => {
+      clearTimeout(loadingTimer);
+      clearInterval(fetchInterval);
+    };
   }, []);
+
+  const openInGoogleMaps = (coordinates) => {
+    const [lat, lng] = coordinates;
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    window.open(googleMapsUrl, '_blank');
+  };
 
   if (isLoading) {
     return (
@@ -101,11 +103,69 @@ function VehicleInfo() {
   }
 
   return (
-    <div>
+    <div className="px-4 py-6">
       <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
-        {'jdyk f;dr;=re yd jdyk k;r lsÍï'}
-        {/* ගිනි ආරක්ෂක */}
+        {'jdyk k;r lsÍï yd m%jdyk fiajd'}
+        {/* වාහන නතර කිරීම් / ප්‍රවාහන සේවාසේවා */}
       </h2>
+      
+      {/* Parking Locations Section */}
+      <div className="mb-12">
+        <h3 className="text-2xl font-semibold mb-4 text-center" style={{ fontFamily: "NotoSansSinhala" }}>
+          වාහන නැවැත්වීම් ස්ථාන
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {parkingLocations.map(location => (
+            <div 
+              key={location.id} 
+              className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow"
+            >
+              <div className="h-48">
+                <MapContainer
+                  center={location.coordinates}
+                  zoom={16}
+                  style={{ height: "100%", width: "100%" }}
+                  scrollWheelZoom={false}
+                  className="rounded-t-lg"
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  />
+                  <Marker 
+                    position={location.coordinates}
+                    icon={L.icon({
+                      iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+                      iconSize: [25, 41],
+                      iconAnchor: [12, 41],
+                      popupAnchor: [1, -34]
+                    })}
+                  >
+                    <Popup>{location.name}</Popup>
+                  </Marker>
+                </MapContainer>
+              </div>
+              <div className="p-4" style={{ fontFamily: "NotoSansSinhala" }}>
+                <h4 className="text-lg font-bold mb-2">{location.name}</h4>
+                <p className="text-gray-700 mb-2">{location.description}</p>
+                <p className="text-sm font-medium text-amber-600">{location.capacity}</p>
+                <button 
+                  onClick={() => openInGoogleMaps(location.coordinates)}
+                  className="mt-3 w-full bg-amber-500 hover:bg-amber-600 text-white py-2 px-4 rounded transition-colors flex items-center justify-center"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  පිහිටීම බලන්න
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Vehicle Information Section */}
       {vehicleInfo.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           No vehicle information available at the moment.
@@ -121,14 +181,14 @@ function VehicleInfo() {
             easing="ease-out"
             className="contents"
           >
-          {vehicleInfo.map((info) => (
-            <Grid key={info.id} timestamp={info.createdDate}>
-              <div style={{ fontFamily : "NotoSansSinhala" }}>
-                <h3 className="text-lg font-bold mb-2">{info.title}</h3>
-                <p className="whitespace-pre-line">{info.content}</p>
-              </div>
-            </Grid>
-          ))}
+            {vehicleInfo.map((info) => (
+              <Grid key={info.id} timestamp={info.formatedDate}>
+                <div style={{ fontFamily: "NotoSansSinhala" }}>
+                  <h3 className="text-lg font-bold mb-2">{info.title}</h3>
+                  <p className="whitespace-pre-line">{info.content}</p>
+                </div>
+              </Grid>
+            ))}
           </AnimationSequence>
         </div>
       )}
