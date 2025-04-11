@@ -78,9 +78,9 @@ function WaterDistribution() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'uOH m%Odk wOHdm;'} */}
-        පානීය ජල බෙදාහැරීම
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+        {'mdkSh c, fnodyeÍu'}
+        {/* පානීය ජල බෙදාහැරීම */}
       </h2>
       {announcements.length === 0 ? (
         <div className="text-center py-8 text-gray-500">

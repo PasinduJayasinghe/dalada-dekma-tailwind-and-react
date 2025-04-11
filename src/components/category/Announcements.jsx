@@ -103,9 +103,9 @@ function Announcements() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'jeo.;a f;dr;=re'} */}
-        වැදගත් තොරතුරු
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+        {'jeo.;a f;dr;=re'}
+        {/* වැදගත් තොරතුරු */}
       </h2>
       {announcements.length === 0 ? (
         <div className="text-center py-8 text-gray-500">

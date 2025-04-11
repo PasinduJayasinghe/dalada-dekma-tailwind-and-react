@@ -102,9 +102,9 @@ function FreeFood() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'fkdñf,a wdydr'} */}
-        නොමිලේ ආහාර
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+        {'fkdñf,a wdydr'}
+        {/* නොමිලේ ආහාර */}
       </h2>
       {foodServices.length === 0 ? (
         <div className="text-center py-8 text-gray-500">

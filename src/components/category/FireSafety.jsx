@@ -78,9 +78,9 @@ function FireSafety() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'wdpd;aul m%fõYh'} */}
-        ගිනි ආරක්ෂක
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+        {'.sks wdrlaIl'}
+        {/* ගිනි ආරක්ෂක */}
       </h2>
       {announcements.length === 0 ? (
         <div className="text-center py-8 text-gray-500">

@@ -102,9 +102,9 @@ function SanitaryFacilities() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'ikSmdrlaIl myiqlï $ jeisls,s'} */}
-        සනීපාරක්ෂක පහසුකම් / වැසිකිලි
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+        {'ikSmdrlaIl myiqlï $ jeisls,s'}
+        {/* සනීපාරක්ෂක පහසුකම් / වැසිකිලි */}
       </h2>
       {facilities.length === 0 ? (
         <div className="text-center py-8 text-gray-500">

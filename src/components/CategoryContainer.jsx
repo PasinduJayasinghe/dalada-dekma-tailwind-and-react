@@ -202,7 +202,7 @@ function CategoryContainer() {
                       </div>
                     </div>
                     <div className="flex flex-col justify-center items-center sm:items-start">
-                      <h2 className="text-2xl sm:text-3xl font-extrabold mb-2" style={{ fontFamily: "IskolaPotha"}}>{category.title}</h2>
+                      <h2 className="text-2xl sm:text-3xl font-extrabold mb-2" style={{ fontFamily: "FMBindumathi"}}>{category.title_fon}</h2>
                       <p className="text-md sm:text-lg mb-4 font-extralight">{category.description}</p>
                     </div>
                   </div>

@@ -102,9 +102,9 @@ function MedicalServices() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'yosis ffjoH fiajd'} */}
-        හදිසි වෛද්‍ය සේවා
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+        {'yosis ffjoH fiajd'}
+        {/* හදිසි වෛද්‍ය සේවා */}
       </h2>
       {medicalServices.length === 0 ? (
         <div className="text-center py-8 text-gray-500">

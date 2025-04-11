@@ -78,9 +78,9 @@ function WorshipServices() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'ïl=Kq wOHdm;'} */}
-        තේවාවන් හා වන්දනා
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+        {'f;ajdjka yd jkaokd'}
+        {/* තේවාවන් හා වන්දනා */}
       </h2>
       {announcements.length === 0 ? (
         <div className="text-center py-8 text-gray-500">

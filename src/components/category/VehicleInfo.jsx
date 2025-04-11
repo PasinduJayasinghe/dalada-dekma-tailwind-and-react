@@ -102,9 +102,9 @@ function VehicleInfo() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'jdyk f;dr;=re yd jdyk k;r lsÍï'} */}
-        ගිනි ආරක්ෂක
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+        {'jdyk f;dr;=re yd jdyk k;r lsÍï'}
+        {/* ගිනි ආරක්ෂක */}
       </h2>
       {vehicleInfo.length === 0 ? (
         <div className="text-center py-8 text-gray-500">

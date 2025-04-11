@@ -102,9 +102,9 @@ function LostAndFound() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'ke;sùï yd fidhd.ekSï'} */}
-        නැතිවීම් හා සොයාගැනීම්
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+        {'ke;sùï yd fidhd.ekSï'}
+        {/* නැතිවීම් හා සොයාගැනීම් */}
       </h2>
       {items.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
