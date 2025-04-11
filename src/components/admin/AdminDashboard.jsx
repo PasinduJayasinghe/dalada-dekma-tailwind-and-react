@@ -17,11 +17,21 @@ function AdminDashboard() {
 
   // Map of category IDs to category names
   const categoryMap = {
-    6: "Important Notices",
-    2: "Traffic Updates",
-    3: "Important Locations",
-    5: "New Updates"
+    1: "Announcement",
+    2: "Locations",
+    3: "Police",
+    4: "Freefood",
+    5: "Sanitary",
+    6: "Medical",
+    7: "Lostfound",
+    8: "Vehicles",
+    9: "Fire",
+    10: "Water",
+    11: "Worship",
+    12: "Weather",
+    13: "Infocenter"
   };
+  
 
   // Fetch data based on active section
   useEffect(() => {
@@ -30,12 +40,12 @@ function AdminDashboard() {
       try {
         switch(activeSection) {
           case 'announcements':
-            const noticesRes = await fetch('https://localhost:7249/api/Notices/category/2');
+            const noticesRes = await fetch('http://localhost:5000/api/notices/category/2');
             const noticesData = await noticesRes.json();
             setNotices(noticesData);
             break;
           case 'notifications':
-            const notifsRes = await fetch('https://localhost:7249/api/Notifications');
+            const notifsRes = await fetch('http://localhost:5000/api/notifications');
             const notifsData = await notifsRes.json();
             setNotifications(notifsData);
             break;
@@ -70,7 +80,7 @@ function AdminDashboard() {
       
       switch(activeSection) {
         case 'announcements':
-          endpoint = 'Notices';
+          endpoint = 'notices';
           const currentDate = new Date().toISOString().split('T')[0];
           
           body = {
@@ -82,7 +92,7 @@ function AdminDashboard() {
           };
           break;
         case 'notifications':
-          endpoint = 'Notifications';
+          endpoint = 'notifications';
           body = {
             content: formData.content,
             isActive: true
@@ -92,7 +102,7 @@ function AdminDashboard() {
           break;
       }
 
-      const response = await fetch(`https://localhost:7249/api/${endpoint}`, {
+      const response = await fetch(`http://localhost:5000/api/${endpoint.toLowerCase()}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,11 +119,11 @@ function AdminDashboard() {
       setFormData({
         title: '',
         content: '',
-        categoryId: 6
+        categoryId: 1
       });
       
       // Refetch data to update the list
-      const refetchRes = await fetch(`https://localhost:7249/api/${endpoint}`);
+      const refetchRes = await fetch(`http://localhost:5000/api/${endpoint.toLowerCase()}`);
       const newData = await refetchRes.json();
       
       if (activeSection === 'announcements') {
@@ -132,8 +142,8 @@ function AdminDashboard() {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
     
     try {
-      const endpoint = type === 'notices' ? 'Notices' : 'Notifications';
-      const response = await fetch(`https://localhost:7249/api/${endpoint}/${id}`, {
+      const endpoint = type === 'notices' ? 'notices' : 'notifications';
+      const response = await fetch(`http://localhost:5000/api/${endpoint.toLowerCase()}/${id}`, {
         method: 'DELETE'
       });
 
@@ -154,7 +164,7 @@ function AdminDashboard() {
 
   const toggleNotificationStatus = async (id) => {
     try {
-      const response = await fetch(`https://localhost:7249/api/Notifications/${id}/toggle`, {
+      const response = await fetch(`http://localhost:5000/api/notifications/${id}/toggle`, {
         method: 'PATCH'
       });
 
@@ -230,10 +240,20 @@ function AdminDashboard() {
                       className="w-full p-2 border border-gray-300 rounded"
                       required
                     >
-                      <option value="6">Important Notices</option>
-                      <option value="2">Traffic Updates</option>
-                      <option value="3">Important Locations</option>
-                      <option value="5">New Updates</option>
+                      <option value="1">Announcement</option>
+                      <option value="2">Locations</option>
+                      <option value="3">Police</option>
+                      <option value="4">Freefood</option>
+                      <option value="5">Sanitary</option>
+                      <option value="6">Medical</option>
+                      <option value="7">Lostfound</option>
+                      <option value="8">Vehicles</option>
+                      <option value="9">Fire</option>
+                      <option value="10">Water</option>
+                      <option value="11">Worship</option>
+                      <option value="12">Weather</option>
+                      <option value="13">Infocenter</option>
+
                     </select>
                   </div>
                   <div className="md:col-span-2">

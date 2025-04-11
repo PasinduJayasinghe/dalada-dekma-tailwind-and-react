@@ -8,56 +8,39 @@ function FireSafety() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const loadingTimer = setTimeout(() => {
-      const dummyAnnouncements = [
-        {
-          id: 1,
-          title: "ගින්නෙන් ආරක්ෂාව පිළිබඳ වැඩමුළුව",
-          content: "ලබන සෙනසුරාදා පෙ.ව. 10.00 ට ගින්නෙන් ආරක්ෂාව පිළිබඳ වැඩමුළුවක් පවත්වනු ලැබේ. සියලුම ජනතාව සහභාගී වන්න.",
-          createdDate: "2025-04-08T09:30:00"
-        },
-        {
-          id: 2,
-          title: "ගින්න හා ආපදා අංශයේ නව දුරකථන අංකය",
-          content: "ගින්න හා ආපදා අංශයේ නව දුරකථන අංකය 011-2345678 වේ. අවශ්යතාවයන් සඳහා මෙම අංකයට අමතන්න.",
-          createdDate: "2025-04-05T14:15:00"
-        }
-      ];
-
-      const sortedData = dummyAnnouncements.sort((a, b) =>
-        new Date(b.createdDate) - new Date(a.createdDate)
-      );
-      
-      setAnnouncements(sortedData);
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(loadingTimer);
-
-    /*
     const fetchAnnouncements = async () => {
       try {
-        const response = await fetch('https://localhost:7249/api/Notices/category/1');
+        // Updated endpoint to match your Express backend
+        const response = await fetch('http://localhost:5000/api/notices/category/9'); // Assuming category 9 is for fire safety
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        // Sort announcements by date (newest first)
         const sortedData = data.sort((a, b) =>
           new Date(b.createdDate) - new Date(a.createdDate)
         );
         setAnnouncements(sortedData);
       } catch (err) {
         setError(err.message);
+        // Fallback to dummy data if API call fails
+        useDummyData();
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchAnnouncements();
+
+    // Optional: Set up auto-refresh every 5 minutes
     const interval = setInterval(fetchAnnouncements, 300000);
     return () => clearInterval(interval);
-    */
   }, []);
+
+  const useDummyData = () => {
+    // You can add some dummy fire safety data here if needed
+    setAnnouncements([]);
+  };
 
   if (isLoading) {
     return (
@@ -68,20 +51,18 @@ function FireSafety() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-        Error loading announcements: {error}
-      </div>
-    );
-  }
-
   return (
     <div>
       <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'wdpd;aul m%fõYh'} */}
         ගිනි ආරක්ෂක
       </h2>
+      
+      {error && (
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+          {error}
+        </div>
+      )}
+      
       {announcements.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           No fire safety announcements available at the moment.

@@ -47,7 +47,7 @@ function Notification({ staticMessages = [], interval = 5000 }) {
     return () => clearTimeout(loadingTimer);
   }, []);
 
-  /*
+  
   // Original API call code (commented)
   useEffect(() => {
     const controller = new AbortController();
@@ -79,7 +79,7 @@ function Notification({ staticMessages = [], interval = 5000 }) {
     
     return () => controller.abort();
   }, []);
-  */
+  
 
   // Combine and memoize messages
   const displayMessages = useMemo(() => {
