@@ -8,28 +8,24 @@ const LOCATION_DATA = [
     id: 1,
     name: "ප්‍රධාන දොරටුව",
     coordinates: [7.2906, 80.6337],
-    timestamp: "March 28, 2024 - 10:00 AM",
     description: "Located at Sri Dalada Maligawa main gate. Please arrive 30 minutes before your scheduled time."
   },
   {
     id: 2,
     name: "තොරතුරු කේන්ද්‍රය",
     coordinates: [7.2910, 80.6340],
-    timestamp: "March 28, 2024 - 9:30 AM",
     description: "Visit our information center near the main entrance for any assistance."
   },
   {
     id: 3,
     name: "ආපනශාලාව",
     coordinates: [7.2920, 80.6350],
-    timestamp: "March 28, 2024 - 11:00 AM",
     description: "Refreshments and meals available from 7:00 AM to 8:00 PM."
   },
   {
     id: 4,
     name: "වාහන නැවැත්වීම්",
     coordinates: [7.2930, 80.6360],
-    timestamp: "March 28, 2024 - 12:00 PM",
     description: "Designated parking areas available at Kandy Lake View Parking and City Center Parking."
   },
 ];
@@ -68,6 +64,12 @@ function ImportantLocations() {
     return [sum[0] / locations.length, sum[1] / locations.length];
   };
 
+  // Function to open Google Maps with the specified coordinates
+  const openInGoogleMaps = (coordinates) => {
+    const [lat, lng] = coordinates;
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    window.open(googleMapsUrl, '_blank');
+  };
   
   if (loading) {
     return (
@@ -83,8 +85,9 @@ function ImportantLocations() {
 
   return (
     <div className="px-4 py-6">
-      <h2 className="text-2xl font-bold text-center mb-6 pb-2 border-b border-amber-300" style={{ fontFamily: "TharuDigitalRun"}}>
-        {'jeo.;a ia:dk'}
+      <h2 className="text-4xl font-bold text-center mb-6 pb-2 border-b border-amber-300" style={{ fontFamily: "IskolaPotha"}}>
+        {/* {'jeo.;a ia:dk'} */}
+        වැදගත් ස්ථාන
       </h2>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -98,7 +101,11 @@ function ImportantLocations() {
           className="contents"
         >
           {locations.map(location => (
-            <LocationCard key={location.id} location={location} />
+            <LocationCard 
+              key={location.id} 
+              location={location} 
+              onNavigate={openInGoogleMaps}
+            />
           ))}
         </AnimationSequence>
       </div>
@@ -106,12 +113,11 @@ function ImportantLocations() {
   );
 }
 
-const LocationCard = ({ location }) => (
-  <div className="bg-[#f6aa1c] bg-opacity-10 p-4 rounded-lg shadow-lg border border-[#220901] border-opacity-20 transition-all hover:shadow-xl hover:scale-[1.01]">
-    <p className="text-sm text-[#220901] opacity-80 mb-2 font-medium">
-      {location.timestamp}
-    </p>
-    
+const LocationCard = ({ location, onNavigate }) => (
+  <div 
+    className="bg-[#f6aa1c] bg-opacity-10 p-4 rounded-lg shadow-lg border border-[#220901] border-opacity-20 transition-all hover:shadow-xl hover:scale-[1.01] cursor-pointer"
+    onClick={() => onNavigate(location.coordinates)}
+  >
     <div 
       className="bg-gradient-to-r from-[#941B0C] to-[#BC3908] p-3 rounded-lg shadow-inner"
       style={{ boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)' }}
@@ -158,13 +164,22 @@ const LocationCard = ({ location }) => (
       </MapContainer>
     </div>
     
-    <div className="flex justify-between mt-3 text-xs">
-      <span className="text-[#220901] opacity-70">
-        Lat: {location.coordinates[0].toFixed(4)}
-      </span>
-      <span className="text-[#220901] opacity-70">
-        Lng: {location.coordinates[1].toFixed(4)}
-      </span>
+    <div className="flex justify-between items-center mt-3">
+      <div className="flex justify-between text-xs flex-1">
+        <span className="text-[#220901] opacity-70">
+          Lat: {location.coordinates[0].toFixed(4)}
+        </span>
+        <span className="text-[#220901] opacity-70">
+          Lng: {location.coordinates[1].toFixed(4)}
+        </span>
+      </div>
+      <div className="ml-2 flex items-center bg-[#BC3908] hover:bg-[#941B0C] transition-colors text-white px-2 py-1 rounded text-xs">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        Navigate
+      </div>
     </div>
   </div>
 );
