@@ -83,5 +83,25 @@ export default function useApi(endpoint) {
     }
   };
 
-  return { data, isLoading, error, fetchData, postData, deleteData, patchData };
+  // Add new putData method for PUT requests
+  const putData = async (path) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const response = await fetch(`${baseUrl}/${endpoint}/${path}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (!response.ok) throw new Error("Operation failed");
+
+      await fetchData();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { data, isLoading, error, fetchData, postData, deleteData, patchData, putData };
 }

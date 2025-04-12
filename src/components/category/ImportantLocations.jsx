@@ -19,7 +19,18 @@ function ImportantLocations() {
           throw new Error("Failed to load locations");
         }
         const data = await response.json();
-        setLocations(data);
+        
+        // Transform and filter the data
+        const transformedData = data
+          // Filter out category_id 7 (Lost & Found)
+          .filter(location => location.category_id !== 7)
+          // Transform remaining locations
+          .map(location => ({
+            ...location,
+            coordinates: [parseFloat(location.lat), parseFloat(location.lng)]
+          }));
+        
+        setLocations(transformedData);
       } catch (err) {
         console.error("Error fetching locations:", err);
         setError("Failed to load locations");
@@ -41,8 +52,8 @@ function ImportantLocations() {
     return [sum[0] / locations.length, sum[1] / locations.length];
   };
 
-  // Function to open Google Maps with the specified coordinates
   const openInGoogleMaps = (coordinates) => {
+    if (!Array.isArray(coordinates) || coordinates.length !== 2) return;
     const [lat, lng] = coordinates;
     const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
     window.open(googleMapsUrl, '_blank');
@@ -52,7 +63,7 @@ function ImportantLocations() {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
-        <span className="ml-4">Loading announcements...</span>
+        <span className="ml-4">Loading locations...</span>
       </div>
     );
   }
@@ -68,97 +79,113 @@ function ImportantLocations() {
       </h2>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <AnimationSequence 
-          direction="right" 
-          baseDelay={100} 
-          staggerDelay={150} 
-          duration={800} 
-          distance={30} 
-          easing="ease-out"
-          className="contents"
-        >
-          {locations.map(location => (
-            <LocationCard 
-              key={location.id} 
-              location={location} 
-              onNavigate={openInGoogleMaps}
-            />
-          ))}
-        </AnimationSequence>
+        {locations.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            No important locations available at the moment.
+          </div>
+          ) : (
+            <AnimationSequence 
+              direction="right" 
+              baseDelay={100} 
+              staggerDelay={150} 
+              duration={800} 
+              distance={30} 
+              easing="ease-out"
+              className="contents"
+            >
+              {locations.map(location => (
+                <LocationCard 
+                  key={location.id} 
+                  location={location} 
+                  onNavigate={openInGoogleMaps}
+                />
+              ))}
+            </AnimationSequence>
+          )}
       </div>
     </div>
   );
 }
 
-const LocationCard = ({ location, onNavigate }) => (
-  <div 
-    className="bg-[#f6aa1c] bg-opacity-10 p-4 rounded-lg shadow-lg border border-[#220901] border-opacity-20 transition-all hover:shadow-xl hover:scale-[1.01] cursor-pointer"
-    onClick={() => onNavigate(location.coordinates)}
-  >
+const LocationCard = ({ location, onNavigate }) => {
+  // Ensure coordinates exist and are valid numbers
+  const coordinates = Array.isArray(location.coordinates) && 
+                      location.coordinates.length === 2 &&
+                      !isNaN(location.coordinates[0]) && 
+                      !isNaN(location.coordinates[1])
+    ? location.coordinates
+    : DEFAULT_CENTER;
+
+  return (
     <div 
-      className="bg-gradient-to-r from-[#941B0C] to-[#BC3908] p-3 rounded-lg shadow-inner"
-      style={{ boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)' }}
+      className="bg-[#f6aa1c] bg-opacity-10 p-4 rounded-lg shadow-lg border border-[#220901] border-opacity-20 transition-all hover:shadow-xl hover:scale-[1.01] cursor-pointer"
+      onClick={() => onNavigate(coordinates)}
     >
-      <h3 
-        className="text-lg font-bold text-[#f6aa1c] text-center tracking-wide"
-        style={{ 
-          fontFamily: "NotoSansSinhala",
-          textShadow: '0 1px 2px rgba(0,0,0,0.3)'
-        }}
+      <div 
+        className="bg-gradient-to-r from-[#941B0C] to-[#BC3908] p-3 rounded-lg shadow-inner"
+        style={{ boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)' }}
       >
-        {location.name}
-      </h3>
-    </div>
-    
-    <div className="h-40 w-full mt-3 rounded-lg overflow-hidden border-2 border-[#621708] border-opacity-30">
-      <MapContainer
-        center={location.coordinates}
-        zoom={16}
-        style={{ 
-          height: "100%", 
-          width: "100%",
-          filter: 'sepia(20%) saturate(120%)' // Vintage map effect
-        }}
-        scrollWheelZoom={false}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Marker 
-          position={location.coordinates}
-          icon={new L.Icon({
-            iconUrl: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23BC3908"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
-            iconSize: [32, 32],
-            iconAnchor: [16, 32],
-            popupAnchor: [0, -32]
-          })}
+        <h3 
+          className="text-lg font-bold text-[#f6aa1c] text-center tracking-wide"
+          style={{ 
+            fontFamily: "NotoSansSinhala",
+            textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+          }}
         >
-          <Popup className="font-bold text-[#621708]">
-            {location.name}
-          </Popup>
-        </Marker>
-      </MapContainer>
-    </div>
-    
-    <div className="flex justify-between items-center mt-3">
-      <div className="flex justify-between text-xs flex-1">
-        <span className="text-[#220901] opacity-70">
-          Lat: {location.coordinates[0].toFixed(4)}
-        </span>
-        <span className="text-[#220901] opacity-70">
-          Lng: {location.coordinates[1].toFixed(4)}
-        </span>
+          {location.name || "Unknown Location"}
+        </h3>
       </div>
-      <div className="ml-2 flex items-center bg-[#BC3908] hover:bg-[#941B0C] transition-colors text-white px-2 py-1 rounded text-xs">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-        Navigate
+      
+      <div className="h-40 w-full mt-3 rounded-lg overflow-hidden border-2 border-[#621708] border-opacity-30">
+        <MapContainer
+          center={coordinates}
+          zoom={16}
+          style={{ 
+            height: "100%", 
+            width: "100%",
+            filter: 'sepia(20%) saturate(120%)'
+          }}
+          scrollWheelZoom={false}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Marker 
+            position={coordinates}
+            icon={new L.Icon({
+              iconUrl: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23BC3908"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+              iconSize: [32, 32],
+              iconAnchor: [16, 32],
+              popupAnchor: [0, -32]
+            })}
+          >
+            <Popup className="font-bold text-[#621708]">
+              {location.name || "Unknown Location"}
+            </Popup>
+          </Marker>
+        </MapContainer>
+      </div>
+      
+      <div className="flex justify-between items-center mt-3">
+        <div className="flex justify-between text-xs flex-1">
+          <span className="text-[#220901] opacity-70">
+            Lat: {coordinates[0].toFixed(4)}
+          </span>
+          <span className="text-[#220901] opacity-70">
+            Lng: {coordinates[1].toFixed(4)}
+          </span>
+        </div>
+        <div className="ml-2 flex items-center bg-[#BC3908] hover:bg-[#941B0C] transition-colors text-white px-2 py-1 rounded text-xs">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Navigate
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default ImportantLocations;

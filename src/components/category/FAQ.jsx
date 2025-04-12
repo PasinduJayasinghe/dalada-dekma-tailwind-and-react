@@ -1,64 +1,46 @@
 import React, { useState, useEffect } from "react";
-import Grid from "../Grid";
 import AnimationSequence from "../Animation/AnimationSequence";
 
 function WorshipServices() {
-  const [questions, setQuestions] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    let loadingTimer;
-    let fetchInterval;
-
-    const fetchAnnouncements = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/notices/category/11');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        const sortedData = data.sort((a, b) =>
-          new Date(b.createdDate) - new Date(a.createdDate)
-        );
-        setQuestions(sortedData);
-        setError(null);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    // Set a minimum loading time to prevent flash of loading state
-    loadingTimer = setTimeout(() => {
-      fetchAnnouncements();
-      // Set up refresh every 5 minutes (300000ms)
-      fetchInterval = setInterval(fetchAnnouncements, 300000);
-    }, 500);
-
-    return () => {
-      clearTimeout(loadingTimer);
-      clearInterval(fetchInterval);
-    };
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
-        <span className="ml-4 text-transform:lowercase">Loading Frequently Asked Questions...</span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-        Error loading questions: {error}
-      </div>
-    );
-  }
+  const [questions, setQuestions] = useState([
+    {
+      id: 1,
+      title: "සිරි දළදා වන්දනාව සදහා පැමිණිය යුතු ආකාරය කෙසේද?",
+      content: `• මේ සදහා පැමිනෙන විට ඔබ මීට අනුරෑප ඇදුමින් සැරසී පැමිණිය යුතු අතර අනවශ්‍ය දෑ රැගෙන නොඒමට කාරුණික වන්න.එ‌මෙන්ම මාලිගා පරිශ්‍රයේදී හා ඉන් පිටතදී ඔබ විනීතව හැසිරීමට කටයුතු කරන්න.
+      • පොලිතීන්, ප්ලාසේටික් වැනි පූජා භූමියට හානිකර ද්‍රවය රැගෙන ඒමෙන් වළකින්න.
+      • පොලිතින් බෑග් හෝ ප්ලාසේටික් බදුන් වල පූජා ද්‍රවය රැගෙන ඒකමන් වලකින්න.`
+    },
+    {
+      id: 2,
+      title: "සිරි දළදා වන්දනාව සදහා පැමිණිය හැකි පිවිසුම් මොනවද?",
+      content: `• මේ සදහා ඔබට පිවිසුම් 03 ක් ඇති අතර ඔබට මහයියාව දෙසින් දළදා මාලිගාව දෙසට, රතු බෝක්කුව දෙසින් වැව රවුම හරහා දළදා මාලිගාවට සහ රතු කබෝක්කුවේ සිට දළදා මාලිගාවට යන පෝලිම් මීට භාවිතා කල හැක.`
+    },
+    {
+      id: 3,
+      title: "සිරි දළදා වන්දනාවට පැමිනෙන විට ගමන් මලු රැගෙන පැමිණිය හැකිද?",
+      content: `• නොහැක. ඔබ දළදා වහන්කසේට පූජා කිරීමට රැගෙන පැමිනෙන දෙයක් හෝ ඔබට අතයවශ්‍යම වන දෑ (ඖෂධ,සනීපාරක්ෂක ද්‍රවයයන් වැනි..) පමෙක් රැගෙන ඒමට හැකියාවක් පවතී.`
+    },
+    {
+      id: 4,
+      title: "ශ්‍රී දළදා මාළිගා පරිශ්‍රය තුළ වාහන නැවැත්වවිය හැකිද?",
+      content: `• නොහැක. ඒ සඳහා මහනුවර රථගාල හෝ වෙනත් සුදුසු ස්ථානයක් ඔබට භාවිතා කිරීමට සිදුවේ.`
+    },
+    {
+      id: 5,
+      title: "ඡායාරූප හෝ වීඩියෝ පට ලබාගත හැකිද?",
+      content: `• ශ්‍රී දළදා මාලිගා පරිශ්‍රකයෙන් පිට ඔබට ඡායාරූප හෝ වීඩියෝ පට ලබාගත හැකි අතර ඉන් පසුව දළදා මාලිගාව අභයන්තරයට ඇතුල්වූ පසු ඔබ අනිවාර්යකයන්ම ඔබගේ ජංගම දුරකථනය ක්‍රියා විරහිත කළ යුතුය.`
+    },
+    {
+      id: 6,
+      title: "සිරි දළදා වන්දනාව පැවැත්වවෙන දිනයන් තුළ දළදා වහන්කසේ වන්දනා කිරීමට පැමිණිය හැකිද?",
+      content: `• මේ සඳහා ඔබට හැකියාව පවතින අතර සිරි දළදා වන්දනාව පැවැත්වවෙන වේලාවන් වලින් තොර වේලාවක පැමිණීමට කාරුණික වන්න.`
+    },
+    {
+      id: 7,
+      title: "සිරි දළදා වන්දනාවට පැමිකෙන මා හට නවාතැන් පහසුකේ ලබා ගැනීමට හැකිද?",
+      content: `• ඔබට අතයවශ්‍යම නම් පමණක් හෝ වැඩිහිිටි හෝ ආබාධිත පුද්ගලයෙක් නම් පමණක් ඔබට නවාතැන් පහසුකම් ලබාගත හැක. මේ සඳහා ඔබට කැප්පෙටිපොළ විදුහල සහ විකේකානන්ද විදුහල භාවිතා කළ හැක.`
+    }
+  ]);
 
   return (
     <div>
@@ -71,7 +53,7 @@ function WorshipServices() {
           No frequently asked questions available at the moment.
         </div>
       ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-4">
           <AnimationSequence 
             direction="right" 
             baseDelay={100} 
@@ -86,6 +68,7 @@ function WorshipServices() {
                 <div style={{ fontFamily: "NotoSansSinhala" }}>
                   <li><h3 className="text-lg font-bold mb-2">{question.title}</h3></li>
                   <p className="whitespace-pre-line">{question.content}</p>
+                  <br />
                 </div>
               </ul>
             ))}
