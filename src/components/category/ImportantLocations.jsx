@@ -19,14 +19,18 @@ function ImportantLocations() {
           throw new Error("Failed to load locations");
         }
         const data = await response.json();
-        // Validate and filter locations to ensure they have valid coordinates
-        const validLocations = data.filter(loc => 
-          Array.isArray(loc.coordinates) && 
-          loc.coordinates.length === 2 && 
-          !isNaN(loc.coordinates[0]) && 
-          !isNaN(loc.coordinates[1])
-        );
-        setLocations(validLocations);
+        
+        // Transform and filter the data
+        const transformedData = data
+          // Filter out category_id 7 (Lost & Found)
+          .filter(location => location.category_id !== 7)
+          // Transform remaining locations
+          .map(location => ({
+            ...location,
+            coordinates: [parseFloat(location.lat), parseFloat(location.lng)]
+          }));
+        
+        setLocations(transformedData);
       } catch (err) {
         console.error("Error fetching locations:", err);
         setError("Failed to load locations");
@@ -59,12 +63,13 @@ function ImportantLocations() {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
-        <span className="ml-4">Loading announcements...</span>
+        <span className="ml-4">Loading locations...</span>
       </div>
     );
   }
 
-  if (error) return <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">Error loading location data: {error}</div>;
+  if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
+  if (locations.length === 0) return <div className="text-center py-8">No locations found</div>;
 
   return (
     <div className="px-4 py-6">
@@ -75,35 +80,35 @@ function ImportantLocations() {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {locations.length === 0 ? (
-          <div className="text-center py-8 text-gray-500 col-span-2">
-            No valid locations available at the moment.
+          <div className="text-center py-8 text-gray-500">
+            No important locations available at the moment.
           </div>
-            ) : (
-              <AnimationSequence 
-                direction="right" 
-                baseDelay={100} 
-                staggerDelay={150} 
-                duration={800} 
-                distance={30} 
-                easing="ease-out"
-                className="contents"
-              >
-                {locations.map(location => (
-                  <LocationCard 
-                    key={location.id} 
-                    location={location} 
-                    onNavigate={openInGoogleMaps}
-                  />
-                ))}
-              </AnimationSequence>
-            )}
+          ) : (
+            <AnimationSequence 
+              direction="right" 
+              baseDelay={100} 
+              staggerDelay={150} 
+              duration={800} 
+              distance={30} 
+              easing="ease-out"
+              className="contents"
+            >
+              {locations.map(location => (
+                <LocationCard 
+                  key={location.id} 
+                  location={location} 
+                  onNavigate={openInGoogleMaps}
+                />
+              ))}
+            </AnimationSequence>
+          )}
       </div>
     </div>
   );
 }
 
 const LocationCard = ({ location, onNavigate }) => {
-  // Default to DEFAULT_CENTER if coordinates are invalid
+  // Ensure coordinates exist and are valid numbers
   const coordinates = Array.isArray(location.coordinates) && 
                       location.coordinates.length === 2 &&
                       !isNaN(location.coordinates[0]) && 
@@ -138,7 +143,7 @@ const LocationCard = ({ location, onNavigate }) => {
           style={{ 
             height: "100%", 
             width: "100%",
-            filter: 'sepia(20%) saturate(120%)' // Vintage map effect
+            filter: 'sepia(20%) saturate(120%)'
           }}
           scrollWheelZoom={false}
         >

@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Grid from "../Grid";
 import AnimationSequence from "../Animation/AnimationSequence";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
 function LostAndFound() {
-  const [items, setItems] = useState([]);
-  const [lostPersons, setLostPersons] = useState([]);
+  const [notices, setNotices] = useState([]);
   const [findingPoints, setFindingPoints] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("lostItems"); // 'lostItems' or 'guide' or 'locations'
+  const [activeTab, setActiveTab] = useState("notices"); // 'notices' or 'guide' or 'locations'
 
   // Guide steps
   const GUIDE_STEPS = [
@@ -27,54 +25,19 @@ function LostAndFound() {
     let loadingTimer;
     let fetchInterval;
 
-    const fetchItems = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/notices/category/7');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        const sortedData = data.sort((a, b) =>
-          new Date(b.createdDate) - new Date(a.createdDate)
-        );
-        setItems(sortedData);
-        setError(null);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadingTimer = setTimeout(() => {
-      fetchItems();
-      fetchInterval = setInterval(fetchItems, 30000);
-    }, 1000);
-
-    return () => {
-      clearTimeout(loadingTimer);
-      clearInterval(fetchInterval);
-    };
-  }, []);
-
-  // Update the useEffect hooks for lost persons and finding points
-  useEffect(() => {
-    let loadingTimer;
-    let fetchInterval;
-
     const fetchData = async () => {
       try {
-        // Fetch lost persons
-        const lostResponse = await fetch('http://localhost:5000/api/locations/lost-persons');
-        if (!lostResponse.ok) throw new Error("Failed to fetch lost persons");
-        const lostData = await lostResponse.json();
+        // Fetch notices (lost persons) from category 7
+        const noticesResponse = await fetch('http://localhost:5000/api/notices/category/7');
+        if (!noticesResponse.ok) throw new Error("Failed to fetch notices");
+        const noticesData = await noticesResponse.json();
         
         // Fetch finding points (locations category 7)
         const pointsResponse = await fetch('http://localhost:5000/api/locations/category/7');
         if (!pointsResponse.ok) throw new Error("Failed to fetch finding points");
         const pointsData = await pointsResponse.json();
         
-        setLostPersons(lostData);
+        setNotices(noticesData.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate)));
         setFindingPoints(pointsData);
         setError(null);
       } catch (err) {
@@ -105,7 +68,7 @@ function LostAndFound() {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
-        <span className="ml-4">Loading lost people information...</span>
+        <span className="ml-4">Loading information...</span>
       </div>
     );
   }
@@ -113,7 +76,7 @@ function LostAndFound() {
   if (error) {
     return (
       <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-        Error loading lost people information: {error}
+        Error loading information: {error}
       </div>
     );
   }
@@ -128,8 +91,8 @@ function LostAndFound() {
       {/* Navigation Tabs */}
       <div className="flex border-b border-gray-200 mb-6">
         <button
-          className={`py-2 px-4 font-medium ${activeTab === 'lostItems' ? 'text-amber-600 border-b-2 border-amber-500 font-extrabold' : 'text-gray-500'}`}
-          onClick={() => setActiveTab('lostItems')}
+          className={`py-2 px-4 font-medium ${activeTab === 'notices' ? 'text-amber-600 border-b-2 border-amber-500 font-extrabold' : 'text-gray-500'}`}
+          onClick={() => setActiveTab('notices')}
         >
           අතරමන් වූ පුද්ගලයන්
         </button>
@@ -148,11 +111,11 @@ function LostAndFound() {
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'lostItems' && (
+      {activeTab === 'notices' && (
         <>
-          {items.length === 0 ? (
+          {notices.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
-              No lost and found items available at the moment.
+              No lost person notices available at the moment.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -165,29 +128,13 @@ function LostAndFound() {
                 easing="ease-out"
                 className="contents"
               >
-                {lostPersons.map((person) => (
-                  <div key={person.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                {notices.map((notice) => (
+                  <div key={notice.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
                     <div className="p-4" style={{ fontFamily: "NotoSansSinhala" }}>
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="text-lg font-bold">{person.name}</h3>
-                        <span className={`px-2 py-1 rounded text-xs ${person.status === 'Found' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                          {person.status === 'Found' ? 'සොයාගත්තා' : 'සොයානොගත්තා'}
-                        </span>
+                        <h3 className="text-lg font-bold">{notice.title}</h3>
                       </div>
-                      <p className="text-gray-700 mb-2">{person.description}</p>
-                      <p className="text-sm text-gray-500 mb-1">
-                        <span className="font-medium">අන්තිම වරට දක්නට ලැබුණු දිනය:</span> {new Date(person.lastSeen).toLocaleString()}
-                      </p>
-                      {person.status === 'Found' && (
-                        <>
-                          <p className="text-sm text-gray-500 mb-1">
-                            <span className="font-medium">සොයාගත් ස්ථානය:</span> {person.foundLocation}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            <span className="font-medium">සොයාගත් දිනය:</span> {new Date(person.foundTime).toLocaleString()}
-                          </p>
-                        </>
-                      )}
+                      <p className="text-gray-700 mb-2">{notice.content}</p>
                     </div>
                   </div>
                 ))}
