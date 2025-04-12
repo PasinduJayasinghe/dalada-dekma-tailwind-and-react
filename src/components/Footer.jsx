@@ -57,10 +57,6 @@ function Footer() {
     }
   };
 
-  const handleAdminLogin = () => {
-    navigate("/admin");
-  };
-
   return (
     <footer 
       className="bg-[#220901] text-amber-50 py-12 cursor-default border-t-4 border-[#BC3908] relative"
@@ -182,14 +178,6 @@ function Footer() {
                     </a>
                   ))}
                 </div>
-                
-                {/* Admin Login Button */}
-                <button 
-                  onClick={handleAdminLogin}
-                  className="w-full bg-[#941B0C] hover:bg-[#BC3908] text-amber-50 font-bold px-6 py-3 rounded-lg border border-[#BC3908] hover:border-[#F6AA1C] transition-all duration-300 cursor-pointer"
-                >
-                  Admin Portal
-                </button>
               </div>
             </div>
           </div>

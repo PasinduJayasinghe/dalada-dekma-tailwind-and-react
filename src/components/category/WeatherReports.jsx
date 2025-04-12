@@ -8,36 +8,12 @@ function WeatherReports() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const loadingTimer = setTimeout(() => {
-      const dummyAnnouncements = [
-        {
-          id: 1,
-          title: "වර්ෂාවේ තීව්‍රතාවය",
-          content: "ලබන සතියේ සිට වර්ෂාවේ තීව්‍රතාවය වැඩි වීමක් බලාපොරොත්තු වේ. වැසි වලාකුළු සහිත දින ගණන වැඩි විය හැකිය.",
-          createdDate: "2025-04-10T09:30:00"
-        },
-        {
-          id: 2,
-          title: "සුළං අනතුරු ඇඟවීම",
-          content: "උතුරු සහ නැගෙනහිර පළාත්වල සුළං වේගය විනාඩියකට කිලෝමීටර 40-50 පමණ විය හැකිය. ගොවීන් සහ මතුපිට ගමන් කරන ජනතාව අවධානයෙන් සිටින්න.",
-          createdDate: "2025-04-08T14:15:00"
-        }
-      ];
+    let loadingTimer;
+    let fetchInterval;
 
-      const sortedData = dummyAnnouncements.sort((a, b) =>
-        new Date(b.createdDate) - new Date(a.createdDate)
-      );
-      
-      setAnnouncements(sortedData);
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(loadingTimer);
-
-    /*
     const fetchAnnouncements = async () => {
       try {
-        const response = await fetch('https://localhost:7249/api/Notices/category/4');
+        const response = await fetch('http://localhost:5000/api/notices/category/12');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -46,6 +22,7 @@ function WeatherReports() {
           new Date(b.createdDate) - new Date(a.createdDate)
         );
         setAnnouncements(sortedData);
+        setError(null);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -53,10 +30,17 @@ function WeatherReports() {
       }
     };
 
-    fetchAnnouncements();
-    const interval = setInterval(fetchAnnouncements, 300000);
-    return () => clearInterval(interval);
-    */
+    // Set a minimum loading time to prevent flash of loading state
+    loadingTimer = setTimeout(() => {
+      fetchAnnouncements();
+      // Set up refresh every 5 minutes (300000ms)
+      fetchInterval = setInterval(fetchAnnouncements, 300000);
+    }, 500);
+
+    return () => {
+      clearTimeout(loadingTimer);
+      clearInterval(fetchInterval);
+    };
   }, []);
 
   if (isLoading) {
@@ -78,9 +62,9 @@ function WeatherReports() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'l%shd;a; m%fõYh'} */}
-        කාලගුන වාර්තා
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+        {'ld,.=k jd¾;d'}
+        {/* කාලගුන වාර්තා */}
       </h2>
       {announcements.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
@@ -98,7 +82,7 @@ function WeatherReports() {
             className="contents"
           >
           {announcements.map((announcement) => (
-            <Grid key={announcement.id} timestamp={announcement.createdDate}>
+            <Grid key={announcement.id} timestamp={announcement.formatedDate}>
               <div style={{ fontFamily : "NotoSansSinhala" }}>
                 <h3 className="text-lg font-bold mb-2">{announcement.title}</h3>
                 <p className="whitespace-pre-line">{announcement.content}</p>

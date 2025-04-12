@@ -26,33 +26,32 @@ function AdminLogin() {
       setError('Please enter both username and password');
       return;
     }
-
+  
     setIsLoading(true);
     
     try {
-      const response = await fetch('https://localhost:7249/api/Admin/login', {
+      const response = await fetch('http://localhost:5000/api/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(credentials),
-        credentials: 'include', // Add this line
-        mode: 'cors' // Add this line
+        body: JSON.stringify(credentials)
       });
-
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
-
+  
       const data = await response.json();
       
-      // Store the admin data in localStorage (temporary)
-      localStorage.setItem('admin', JSON.stringify(data));
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+      
+      // Store token and admin data
+      localStorage.setItem('adminToken', data.token);
+      localStorage.setItem('adminData', JSON.stringify(data.admin));
       
       // Redirect to dashboard
       navigate('/admin/dashboard');
     } catch (err) {
-      setError('Invalid username or password');
+      setError(err.message || 'Invalid username or password');
     } finally {
       setIsLoading(false);
     }

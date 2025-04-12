@@ -9,45 +9,6 @@ function Notification({ staticMessages = [], interval = 5000 }) {
   const [databaseNotifications, setDatabaseNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Dummy data for Sri Dalada Perahera notifications
-  useEffect(() => {
-    const loadingTimer = setTimeout(() => {
-      const dummyNotifications = [
-        {
-          id: 1,
-          content: "ශ්‍රී දළදා මාළිගාව විවෘත වේලාවන්: උදෑසන 5.30 සිට සවස 8.00 දක්වා",
-          isActive: true
-        },
-        {
-          id: 2,
-          content: "දළදා පෙරහැර ආරම්භය: ලබන අගහරුවාදා සවස 7.00 ට",
-          isActive: true
-        },
-        {
-          id: 3,
-          content: "පූජා සඳහා විශේෂ පූජා භාණ්ඩ ගෙන ඒමෙන් වලකින්න",
-          isActive: true
-        },
-        {
-          id: 4,
-          content: "ප්‍රධාන ප්‍රදර්ශන ශාලාවේ පිවිසුම් ටිකට්ටු ලබා ගැනීම සඳහා පූර්ව ඇණවුම් කරන්න",
-          isActive: true
-        },
-        {
-          id: 5,
-          content: "ආරක්ෂක පරීක්ෂණ සඳහා පැමිණෙන සියලුම භක්තිකයින් සාදරයෙන් පිළිගනිමු",
-          isActive: true
-        }
-      ];
-
-      setDatabaseNotifications(dummyNotifications);
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(loadingTimer);
-  }, []);
-
-  /*
   // Original API call code (commented)
   useEffect(() => {
     const controller = new AbortController();
@@ -79,7 +40,6 @@ function Notification({ staticMessages = [], interval = 5000 }) {
     
     return () => controller.abort();
   }, []);
-  */
 
   // Combine and memoize messages
   const displayMessages = useMemo(() => {
@@ -92,7 +52,7 @@ function Notification({ staticMessages = [], interval = 5000 }) {
       : [];
 
     const combined = [...staticMessages, ...activeDbNotifications];
-    return combined.length > 0 ? combined : ['පවතින ප්‍රකාශන නොමැත'];
+    return combined.length > 0 ? combined : ['පවතින ප්‍රකාශන නොමැත.'];
   }, [staticMessages, databaseNotifications, isLoading]);
 
   // Auto-rotation effect

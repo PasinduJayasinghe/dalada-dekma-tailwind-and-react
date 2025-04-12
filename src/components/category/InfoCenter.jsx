@@ -8,36 +8,12 @@ function InfoCenter() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const loadingTimer = setTimeout(() => {
-      const dummyAnnouncements = [
-        {
-          id: 1,
-          title: "තොරතුරු මධ්‍යස්ථානයේ නව වේලාවන්",
-          content: "තොරතුරු මධ්‍යස්ථානය දැන් සඳුදා සිට සිකුරාදා දක්වා උදෑසන 8.00 සිට සවස 6.00 දක්වා විවෘතයි.",
-          createdDate: "2025-04-10T09:30:00"
-        },
-        {
-          id: 2,
-          title: "නව සේවාවන්",
-          content: "තොරතුරු මධ්‍යස්ථානයේ දැන් ජනතා ලියාපදිංචි සහතික, උපත් සහතික සහ විවාහ සහතික සඳහා අයදුම්පත් ලබා ගත හැකිය.",
-          createdDate: "2025-04-07T14:15:00"
-        }
-      ];
+    let loadingTimer;
+    let fetchInterval;
 
-      const sortedData = dummyAnnouncements.sort((a, b) =>
-        new Date(b.createdDate) - new Date(a.createdDate)
-      );
-      
-      setAnnouncements(sortedData);
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(loadingTimer);
-
-    /*
     const fetchAnnouncements = async () => {
       try {
-        const response = await fetch('https://localhost:7249/api/Notices/category/2');
+        const response = await fetch('http://localhost:5000/api/notices/category/13');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -53,10 +29,17 @@ function InfoCenter() {
       }
     };
 
-    fetchAnnouncements();
-    const interval = setInterval(fetchAnnouncements, 300000);
-    return () => clearInterval(interval);
-    */
+    // Set a minimum loading time to prevent flash of loading state
+    loadingTimer = setTimeout(() => {
+      fetchAnnouncements();
+      // Set up refresh every 5 minutes (300000ms)
+      fetchInterval = setInterval(fetchAnnouncements, 300000);
+    }, 500);
+
+    return () => {
+      clearTimeout(loadingTimer);
+      clearInterval(fetchInterval);
+    }
   }, []);
 
   if (isLoading) {
@@ -78,9 +61,9 @@ function InfoCenter() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "IskolaPotha"}}>
-        {/* {'uÜgul m%fõYh'} */}
-        තොරතුරු මධ්‍යස්ථානය
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+        {'f;dr;=re uOHia:dkh'}
+        {/* තොරතුරු මධ්‍යස්ථානය */}
       </h2>
       {announcements.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
