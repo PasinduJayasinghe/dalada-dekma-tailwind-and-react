@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Announcements from "./category/announcements";
+import Announcements from "./category/Announcements";
 import ImportantLocations from "./category/ImportantLocations";
 import Police from "./category/Security";
 import FreeFood from "./category/FreeFood";
