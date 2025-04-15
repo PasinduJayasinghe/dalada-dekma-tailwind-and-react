@@ -75,7 +75,7 @@ function Footer() {
         {/* Main content row */}
         <div className="flex flex-col lg:flex-row justify-between items-start">
           {/* Subscription Form - Left Section */}
-          <div className="w-full lg:w-2/5 mb-8 lg:mb-0">
+          <div className="w-full lg:w-2/5 mb-0 sm:mb-8 lg:mb-0">
             <h3 className="text-2xl font-bold mb-6 text-[#F6AA1C] font-serif">Stay Connected</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

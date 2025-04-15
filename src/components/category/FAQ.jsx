@@ -44,7 +44,7 @@ function WorshipServices() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi" }}>
+      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 text-white border-amber-300 text-center" style={{ fontFamily: "FMBindumathi" }}>
         {'ks;r wik mek'}
         {/* නිතර අසන පැනපැන */}
       </h2>
@@ -65,7 +65,7 @@ function WorshipServices() {
           >
             {questions.map((question) => (
               <ul key={question.id}>
-                <div style={{ fontFamily: "NotoSansSinhala" }}>
+                <div className="text-white" style={{ fontFamily: "NotoSansSinhala" }}>
                   <li><h3 className="text-lg font-bold mb-2">{question.title}</h3></li>
                   <p className="whitespace-pre-line">{question.content}</p>
                   <br />

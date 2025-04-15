@@ -75,8 +75,8 @@ function CategoryContainer() {
     },
     {
       id: "vehicles",
-      title: "වාහන නතර කිරීම් / ප්‍රවාහන සේවාසේවා",
-      title_fon: "jdyk k;r lsÍï yd m%jdyk fiajd",
+      title: "වාහන නතර කිරීම් හා ප්‍රවාහන සේවාසේවා",
+      title_fon: "jdyk k;r lsÍï yd fiajd",
       description: "Vehicle Parking & Transport",
       component: VehicleInfo,
       icon: FaCar
@@ -128,6 +128,15 @@ function CategoryContainer() {
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
+  useEffect(() => {
+    if (selectedCategory) {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+  }, [selectedCategory]);
+
   const handleTileClick = (categoryId) => {
     setSelectedCategory(categoryId === selectedCategory ? null : categoryId);
   };
@@ -139,7 +148,7 @@ function CategoryContainer() {
   return (
     <div className="cursor-default p-4 bg-cover bg-center min-h-screen flex flex-col" 
       style={{ 
-        backgroundImage: `linear-gradient(rgba(34, 9, 1, 0.7), rgba(98, 23, 8, 0.5)), url(${Background})`
+        backgroundImage: `linear-gradient(rgba(200, 200, 255, 0.7), rgba(200, 200, 8, 0.5)), url(${Background})`
       }}
     >
       {/* Mobile dropdown - always visible on mobile */}
@@ -162,7 +171,7 @@ function CategoryContainer() {
   
       {/* Show tiles when no category is selected */}
       {!selectedCategory && (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 justify-center items-center">
           <div className={`grid gap-6 ${isMobile ? "grid-cols-2" : "grid-cols-2 md:grid-cols-3"}`}>
             <AnimationSequence 
               direction="right" 
@@ -179,18 +188,18 @@ function CategoryContainer() {
                   <div 
                     key={category.id}
                     onClick={() => handleTileClick(category.id)}
-                    className="grid sm:grid-cols-2 bg-[#621708]/90 hover:bg-[#F6AA1C] h-56 text-[#F6AA1C] hover:text-[#220901] pr-0 p-2 sm:pr-4 sm:p-0 rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 border-2 border-[#941B0C]"
+                    className="grid sm:grid-cols-1 bg-[#621708]/90 hover:bg-[#F6AA1C] h-56 text-white hover:text-[#220901] p-4 rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 border-2 border-[#941B0C] flex flex-col justify-center items-center text-center"
                   >
-                    <div className="flex justify-center items-center">
-                      <div className="p-3 bg-[#220901] rounded-full w-28 md:w-24 sm:w-20 md:h-20 sm:h-20 flex items-center justify-center text-[#F6AA1C] border-2 border-[#BC3908]">
+                    <div className="flex justify-center items-center mb-3">
+                      {/* <div className="p-3 bg-[#220901] rounded-full w-28 md:w-24 sm:w-20 md:h-20 sm:h-20 flex items-center justify-center text-[#F6AA1C] border-2 border-[#BC3908]"> */}
                         {isFontAwesomeIcon ? (
                           <FontAwesomeIcon icon={category.icon} size="2x" />
                         ) : (
-                          <category.icon size={40} />
+                          <category.icon size={56} />
                         )}
-                      </div>
+                      {/* </div> */}
                     </div>
-                    <div className="flex flex-col justify-center items-center sm:items-start">
+                    <div className="flex flex-col justify-center items-center text-center">
                       <h2 className="text-2xl sm:text-3xl font-extrabold mb-2" style={{ fontFamily: "FMBindumathi"}}>{category.title_fon}</h2>
                       <p className="text-md sm:text-lg mb-4 font-extralight">{category.description}</p>
                     </div>
@@ -204,7 +213,9 @@ function CategoryContainer() {
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
             {/* Contact Details Div */}
             <div className="bg-[#220901]/90 p-6 rounded-lg shadow-lg border-2 border-[#941B0C] text-[#F6AA1C]">
-              <h3 className="text-2xl font-bold mb-4" style={{ fontFamily: "IskolaPotha" }}>සම්බන්ධ කරගත හැකි ආකාරය</h3>
+              <h3 className="text-2xl font-bold mb-4" style={{ fontFamily: "" }}>
+                සම්බන්ධ කරගත හැකි ආකාරය
+                </h3>
               <ul className="space-y-2">
               <li className="flex items-center">
                 <span className="mr-2">🚨</span> පොලිස් අධිකාරිය: <span className="font-bold ml-2">119 / 0112 433 333</span>
