@@ -19,7 +19,7 @@ useEffect(() => {
 
   const fetchFoodLocations = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/locations/category/2'); // Category 2 for free food
+      const response = await fetch('http://localhost:5000/api/locations/category/4');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -50,7 +50,7 @@ useEffect(() => {
     
       const fetchFoodServices = async () => {
         try {
-          const response = await fetch('http://localhost:5000/api/notices/category/2'); // Category 2 for free food
+          const response = await fetch('http://localhost:5000/api/notices/category/4'); 
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }

@@ -13,7 +13,7 @@ function InfoCenter() {
 
     const fetchAnnouncements = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/notices/category/13');
+        const response = await fetch('http://localhost:5000/api/notices/category/12');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
