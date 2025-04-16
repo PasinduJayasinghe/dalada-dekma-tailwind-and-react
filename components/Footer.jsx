@@ -164,15 +164,15 @@ function Footer() {
                 <h3 className="text-2xl font-bold mb-6 text-[#F6AA1C] font-serif">Follow Us</h3>
                 <div className="flex space-x-4 mb-6">
                   {[
-                    { icon: <FaFacebook size={20} />, color: 'hover:text-[#4267B2]' },
-                    { icon: <FaTwitter size={20} />, color: 'hover:text-[#1DA1F2]' },
-                    { icon: <FaInstagram size={20} />, color: 'hover:text-[#E1306C]' },
-                    { icon: <FaLinkedin size={20} />, color: 'hover:text-[#0077B5]' }
+                    { icon: <FaFacebook size={20} />, color: 'hover:text-[#4267B2]', link:"https://www.facebook.com/p/Bitzify-100063517088777/" },
+                    { icon: <FaLinkedin size={20} />, color: 'hover:text-[#0077B5]', link:"https://www.linkedin.com/company/bitzify-software-private-limited/" }
                   ].map((social, index) => (
                     <a 
                       key={index} 
-                      href="#" 
+                      href={social.link}
                       className="p-2 bg-[#621708] rounded-full text-amber-100 hover:bg-[#F6AA1C] hover:text-[#220901] transition-all duration-300"
+                      target="_blank"
+                      rel="noopener noreferrer"  
                     >
                       {social.icon}
                     </a>
@@ -187,8 +187,7 @@ function Footer() {
         <div className="border-t border-[#941B0C]/50 mt-12 pt-8 text-center">
           <p className="text-sm text-amber-100/80">
             &copy; {new Date().getFullYear()} Bitzify. All rights reserved. | 
-            <a href="#" className="hover:text-[#F6AA1C] ml-2 transition-colors">Privacy Policy</a> | 
-            <a href="#" className="hover:text-[#F6AA1C] ml-2 transition-colors">Terms of Service</a>
+            <a href="https://www.bitzify.com/privacy-policy/" target="_blank" className="hover:text-[#F6AA1C] ml-2 transition-colors">Privacy Policy</a>
           </p>
         </div>
       </div>

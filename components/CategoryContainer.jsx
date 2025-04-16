@@ -13,7 +13,7 @@ import FAQ from "./category/FAQ";
 import WeatherReports from "./category/WeatherReports";
 import InfoCenter from "./category/InfoCenter";
 import Background from "../assets/images/daladamaligawa5.png";
-import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaFire, FaWater, FaCloudSun, FaInfoCircle, FaQuestion } from "react-icons/fa";
+import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaFire, FaWater, FaCloudSun, FaInfoCircle, FaQuestion, FaFacebook, FaYoutube, FaGlobe } from "react-icons/fa";
 import AnimationSequence from "./Animation/AnimationSequence";
 
 
@@ -175,15 +175,6 @@ function CategoryContainer() {
       {!selectedCategory && (
         <div className="flex flex-col gap-6 justify-center items-center">
           <div className={`grid gap-6 ${isMobile ? "grid-cols-2" : "grid-cols-2 md:grid-cols-3"}`}>
-            <AnimationSequence 
-              direction="right" 
-              baseDelay={100} 
-              staggerDelay={100} 
-              duration={800} 
-              distance={30} 
-              easing="ease-out"
-              className="contents"
-            >
               {categories.map(category => {
                 const isFontAwesomeIcon = typeof category.icon === 'object' && category.icon.iconName;
                 return (
@@ -208,74 +199,93 @@ function CategoryContainer() {
                   </div>
                 );
               })}
-            </AnimationSequence>
           </div>
 
           {/* Additional divs for contact and radio player */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
             {/* Contact Details Div */}
             <div className="bg-[#220901]/90 p-6 rounded-lg shadow-lg border-2 border-[#941B0C] text-[#F6AA1C]">
-              <h3 className="text-2xl font-bold mb-4" style={{ fontFamily: "" }}>
+              <h3 className="text-xl sm:text-2xl font-bold mb-4" style={{ fontFamily: "NotoSansSinhala" }}>
                 සම්බන්ධ කරගත හැකි ආකාරය
-                </h3>
-              <ul className="space-y-2">
-              <li className="flex items-center">
-                <span className="mr-2">🚨</span> පොලිස් අධිකාරිය: <span className="font-bold ml-2">119 / 0112 433 333</span>
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2">🚒</span> ගිනි අංශ: <span className="font-bold ml-2">110 / 0112 422 222</span>
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2">🚑</span> සුබසාධන රථ: <span className="font-bold ml-2">1990 / 0112 677 111</span>
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2">🏥</span> රාජකීය වෛද්‍ය සේවා: <span className="font-bold ml-2">0112 695 000</span>
-              </li>
-              </ul>
-            </div>
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Emergency Contacts */}
+              <div className="mb-6">
+                <h4 className="text-lg sm:text-xl font-bold mb-3" style={{ fontFamily: "NotoSansSinhala" }}>ක්ෂණික ඇමතුම්</h4>
+                <ul className="space-y-2">
+                  <li className="flex items-center">
+                    <span className="mr-2">🚨</span> පොලිස් අධිකාරිය: <span className="font-bold ml-2">119 / 0112 433 333 / 118</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="mr-2">🚒</span> ගිනි අංශ: <span className="font-bold ml-2">110 / 0112 422 222</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="mr-2">🚑</span> සුබසාධන රථ: <span className="font-bold ml-2">1990 / 0112 677 111</span>
+                  </li>
+                  <li className="flex items-center">
+                    <span className="mr-2">🏥</span> රාජකීය වෛද්‍ය සේවා: <span className="font-bold ml-2">0112 695 000</span>
+                  </li>
+                </ul>
+              </div>
 
-            {/* Radio Player Div */}
-            {/* hidden for a reason */}
-            <div className="hidden bg-[#220901]/90 p-6 rounded-lg shadow-lg border-2 border-[#941B0C] text-[#F6AA1C]">
-              <h3 className="text-2xl font-bold mb-4" style={{ fontFamily: "IskolaPotha" }}>රේඩියෝ සංදේශ</h3>
-              <div className="flex flex-col items-center">
-                <div className="w-full max-w-md bg-[#621708] p-4 rounded-lg mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium">සිංහල ජන රේඩියෝ</span>
-                    <span className="text-sm">FM 98.8</span>
-                  </div>
-                  <div className="flex items-center justify-center space-x-4">
-                    <button className="p-2 rounded-full bg-[#BC3908] hover:bg-[#F6AA1C] text-[#F6AA1C] hover:text-[#220901]">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                      </svg>
-                    </button>
-                    <button className="p-3 rounded-full bg-[#BC3908] hover:bg-[#F6AA1C] text-[#F6AA1C] hover:text-[#220901]">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </button>
-                    <button className="p-2 rounded-full bg-[#BC3908] hover:bg-[#F6AA1C] text-[#F6AA1C] hover:text-[#220901]">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="mt-4">
-                    <div className="h-1 w-full bg-[#941B0C] rounded-full">
-                      <div className="h-1 w-1/3 bg-[#F6AA1C] rounded-full"></div>
-                    </div>
-                    <div className="flex justify-between text-xs mt-1">
-                      <span>10:45</span>
-                      <span>දේශීය ප්‍රවෘත්ති</span>
-                      <span>11:00</span>
-                    </div>
-                  </div>
+              {/* Useful Phone Numbers */}
+              <div className="mb-6">
+                <h4 className="text-lg sm:text-xl font-bold mb-3" style={{ fontFamily: "NotoSansSinhala" }}>ප්‍රයෝජනවත් දුරකථන අංක</h4>
+                <ul className="space-y-3">
+                  <li className="flex">
+                    <span className="font-bold min-w-[1.5rem]">1.</span>
+                    <span>මහනුවර මහ නගර සභාව: <span className="font-bold">0812 222 275</span></span>
+                  </li>
+                  <li className="flex">
+                    <span className="font-bold min-w-[1.5rem]">2.</span>
+                    <span>මහනුවර දුම්රිය ස්ථානය: <span className="font-bold">0812 222 271</span></span>
+                  </li>
+                  <li className="flex">
+                    <span className="font-bold min-w-[1.5rem]">3.</span>
+                    <span>ශ්‍රී දළදා මාලිගාව පොලිස් ස්ථානය: <span className="font-bold">0812 225 722</span></span>
+                  </li>
+                  <li className="flex">
+                    <span className="font-bold min-w-[1.5rem]">4.</span>
+                    <span>මහනුවර පොලිස් ස්ථානය: <span className="font-bold">0812 222 222</span></span>
+                  </li>
+                  <li className="flex">
+                    <span className="font-bold min-w-[1.5rem]">5.</span>
+                    <span>මහනුවර ගිනි නිවීමේ දෙපාර්තමේන්තුව: <span className="font-bold">0812 204 844</span></span>
+                  </li>
+                </ul>
+              </div>
+              </div>
+              {/* Social Media Links */}
+              <div className="mt-6 pt-4 border-t border-[#941B0C]">
+                <h4 className="text-xl font-bold mb-3" style={{ fontFamily: "NotoSansSinhala" }}>අපව සොයාගන්න</h4>
+                <div className="flex flex-wrap gap-4">
+                  <a 
+                    href="https://www.facebook.com/sridaladamaligawa" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center bg-[#3b5998] hover:bg-[#334d84] text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <FaFacebook className="mr-2" /> Facebook
+                  </a>
+                  
+                  <a 
+                    href="https://www.youtube.com/@sridalada" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center bg-[#ff0000] hover:bg-[#cc0000] text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <FaYoutube className="mr-2" /> YouTube
+                  </a>
+                  
+                  <a 
+                    href="https://sridaladamaligawa.lk" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center bg-[#941B0C] hover:bg-[#7a160a] text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <FaGlobe className="mr-2" /> Website
+                  </a>
                 </div>
-                <button className="px-4 py-2 bg-[#BC3908] hover:bg-[#F6AA1C] text-[#F6AA1C] hover:text-[#220901] rounded-md transition-all border-2 border-[#941B0C]">
-                  සියලුම රේඩියෝ නාලිකා
-                </button>
               </div>
             </div>
           </div>
