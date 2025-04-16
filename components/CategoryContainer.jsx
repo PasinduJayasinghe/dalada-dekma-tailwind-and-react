@@ -16,6 +16,8 @@ import Background from "../assets/images/daladamaligawa5.png";
 import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaFire, FaWater, FaCloudSun, FaInfoCircle, FaQuestion } from "react-icons/fa";
 import AnimationSequence from "./Animation/AnimationSequence";
 
+
+
 function CategoryContainer() {
   const categories = [
     {
