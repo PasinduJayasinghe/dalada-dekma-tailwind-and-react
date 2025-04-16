@@ -2,13 +2,13 @@
 
 @font-face {
     font-family: "Iskolapotha";
-    src: url("assets/fonts/ISKPOTA.TTF") format("truetype");
+    src: url("../assets/fonts/ISKPOTA.TTF") format("truetype");
     font-weight: normal;
 }
 
 @font-face {
     font-family: "TharuDigitalSansala";
-    src: url("assets/fonts/tharu_digital_sansala.ttf") format("truetype");
+    src: url("../assets/fonts/tharu_digital_sansala.ttf") format("truetype");
     font-weight: normal;
 }
 
@@ -19,13 +19,13 @@
 }
 
 @font-face {
-    font-family: "TharuDigitalRun";
+    font-family: "TharuDigitalSansala";
     src: url("assets/fonts/tharu_digital_run.ttf") format("truetype");
     font-weight: normal;
 }
 
 @font-face {
     font-family: "FMBindumathi";
-    src: url("assets/fonts/FMBindumathi\ x.ttf") format("truetype");
+    src: url("assets/fonts/FMBindumathi x.ttf") format("truetype");
     font-weight: normal;
 }
