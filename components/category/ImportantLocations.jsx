@@ -3,6 +3,9 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import AnimationSequence from "../Animation/AnimationSequence";
 import L from "leaflet";
+import walespark from "../../assets/images/route1.png"
+import rathubokkuwa from "../../assets/images/route2.png"
+import dssenanayake from "../../assets/images/route3.png"
 
 const DEFAULT_CENTER = [7.2906, 80.6337];
 
@@ -10,6 +13,28 @@ function ImportantLocations() {
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Static images data
+  const staticImages = [
+    {
+      id: 1,
+      src: walespark,
+      alt: "Route 1",
+      caption: "වේල්ස් පාර්ක් හන්දිය හරහා මාර්ගය"
+    },
+    {
+      id: 2,
+      src: rathubokkuwa,
+      alt: "Route 2",
+      caption: "රතුබොක්කුව හන්දිය හරහා මාර්ගය"
+    },
+    {
+      id: 3,
+      src: dssenanayake,
+      alt: "Route 3",
+      caption: "ඩී.එස් සේනානායක විදිය හරහා මාර්ගය"
+    }
+  ];
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -61,12 +86,73 @@ function ImportantLocations() {
   
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
-        <span className="ml-4">Loading locations...</span>
+      <div className="space-y-8"> {/* Added container for both gallery and spinner */}
+        {/* Static Images Gallery - Now properly rendered */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {staticImages.map((image) => (
+            <div 
+              key={image.id} 
+              className="group relative overflow-hidden rounded-lg shadow-lg border-2 border-[#941B0C] hover:border-[#F6AA1C] transition-all duration-300"
+            >
+              <img 
+                src={image.src} 
+                alt={image.alt}
+                className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#220901]/90 to-transparent flex items-end p-4">
+                <p 
+                  className="text-[#F6AA1C] font-bold text-lg"
+                  style={{ fontFamily: "NotoSansSinhala" }}
+                >
+                  {image.caption}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        {/* Loading Spinner */}
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
+          <span className="ml-4 text-[#F6AA1C]">Loading locations...</span>
+        </div>
       </div>
     );
   }
+
+  const StaticImageGallery = () => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      {staticImages.map((image) => (
+        <div 
+          key={image.id} 
+          className="group relative overflow-hidden rounded-lg shadow-lg border-2 border-[#941B0C] hover:border-[#F6AA1C] transition-all duration-300"
+        >
+          <a
+            href={image.src}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img 
+              src={image.src} 
+              alt={image.alt}
+              className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+          </a>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#220901]/90 to-transparent flex items-end p-4">
+            <p 
+              className="text-[#F6AA1C] font-bold text-lg"
+              style={{ fontFamily: "NotoSansSinhala" }}
+            >
+              {image.caption}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+  
 
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
   if (locations.length === 0) return <div className="text-center py-8">No locations found</div>;
@@ -77,32 +163,45 @@ function ImportantLocations() {
         {'jeo.;a ia:dk'}
         {/* වැදගත් ස්ථාන */}
       </h2>
+
+      {/* Static Image Gallery - Always Visible */}
+      <StaticImageGallery />
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {locations.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            No important locations available at the moment.
-          </div>
-          ) : (
-            <AnimationSequence 
-              direction="right" 
-              baseDelay={100} 
-              staggerDelay={150} 
-              duration={800} 
-              distance={30} 
-              easing="ease-out"
-              className="contents"
-            >
-              {locations.map(location => (
-                <LocationCard 
-                  key={location.id} 
-                  location={location} 
-                  onNavigate={openInGoogleMaps}
-                />
-              ))}
-            </AnimationSequence>
-          )}
-      </div>
+      {/* Conditional Content */}
+      {loading ? (
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
+          <span className="ml-4 text-[#F6AA1C]">Loading locations...</span>
+        </div>
+      ) : error ? (
+        <div className="text-center py-8 text-red-500">
+          {error} - Showing static content only
+        </div>
+      ) : locations.length === 0 ? (
+        <div className="text-center py-8 text-gray-500">
+          No locations found - Showing static content only
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <AnimationSequence 
+            direction="right" 
+            baseDelay={100} 
+            staggerDelay={150} 
+            duration={800} 
+            distance={30} 
+            easing="ease-out"
+            className="contents"
+          >
+            {locations.map(location => (
+              <LocationCard 
+                key={location.id} 
+                location={location} 
+                onNavigate={openInGoogleMaps}
+              />
+            ))}
+          </AnimationSequence>
+        </div>
+      )}
     </div>
   );
 }

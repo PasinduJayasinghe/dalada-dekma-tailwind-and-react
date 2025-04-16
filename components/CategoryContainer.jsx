@@ -13,7 +13,7 @@ import FAQ from "./category/FAQ";
 import WeatherReports from "./category/WeatherReports";
 import InfoCenter from "./category/InfoCenter";
 import Background from "../assets/images/daladamaligawa5.png";
-import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaFire, FaWater, FaCloudSun, FaInfoCircle, FaQuestion } from "react-icons/fa";
+import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaFire, FaWater, FaCloudSun, FaInfoCircle, FaQuestion, FaFacebook, FaYoutube, FaGlobe } from "react-icons/fa";
 import AnimationSequence from "./Animation/AnimationSequence";
 
 
@@ -175,15 +175,6 @@ function CategoryContainer() {
       {!selectedCategory && (
         <div className="flex flex-col gap-6 justify-center items-center">
           <div className={`grid gap-6 ${isMobile ? "grid-cols-2" : "grid-cols-2 md:grid-cols-3"}`}>
-            <AnimationSequence 
-              direction="right" 
-              baseDelay={100} 
-              staggerDelay={100} 
-              duration={800} 
-              distance={30} 
-              easing="ease-out"
-              className="contents"
-            >
               {categories.map(category => {
                 const isFontAwesomeIcon = typeof category.icon === 'object' && category.icon.iconName;
                 return (
@@ -208,7 +199,6 @@ function CategoryContainer() {
                   </div>
                 );
               })}
-            </AnimationSequence>
           </div>
 
           {/* Additional divs for contact and radio player */}
@@ -217,21 +207,54 @@ function CategoryContainer() {
             <div className="bg-[#220901]/90 p-6 rounded-lg shadow-lg border-2 border-[#941B0C] text-[#F6AA1C]">
               <h3 className="text-2xl font-bold mb-4" style={{ fontFamily: "" }}>
                 සම්බන්ධ කරගත හැකි ආකාරය
-                </h3>
+              </h3>
               <ul className="space-y-2">
-              <li className="flex items-center">
-                <span className="mr-2">🚨</span> පොලිස් අධිකාරිය: <span className="font-bold ml-2">119 / 0112 433 333</span>
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2">🚒</span> ගිනි අංශ: <span className="font-bold ml-2">110 / 0112 422 222</span>
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2">🚑</span> සුබසාධන රථ: <span className="font-bold ml-2">1990 / 0112 677 111</span>
-              </li>
-              <li className="flex items-center">
-                <span className="mr-2">🏥</span> රාජකීය වෛද්‍ය සේවා: <span className="font-bold ml-2">0112 695 000</span>
-              </li>
+                <li className="flex items-center">
+                  <span className="mr-2">🚨</span> පොලිස් අධිකාරිය: <span className="font-bold ml-2">119 / 0112 433 333</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="mr-2">🚒</span> ගිනි අංශ: <span className="font-bold ml-2">110 / 0112 422 222</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="mr-2">🚑</span> සුබසාධන රථ: <span className="font-bold ml-2">1990 / 0112 677 111</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="mr-2">🏥</span> රාජකීය වෛද්‍ය සේවා: <span className="font-bold ml-2">0112 695 000</span>
+                </li>
               </ul>
+              
+              {/* Social Media Links */}
+              <div className="mt-6 pt-4 border-t border-[#941B0C]">
+                <h4 className="text-xl font-bold mb-3">අපව සොයාගන්න</h4>
+                <div className="flex flex-wrap gap-4">
+                  <a 
+                    href="https://www.facebook.com/sridaladamaligawa" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center bg-[#3b5998] hover:bg-[#334d84] text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <FaFacebook /> &nbsp; Facebook
+                  </a>
+                  
+                  <a 
+                    href="https://www.youtube.com/@sridalada" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center bg-[#ff0000] hover:bg-[#cc0000] text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <FaYoutube /> &nbsp; YouTube
+                  </a>
+                  
+                  <a 
+                    href="https://sridaladamaligawa.lk" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center bg-[#941B0C] hover:bg-[#7a160a] text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <FaGlobe /> &nbsp; Website
+                  </a>
+                </div>
+              </div>
             </div>
 
             {/* Radio Player Div */}
