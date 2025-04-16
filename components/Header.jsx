@@ -106,7 +106,7 @@ function Banner() {
         style={{ fontFamily: 'FMBindumathi' }}
       >
         <span
-          className="text-[#F6AA1C] font-bold text-5xl text-right tracking-widest transform transition-all duration-500 drop-shadow-[0_0_10px_#F6AA1C] hover:drop-shadow-[0_0_20px_#F6AA1C]"
+          className="text-[#F6AA1C] font-bold text-5xl text-right  transform transition-all duration-500 drop-shadow-[0_0_10px_#F6AA1C] hover:drop-shadow-[0_0_20px_#F6AA1C]"
         >
           {`isrs o<od jkaokdj 2025`}
           {/* සිරි දළදා දැක්ම <br className="block lg:hidden" /> 2025 */}
