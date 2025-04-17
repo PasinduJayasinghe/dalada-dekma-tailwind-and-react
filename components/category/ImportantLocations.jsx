@@ -132,6 +132,7 @@ function ImportantLocations() {
             href={image.src}
             target="_blank"
             rel="noopener noreferrer"
+            className="block w-full h-full"
           >
             <img 
               src={image.src} 
@@ -139,15 +140,15 @@ function ImportantLocations() {
               className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#220901]/90 to-transparent flex items-end p-4 pointer-events-none">
+              <p 
+                className="text-[#F6AA1C] font-bold text-lg"
+                style={{ fontFamily: "NotoSansSinhala" }}
+              >
+                {image.caption}
+              </p>
+            </div>
           </a>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#220901]/90 to-transparent flex items-end p-4">
-            <p 
-              className="text-[#F6AA1C] font-bold text-lg"
-              style={{ fontFamily: "NotoSansSinhala" }}
-            >
-              {image.caption}
-            </p>
-          </div>
         </div>
       ))}
     </div>

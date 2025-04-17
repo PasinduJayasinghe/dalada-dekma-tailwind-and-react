@@ -109,7 +109,7 @@ function WaterDistribution() {
               No water distribution announcements available.
             </div>
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <AnimationSequence 
                 direction="right" 
                 baseDelay={100} 
@@ -126,7 +126,7 @@ function WaterDistribution() {
                       <p className="whitespace-pre-line">{announcement.content}</p>
                       {announcement.createdDate && (
                         <p className="text-xs text-gray-500 mt-2">
-                          {new Date(announcement.createdDate).toLocaleString()}
+                          {new Date(announcement.formattedDate).toLocaleString()}
                         </p>
                       )}
                     </div>

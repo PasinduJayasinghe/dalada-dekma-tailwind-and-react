@@ -14,9 +14,6 @@ import WeatherReports from "./category/WeatherReports";
 import InfoCenter from "./category/InfoCenter";
 import Background from "../assets/images/daladamaligawa5.png";
 import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaFire, FaWater, FaCloudSun, FaInfoCircle, FaQuestion, FaFacebook, FaYoutube, FaGlobe } from "react-icons/fa";
-import AnimationSequence from "./Animation/AnimationSequence";
-
-
 
 function CategoryContainer() {
   const categories = [
@@ -47,23 +44,23 @@ function CategoryContainer() {
       id: "freefood",
       title: "දන්සැල්",
       title_fon: "okaie,a",
-      description: "Danzal Zone",
+      description: "Food donation",
       component: FreeFood,
       icon: FaUtensils
     },
     {
       id: "sanitary",
-      title: "සනීපාරක්ෂක",
-      title_fon: "ikSmdrlaIl",
-      description: "Sanitary",
+      title: "සනීපාරක්ෂක සේවා",
+      title_fon: "ikSmdrlaIl fiajd",
+      description: "Sanitary services",
       component: SanitaryFacilities,
       icon: FaToilet
     },
     {
       id: "medical",
-      title: "හදිසි වෛද්‍ය සේවා හා කදවුරු",
-      title_fon: "yosis ffjoH fiajd",
-      description: "Emergency medical services & Camps",
+      title: "වෛද්‍ය සේවා",
+      title_fon: "ffjoH fiajd",
+      description: "Emergency medical services",
       component: MedicalServices,
       icon: FaMedkit
     },
@@ -71,23 +68,23 @@ function CategoryContainer() {
       id: "lostfound",
       title: "අතරමන් වූවන් සොයා ගැනීම",
       title_fon: "w;ruka jQjka fidhd .ekSu",
-      description: "Find Lost Person",
+      description: "Lost & Found",
       component: LostAndFound,
       icon: FaSearch
     },
     {
       id: "vehicles",
-      title: "වාහන නතර කිරීම් හා ප්‍රවාහන සේවාසේවා",
-      title_fon: "jdyk k;r lsÍï yd fiajd",
-      description: "Vehicle Parking & Transport",
+      title: "වාහන නතර කිරීම්",
+      title_fon: "jdyk k;r lsÍï",
+      description: "Vehicle Parking",
       component: VehicleInfo,
       icon: FaCar
     },
     {
       id: "water",
-      title: "පානීය ජල බෙදාහැරීම",
-      title_fon: "mdkSh c, fnodyeÍu",
-      description: "Drinking water distribution",
+      title: "පානීය ජලය",
+      title_fon: "mdkSh c,h",
+      description: "Drinking water",
       component: WaterDistribution,
       icon: FaWater
     },
@@ -95,15 +92,15 @@ function CategoryContainer() {
       id: "faq",
       title: "නිතර අසන පැනපැන",
       title_fon: "ks;r wik mek",
-      description: "Frequently Asked Questions",
+      description: "FAQ",
       component: FAQ,
       icon: FaQuestion
     },
     {
       id: "weather",
-      title: "කාලගුන වාර්තා",
-      title_fon: "ld,.=k jd¾;d",
-      description: "Weather reports",
+      title: "කාලගුණය",
+      title_fon: "ld,.=Kh",
+      description: "Weather",
       component: WeatherReports,
       icon: FaCloudSun
     },
@@ -143,34 +140,12 @@ function CategoryContainer() {
     setSelectedCategory(categoryId === selectedCategory ? null : categoryId);
   };
 
-  const handleDropdownSelect = (categoryId) => {
-    setSelectedCategory(categoryId === "all" ? null : categoryId);
-  };
-
   return (
     <div className="cursor-default p-4 bg-cover bg-center min-h-screen flex flex-col" 
       style={{ 
         backgroundImage: `linear-gradient(rgba(200, 200, 255, 0.7), rgba(200, 200, 8, 0.5)), url(${Background})`
       }}
     >
-      {/* Mobile dropdown - always visible on mobile */}
-      {isMobile && (
-        <div className="mb-4">
-          <select
-            onChange={(e) => handleDropdownSelect(e.target.value)}
-            value={selectedCategory || "all"}
-            className="w-full p-2 border border-[#BC3908] rounded-md bg-[#220901] text-[#F6AA1C]"
-          >
-            <option value="all">සියල්ල</option>
-            {categories.map(category => (
-              <option key={category.id} value={category.id}>
-                {category.title}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-  
       {/* Show tiles when no category is selected */}
       {!selectedCategory && (
         <div className="flex flex-col gap-6 justify-center items-center">
@@ -202,70 +177,121 @@ function CategoryContainer() {
           </div>
 
           {/* Additional divs for contact and radio player */}
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+          <div className="grid gap-6">
             {/* Contact Details Div */}
             <div className="bg-[#220901]/90 p-6 rounded-lg shadow-lg border-2 border-[#941B0C] text-[#F6AA1C]">
               <h3 className="text-xl sm:text-2xl font-bold mb-4" style={{ fontFamily: "NotoSansSinhala" }}>
-                සම්බන්ධ කරගත හැකි ආකාරය
+                ක්ෂණික ඇමතුම්
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Emergency Contacts */}
-              <div className="mb-6">
-                <h4 className="text-lg sm:text-xl font-bold mb-3" style={{ fontFamily: "NotoSansSinhala" }}>ක්ෂණික ඇමතුම්</h4>
-                <ul className="space-y-2">
-                  <li className="flex items-center">
-                    <span className="mr-2">🚨</span> පොලිස් අධිකාරිය: <span className="font-bold ml-2">119 / 0112 433 333 / 118</span>
-                  </li>
-                  <li className="flex items-center">
-                    <span className="mr-2">🚒</span> ගිනි අංශ: <span className="font-bold ml-2">110 / 0112 422 222</span>
-                  </li>
-                  <li className="flex items-center">
-                    <span className="mr-2">🚑</span> සුබසාධන රථ: <span className="font-bold ml-2">1990 / 0112 677 111</span>
-                  </li>
-                  <li className="flex items-center">
-                    <span className="mr-2">🏥</span> රාජකීය වෛද්‍ය සේවා: <span className="font-bold ml-2">0112 695 000</span>
-                  </li>
-                </ul>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {/* Left Column */}
+                <div className="space-y-4 text-sm sm:text-md" style={{ fontFamily: "NotoSansSinhala" }}>
+                  {/* Police Section */}
+                  <div>
+                    <h5 className="font-semibold mb-2 text-[#F6AA1C]">🚨 පොලිස්:</h5>
+                    <ul className="space-y-2 ml-4">
+                      <li className="flex items-start">
+                        <span className="mr-2 mt-1 font-extrabold">~</span>
+                        <div>
+                          <span>හදිසි අංකය</span>
+                          <div className="font-bold">119</div>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                      <span className="mr-2 mt-1 font-extrabold">~</span>
+                        <div>
+                          <span>දළදා මාලිගා පොලිසිය</span>
+                          <div className="font-bold">0812 225 722</div>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                      <span className="mr-2 mt-1 font-extrabold">~</span>
+                        <div>
+                          <span>මහනුවර පොලිසිය</span>
+                          <div className="font-bold">0812 222 222</div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Fire Department */}
+                  <div>
+                    <h5 className="font-semibold mb-2 text-[#F6AA1C]">🚒 ගිනි නිවීම්:</h5>
+                    <ul className="space-y-2 ml-4">
+                      <li className="flex items-start">
+                      <span className="mr-2 mt-1 font-extrabold">~</span>
+                        <div>
+                          <span>හදිසි අංකය</span>
+                          <div className="font-bold">110</div>
+                        </div>
+                      </li>
+                      <li className="flex items-start">
+                      <span className="mr-2 mt-1 font-extrabold">~</span>
+                        <div>
+                          <span>මහනුවර ගිනි නිවීම් දෙපාර්තමේන්තුව</span>
+                          <div className="font-bold">0812 204 844</div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Right Column */}
+                <div className="space-y-4 text-sm sm:text-md" style={{ fontFamily: "NotoSansSinhala" }}>
+                  {/* Ambulance */}
+                  <div>
+                    <h5 className="font-semibold mb-2 text-[#F6AA1C]">🚑 ගිලන් රථ:</h5>
+                    <ul className="space-y-2 ml-4">
+                      <li className="flex items-start">
+                      <span className="mr-2 mt-1 font-extrabold">~</span>
+                        <div>
+                          <span>හදිසි අංකය</span>
+                          <div className="font-bold">1990</div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Municipal Council */}
+                  <div>
+                    <h5 className="font-semibold mb-2 text-[#F6AA1C]">🏛️ මහනුවර මහ නගර සභාව:</h5>
+                    <ul className="space-y-2 ml-4">
+                      <li className="flex items-start">
+                      <span className="mr-2 font-extrabold">~</span>
+                        <div>
+                          <div className="font-bold">0812 222 275</div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Train Station */}
+                  <div>
+                    <h5 className="font-semibold mb-2 text-[#F6AA1C]">🚂 මහනුවර දුම්රිය ස්ථානය:</h5>
+                    <ul className="space-y-2 ml-4">
+                      <li className="flex items-start">
+                      <span className="mr-2 font-extrabold">~</span>
+                        <div>
+                          <div className="font-bold">0812 222 271</div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
 
-              {/* Useful Phone Numbers */}
-              <div className="mb-6">
-                <h4 className="text-lg sm:text-xl font-bold mb-3" style={{ fontFamily: "NotoSansSinhala" }}>ප්‍රයෝජනවත් දුරකථන අංක</h4>
-                <ul className="space-y-3">
-                  <li className="flex">
-                    <span className="font-bold min-w-[1.5rem]">1.</span>
-                    <span>මහනුවර මහ නගර සභාව: <span className="font-bold">0812 222 275</span></span>
-                  </li>
-                  <li className="flex">
-                    <span className="font-bold min-w-[1.5rem]">2.</span>
-                    <span>මහනුවර දුම්රිය ස්ථානය: <span className="font-bold">0812 222 271</span></span>
-                  </li>
-                  <li className="flex">
-                    <span className="font-bold min-w-[1.5rem]">3.</span>
-                    <span>ශ්‍රී දළදා මාලිගාව පොලිස් ස්ථානය: <span className="font-bold">0812 225 722</span></span>
-                  </li>
-                  <li className="flex">
-                    <span className="font-bold min-w-[1.5rem]">4.</span>
-                    <span>මහනුවර පොලිස් ස්ථානය: <span className="font-bold">0812 222 222</span></span>
-                  </li>
-                  <li className="flex">
-                    <span className="font-bold min-w-[1.5rem]">5.</span>
-                    <span>මහනුවර ගිනි නිවීමේ දෙපාර්තමේන්තුව: <span className="font-bold">0812 204 844</span></span>
-                  </li>
-                </ul>
-              </div>
-              </div>
               {/* Social Media Links */}
-              <div className="mt-6 pt-4 border-t border-[#941B0C]">
+              <div className="mt-6 pt-4 border-t grid grid-cols-1 sm:grid-cols-2 border-[#941B0C]">
                 <h4 className="text-xl font-bold mb-3" style={{ fontFamily: "NotoSansSinhala" }}>අපව සොයාගන්න</h4>
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-4 justify-center">
                   <a 
                     href="https://www.facebook.com/sridaladamaligawa" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="flex items-center bg-[#3b5998] hover:bg-[#334d84] text-white px-4 py-2 rounded-lg transition-colors"
                   >
-                    <FaFacebook className="mr-2" /> Facebook
+                    <FaFacebook />
                   </a>
                   
                   <a 
@@ -274,7 +300,7 @@ function CategoryContainer() {
                     rel="noopener noreferrer"
                     className="flex items-center bg-[#ff0000] hover:bg-[#cc0000] text-white px-4 py-2 rounded-lg transition-colors"
                   >
-                    <FaYoutube className="mr-2" /> YouTube
+                    <FaYoutube />
                   </a>
                   
                   <a 
@@ -283,7 +309,7 @@ function CategoryContainer() {
                     rel="noopener noreferrer"
                     className="flex items-center bg-[#941B0C] hover:bg-[#7a160a] text-white px-4 py-2 rounded-lg transition-colors"
                   >
-                    <FaGlobe className="mr-2" /> Website
+                    <FaGlobe />
                   </a>
                 </div>
               </div>

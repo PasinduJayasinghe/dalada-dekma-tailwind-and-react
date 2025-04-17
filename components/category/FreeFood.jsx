@@ -134,7 +134,7 @@ useEffect(() => {
               No free food services available at the moment.
             </div>
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <AnimationSequence 
                 direction="right" 
                 baseDelay={100} 
@@ -145,7 +145,7 @@ useEffect(() => {
                 className="contents"
               >
                 {foodServices.map((service) => (
-                  <Grid key={service.id} timestamp={service.createdDate}>
+                  <Grid key={service.id} timestamp={service.formattedDate}>
                     <div style={{ fontFamily: "NotoSansSinhala" }}>
                       <h3 className="text-lg font-bold mb-2">{service.title}</h3>
                       <p className="whitespace-pre-line">{service.content}</p>
