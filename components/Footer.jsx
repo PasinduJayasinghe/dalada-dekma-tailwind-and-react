@@ -186,7 +186,7 @@ function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-[#941B0C]/50 mt-12 pt-8 text-center">
-          <img src={bitzify} alt="Bitzify Logo" className="w-52 mx-auto mb-4" />
+          <a href="https://www.bitzify.com/" target="_blank"><img src={bitzify} alt="Bitzify Logo" className="w-52 mx-auto mb-4" /></a>
           <p className="text-sm text-amber-100/80">
             &copy; {new Date().getFullYear()} Bitzify. All rights reserved. | 
             <a href="https://www.bitzify.com/privacy-policy/" target="_blank" className="hover:text-[#F6AA1C] ml-2 transition-colors">Privacy Policy</a>

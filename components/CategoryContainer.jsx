@@ -13,7 +13,7 @@ import FAQ from "./category/FAQ";
 import WeatherReports from "./category/WeatherReports";
 import InfoCenter from "./category/InfoCenter";
 import Background from "../assets/images/daladamaligawa5.png";
-import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaFire, FaWater, FaCloudSun, FaInfoCircle, FaQuestion, FaFacebook, FaYoutube, FaGlobe } from "react-icons/fa";
+import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaHandHoldingWater, FaCloudSun, FaInfoCircle, FaQuestion, FaFacebook, FaYoutube, FaGlobe } from "react-icons/fa";
 
 function CategoryContainer() {
   const categories = [
@@ -86,7 +86,7 @@ function CategoryContainer() {
       title_fon: "mdkSh c,h",
       description: "Drinking water",
       component: WaterDistribution,
-      icon: FaWater
+      icon: FaHandHoldingWater
     },
     {
       id: "faq",

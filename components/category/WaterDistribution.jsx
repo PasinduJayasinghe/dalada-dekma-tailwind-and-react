@@ -120,7 +120,7 @@ function WaterDistribution() {
                 className="contents"
               >
                 {announcements.map((announcement) => (
-                  <Grid key={announcement.id}>
+                  <Grid key={announcement.id}  timestamp={announcement.formattedDate}>
                     <div style={{ fontFamily: "NotoSansSinhala" }}>
                       <h3 className="text-lg font-bold mb-2">{announcement.title}</h3>
                       <p className="whitespace-pre-line">{announcement.content}</p>
