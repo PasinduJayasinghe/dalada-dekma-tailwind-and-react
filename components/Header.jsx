@@ -94,9 +94,9 @@ function Banner() {
 
           <div className="absolute inset-0 bg-[#F6AA1C] opacity-0 group-hover:opacity-20 rounded-full blur-md transition-opacity duration-300"></div>
         </div>
-        <div className="flex flex-col" style={{ fontFamily: 'TharuDigitalSansala'}}>
-          <span className="text-[#F6AA1C] font-extrabold text-3xl tracking-widest">{`YS% o<od ud,s.dj`}</span>
-          <span className="text-[#F6AA1C] text-2xl tracking-widest">{`uykqjr`}</span>
+        <div className="flex flex-col" style={{ fontFamily: 'FMBindumathi'}}>
+          <span className="text-[#F6AA1C] font-extrabold text-3xl">{`YS% o<od ud,s.dj`}</span>
+          <span className="text-[#F6AA1C] text-2xl">{`uykqjr`}</span>
         </div>
       </div>
         
@@ -114,7 +114,7 @@ function Banner() {
       
       {/* Accent elements */}
       <div className="absolute bottom-0 left-0 w-full h-1 z-40 bg-gradient-to-r from-[#941B0C] via-[#BC3908] to-[#941B0C]"></div>
-      {/* <div className="absolute top-0 right-0 w-32 h-32 bg-[#941B0C] rounded-full mix-blend-multiply opacity-20 transform translate-x-16 -translate-y-16"></div> */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-[#941B0C] rounded-full mix-blend-multiply opacity-20 transform translate-x-16 -translate-y-16"></div>
     </div>
   );
 }

@@ -121,7 +121,6 @@ function SanitaryFacilities() {
                 <p className="text-gray-700 mb-2">{facility.description}</p>
                 <div className="flex justify-between text-sm">
                   <span className="font-medium text-amber-600">වේලාව: {facility.hours}</span>
-                  <span className="font-medium text-amber-600">ගාස්තුව: {facility.fee}</span>
                 </div>
                 <button 
                   onClick={() => openInGoogleMaps(facility.coordinates)}

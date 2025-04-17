@@ -174,6 +174,21 @@ function LostAndFound() {
           >
             {findingPoints.map(location => (
               <div key={location.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow">
+                {/* Status Badge - Added here */}
+                {location.status && (
+                  <div className={`px-3 py-1 ${location.status === 'Found' ? 
+                    'bg-green-100 text-green-800 border-b border-green-200' : 
+                    'bg-red-100 text-red-800 border-b border-red-200'}`}
+                  >
+                    <div className="flex items-center justify-center">
+                      <span className={`inline-block w-2 h-2 rounded-full mr-2 ${location.status === 'Found' ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                      <span className="text-sm font-medium">
+                        {location.status === 'Found' ? 'සොයාගෙන ඇත' : 'සොයාගෙන නැත'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="h-48">
                   <MapContainer
                     center={location.coordinates}
@@ -202,6 +217,15 @@ function LostAndFound() {
                 <div className="p-4" style={{ fontFamily: "NotoSansSinhala" }}>
                   <h4 className="text-lg font-bold mb-2">{location.name}</h4>
                   <p className="text-gray-700 mb-2">{location.description}</p>
+                  
+                  {/* Added Status Details */}
+                  {location.status === 'Found' && location.found_time && (
+                    <div className="text-sm text-gray-600 mb-2">
+                      <span className="font-semibold">සොයාගත් දිනය: </span>
+                      {new Date(location.found_time).toLocaleDateString()}
+                    </div>
+                  )}
+                  
                   <div className="flex justify-between text-sm">
                     <span className="font-medium text-amber-600">වේලාව: {location.hours}</span>
                     <span className="font-medium text-amber-600">දුරකථන: {location.contact}</span>
