@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: center;
   min-height: 60px;
-  padding: 1rem 2rem;
+  padding: 5px;
 }
 
 .messages-container {
@@ -42,6 +42,7 @@
   border-radius: 50%;
   height: 32px;
   width: 32px;
+  display: none; /* Hidden by default */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,6 +62,13 @@
 
 .next-button {
   right: 0.5rem;
+}
+
+/* Show buttons only on larger screens */
+@media (min-width: 768px) {
+  .nav-button {
+    display: flex; /* Show buttons on screens 768px and wider */
+  }
 }
 
 /* Animation classes */

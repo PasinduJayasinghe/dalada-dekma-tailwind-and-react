@@ -73,7 +73,7 @@ function Announcements() {
           No important announcements available at the moment.
         </div>
       ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <AnimationSequence 
             direction="right" 
             baseDelay={100} 
@@ -84,7 +84,7 @@ function Announcements() {
             className="contents"
           >
           {announcements.map((announcement) => (
-            <Grid key={announcement.id} timestamp={announcement.createdDate}>
+            <Grid key={announcement.id} timestamp={announcement.formattedDate}>
               <div style={{ fontFamily : "NotoSansSinhala" }}>
                 <h3 className="text-lg font-bold mb-2">{announcement.title}</h3>
                 <p className="whitespace-pre-line">{announcement.content}</p>

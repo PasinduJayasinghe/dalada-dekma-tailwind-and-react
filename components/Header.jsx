@@ -75,12 +75,11 @@ function Banner() {
             zIndex: 1,
           }}
         >
-       <img 
-  src={flowerImage(flower.type)} 
-  alt="Decorative flower" 
-  className="w-16 h-16"
-/>
-
+          <img 
+            src={flowerImage(flower.type)} 
+            alt="Decorative flower" 
+            className="w-16 h-16"
+          />
         </div>
       ))}
 
@@ -88,10 +87,10 @@ function Banner() {
       <div className="flex items-center z-40 space-x-4">
         <div className="relative group inline-flex items-center justify-center">
         <img
-  src={Logo2}
-  alt="Logo"
-  className="h-16 transition-all z-20 duration-500 group-hover:scale-110 group-hover:rotate-2 filter drop-shadow-lg"
-/>
+          src={Logo2}
+          alt="Logo"
+          className="h-16 transition-all z-20 duration-500 group-hover:scale-110 group-hover:rotate-2 filter drop-shadow-lg"
+        />
 
           <div className="absolute inset-0 bg-[#F6AA1C] opacity-0 group-hover:opacity-20 rounded-full blur-md transition-opacity duration-300"></div>
         </div>
