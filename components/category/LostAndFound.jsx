@@ -3,6 +3,7 @@ import AnimationSequence from "../Animation/AnimationSequence";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import Grid from "../Grid"
 
 function LostAndFound() {
   const [notices, setNotices] = useState([]);
@@ -94,7 +95,7 @@ function LostAndFound() {
           className={`py-2 px-4 font-medium ${activeTab === 'notices' ? 'text-amber-600 border-b-2 border-amber-500 font-extrabold' : 'text-gray-500'}`}
           onClick={() => setActiveTab('notices')}
         >
-          අතරමන් වූ පුද්ගලයන්
+          අතරමන් වූ දෑ
         </button>
         <button
           className={`py-2 px-4 font-medium ${activeTab === 'guide' ? 'text-amber-600 border-b-2 border-amber-500' : 'text-gray-500'}`}
@@ -106,7 +107,7 @@ function LostAndFound() {
           className={`py-2 px-4 font-medium ${activeTab === 'locations' ? 'text-amber-600 border-b-2 border-amber-500' : 'text-gray-500'}`}
           onClick={() => setActiveTab('locations')}
         >
-          වාර්තා කිරීමේ ස්ථාන
+          අතරමන් වූ පුද්ගලයන්
         </button>
       </div>
 
@@ -129,14 +130,12 @@ function LostAndFound() {
                 className="contents"
               >
                 {notices.map((notice) => (
-                  <div key={notice.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-                    <div className="p-4" style={{ fontFamily: "NotoSansSinhala" }}>
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="text-lg font-bold">{notice.title}</h3>
-                      </div>
-                      <p className="text-gray-700 mb-2">{notice.content}</p>
+                  <Grid key={notice.id} timestamp={notice.formattedDate}>
+                    <div style={{ fontFamily: "NotoSansSinhala" }}>
+                      <h3 className="text-lg font-bold">{notice.title}</h3>
+                      <p className="mb-2">{notice.content}</p>
                     </div>
-                  </div>
+                  </Grid>
                 ))}
               </AnimationSequence>
             </div>
