@@ -104,7 +104,7 @@ function Banner() {
         className="flex items-center z-40 justify-center space-x-4 animate-fadeIn"
         style={{ fontFamily: 'FMBindumathi' }}
       >
-        <div className="sm:hidden relative group inline-flex items-center justify-center">
+        <div className="md:hidden relative group inline-flex items-center justify-center">
           <img
             src={Logo2}
             alt="Logo"

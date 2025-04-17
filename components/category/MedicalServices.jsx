@@ -66,7 +66,7 @@ function MedicalServices() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+      <h2 className="text-3xl lg:text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
         {'yosis ffjoH fiajd'}
         {/* හදිසි වෛද්‍ය සේවා */}
       </h2>
