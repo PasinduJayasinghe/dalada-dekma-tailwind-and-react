@@ -32,7 +32,7 @@ function WaterDistribution() {
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/notices/category/10');
+        const response = await fetch('http://localhost:5000/api/notices/category/9');
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         const sortedData = data.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
