@@ -85,7 +85,8 @@ function Banner() {
 
       {/* Main Logo with artistic effects */}
       <div className="hidden md:flex items-center z-40 space-x-4">
-        <div className="relative group inline-flex items-center justify-center">
+        {/* CHANGE HERE: Wrapped the div in an anchor tag */}
+        <a href="/" className="relative group inline-flex items-center justify-center">
           <img
             src={Logo2}
             alt="Logo"
@@ -93,7 +94,7 @@ function Banner() {
           />
 
           <div className="absolute inset-0 bg-[#F6AA1C] opacity-0 group-hover:opacity-20 rounded-full blur-md transition-opacity duration-300"></div>
-        </div>
+        </a>
         <div className="flex flex-col" style={{ fontFamily: 'FMBindumathi'}}>
           <span className="text-[#F6AA1C] font-extrabold text-3xl">{`YS% o<od ud,s.dj`}</span>
           <span className="text-[#F6AA1C] text-2xl">{`uykqjr`}</span>
@@ -104,7 +105,8 @@ function Banner() {
         className="flex items-center z-40 justify-center space-x-4 animate-fadeIn"
         style={{ fontFamily: 'FMBindumathi' }}
       >
-        <div className="md:hidden relative group inline-flex items-center justify-center">
+        {/* CHANGE HERE: Wrapped the mobile logo div in an anchor tag */}
+        <a href="/" className="md:hidden relative group inline-flex items-center justify-center">
           <img
             src={Logo2}
             alt="Logo"
@@ -112,7 +114,7 @@ function Banner() {
           />
 
           <div className="absolute inset-0 bg-[#F6AA1C] opacity-0 group-hover:opacity-20 rounded-full blur-md transition-opacity duration-300"></div>
-        </div>
+        </a>
         <span
           className="text-[#F6AA1C] font-bold text-3xl md:text-4xl lg:text-5xl md:text-right  transform transition-all duration-500 drop-shadow-[0_0_10px_#F6AA1C] hover:drop-shadow-[0_0_20px_#F6AA1C]"
         >
