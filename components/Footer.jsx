@@ -145,7 +145,7 @@ function Footer() {
                     </div>
                     <div>
                       <p className="font-medium text-amber-100">Phone</p>
-                      <p className="text-amber-50/90">+94 76 123 4567</p>
+                      <p className="text-amber-50/90">0812 063 636</p>
                     </div>
                   </div>
                   <div className="flex items-start">

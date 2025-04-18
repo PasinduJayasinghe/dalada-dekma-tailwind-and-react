@@ -71,6 +71,19 @@ function SanitaryFacilities() {
         {'ikSmdrlaIl myiqlï $ jeisls,s'}
         {/* සනීපාරක්ෂක පහසුකම් / වැසිකිලි */}
       </h2>
+      
+      {/* Embedded Google My Map */}
+      <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
+        <iframe 
+          src="https://www.google.com/maps/d/u/0/embed?mid=1I3pUgO0EnzwvhFzymChReGo-2Q5m3Ls&ehbc=2E312F&noprof=1" 
+          width="100%" 
+          height="480"
+          className="border-0"
+          allowFullScreen=""
+          loading="lazy"
+        ></iframe>
+      </div>
+
       {facilities.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           No facility locations available at the moment.
