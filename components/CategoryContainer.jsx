@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Announcements from "./category/Announcements";
 import ImportantLocations from "./category/ImportantLocations";
@@ -129,6 +128,7 @@ function CategoryContainer() {
     window.history.pushState({ hasSelectedCategory: false }, '');
   };
 
+
   // Function to refresh data
   const refreshData = async () => {
     setIsRefreshing(true);
@@ -222,9 +222,42 @@ function CategoryContainer() {
     }
   }, [selectedCategory]);
 
-  const handleTileClick = (categoryId) => {
-    setSelectedCategory(categoryId === selectedCategory ? null : categoryId);
-  };
+
+
+  // New mobile navigation logic
+  useEffect(() => {
+    // Handle the browser's back button/gesture
+    const handlePopState = (event) => {
+      if (event.state && event.state.view === 'main') {
+        setSelectedCategory(null);
+      }
+    };
+        // Add event listener
+        window.addEventListener('popstate', handlePopState);
+    
+        // Clean up
+        return () => {
+          window.removeEventListener('popstate', handlePopState);
+        };
+      }, []);
+
+    // Modify your existing handleTileClick function
+    const handleTileClick = (categoryId) => {
+      // If we're selecting a category (not toggling the same one off)
+      if (categoryId !== selectedCategory) {
+        // Push the main page state to history before navigating to category
+        window.history.pushState(
+          { view: 'main' }, 
+          '', 
+          window.location.pathname
+        );
+        
+        // Update state to show the selected category
+        setSelectedCategory(categoryId);
+      } else {
+        setSelectedCategory(null);
+      }
+    };
 
   // Format time until next refresh
   const formatTimeRemaining = (seconds) => {
@@ -460,8 +493,7 @@ function CategoryContainer() {
       {selectedCategory && (
         <div>
           {/* Back button - shows on both mobile and desktop */}
-          <button 
-            onClick={handleBack}
+
             className="mb-4 px-4 py-2 bg-[#BC3908] hover:bg-[#F6AA1C] text-[#F6AA1C] hover:text-[#220901] rounded-md flex items-center transition-all border-2 border-[#941B0C]"
           >
             <span className="mr-2">←</span> Back to categories
