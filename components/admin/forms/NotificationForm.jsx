@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // Form component for creating/editing notifications
 export default function NotificationForm({ formData, onChange, onSubmit, isLoading }) {
   const [charCount, setCharCount] = useState(formData.content.length);
-  const maxLength = 50; // Set your desired maximum character limit
+  const maxLength = 250; // Set your desired maximum character limit
 
   const handleContentChange = (e) => {
     const { name, value } = e.target;
