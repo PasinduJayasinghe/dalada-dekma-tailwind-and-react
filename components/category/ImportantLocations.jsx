@@ -3,36 +3,47 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import AnimationSequence from "../Animation/AnimationSequence";
 import L from "leaflet";
-import walespark from "../../assets/images/route1.png"
-import rathubokkuwa from "../../assets/images/route2.png"
-import dssenanayake from "../../assets/images/route3.png"
+import walespark from "../../assets/images/route1.png";
+import rathubokkuwa from "../../assets/images/route2.png";
+import dssenanayake from "../../assets/images/route3.png";
 
 const DEFAULT_CENTER = [7.2906, 80.6337];
 
+// Category data from your image
+const CATEGORIES = [
+  { id: 4, name: "Freefood", displayName: "Freefood" },
+  { id: 5, name: "Sanitary", displayName: "Sanitary" },
+  { id: 6, name: "Medical", displayName: "Medical" },
+  { id: 8, name: "Vehicles", displayName: "Vehicles" },
+  { id: 9, name: "Water", displayName: "Water" }
+];
+
 function ImportantLocations() {
-  const [locations, setLocations] = useState([]);
+  const [allLocations, setAllLocations] = useState([]);
+  const [filteredLocations, setFilteredLocations] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Static images data
   const staticImages = [
     {
       id: 1,
       src: walespark,
       alt: "Route 1",
-      caption: "ප්‍රවේශ මාර්ග 1"
+      caption: "රතු බෝක්කුව දෙස සිට මහනුවර වැව රවුම (සංඝරාජ මාවත) ශ්‍රී දළදා මාලිගාවේ පිවිසුම් මාර්ගය"
     },
     {
       id: 2,
       src: rathubokkuwa,
       alt: "Route 2",
-      caption: "ප්‍රවේශ මාර්ග 2"
+      caption: "රතු බෝක්කුව දෙස සිට මහනුවර වැව රවුම (මාලිගාව පෙදෙස) ශ්‍රී දළදා මාලිගාවේ පිවිසුම් මාර්ගය"
     },
     {
       id: 3,
       src: dssenanayake,
       alt: "Route 3",
-      caption: "ප්‍රවේශ මාර්ග 3"
+      caption: "ඩී.එස්. සේනානායක වීදිය දෙස සිට (ත්‍රීකුණාමල වීදිය) ශ්‍රී දළදා මාලිගාවේ පිවිසුම් මාර්ගය"
     }
   ];
 
@@ -45,17 +56,16 @@ function ImportantLocations() {
         }
         const data = await response.json();
         
-        // Transform and filter the data
+        // Transform the data
         const transformedData = data
-          // Filter out category_id 7 (Lost & Found)
-          .filter(location => location.category_id !== 7)
-          // Transform remaining locations
-          .map(location => ({
-            ...location,
-            coordinates: [parseFloat(location.lat), parseFloat(location.lng)]
-          }));
+        .filter(location => location.category_id && location.lng)
+        .map(location => ({
+          ...location,
+          coordinates: [parseFloat(location.lat), parseFloat(location.lng)]
+        }));
         
-        setLocations(transformedData);
+        setAllLocations(transformedData);
+        setFilteredLocations(transformedData); // Initially show all locations
       } catch (err) {
         console.error("Error fetching locations:", err);
         setError("Failed to load locations");
@@ -67,14 +77,34 @@ function ImportantLocations() {
     fetchLocations();
   }, []);
 
+  // Filter locations based on selected categories
+  useEffect(() => {
+    if (selectedCategories.length === 0) {
+      setFilteredLocations(allLocations);
+    } else {
+      const filtered = allLocations.filter(location => 
+        selectedCategories.includes(location.category_id)
+      );
+      setFilteredLocations(filtered);
+    }
+  }, [selectedCategories, allLocations]);
+
+  const toggleCategory = (categoryId) => {
+    setSelectedCategories(prev => 
+      prev.includes(categoryId)
+        ? prev.filter(id => id !== categoryId)
+        : [...prev, categoryId]
+    );
+  };
+
   const calculateCenter = () => {
-    if (locations.length === 0) return DEFAULT_CENTER;
+    if (filteredLocations.length === 0) return DEFAULT_CENTER;
     
-    const sum = locations.reduce((acc, loc) => {
+    const sum = filteredLocations.reduce((acc, loc) => {
       return [acc[0] + loc.coordinates[0], acc[1] + loc.coordinates[1]];
     }, [0, 0]);
     
-    return [sum[0] / locations.length, sum[1] / locations.length];
+    return [sum[0] / filteredLocations.length, sum[1] / filteredLocations.length];
   };
 
   const openInGoogleMaps = (coordinates) => {
@@ -86,8 +116,7 @@ function ImportantLocations() {
   
   if (loading) {
     return (
-      <div className="space-y-8"> {/* Added container for both gallery and spinner */}
-        {/* Static Images Gallery - Now properly rendered */}
+      <div className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {staticImages.map((image) => (
             <div 
@@ -112,7 +141,6 @@ function ImportantLocations() {
           ))}
         </div>
         
-        {/* Loading Spinner */}
         <div className="flex justify-center items-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
           <span className="ml-4">Loading locations...</span>
@@ -153,34 +181,43 @@ function ImportantLocations() {
       ))}
     </div>
   );
-  
 
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
-  if (locations.length === 0) return <div className="text-center py-8">No locations found</div>;
+  if (allLocations.length === 0) return <div className="text-center py-8">No locations found</div>;
 
   return (
     <div className="px-4 py-6">
       <h2 className="text-3xl lg:text-4xl font-bold text-center mb-6 pb-2 border-b border-amber-300" style={{ fontFamily: "FMBindumathi"}}>
-        {'jeo.;a ia:dk'}
-        {/* වැදගත් ස්ථාන */}
+        {'m%fõI ùfï ud¾.'}
       </h2>
 
-      {/* Static Image Gallery - Always Visible */}
       <StaticImageGallery />
       
-      {/* Conditional Content */}
-      {loading ? (
-        <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
-          <span className="ml-4 text-[#F6AA1C]">Loading locations...</span>
+      {/* Category Filter */}
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: "NotoSansSinhala" }}>
+          ප්‍රවර්ගය අනුව වැදගත් ස්ථාන:
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          {CATEGORIES.map(category => (
+            <button
+              key={category.id}
+              onClick={() => toggleCategory(category.id)}
+              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                selectedCategories.includes(category.id)
+                  ? 'bg-[#BC3908] text-white'
+                  : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+              }`}
+            >
+              {category.displayName}
+            </button>
+          ))}
         </div>
-      ) : error ? (
-        <div className="text-center py-8 text-red-500">
-          {error} - Showing static content only
-        </div>
-      ) : locations.length === 0 ? (
+      </div>
+
+      {filteredLocations.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
-          No locations found - Showing static content only
+          No locations match the selected categories
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -193,7 +230,7 @@ function ImportantLocations() {
             easing="ease-out"
             className="contents"
           >
-            {locations.map(location => (
+            {filteredLocations.map(location => (
               <LocationCard 
                 key={location.id} 
                 location={location} 
@@ -208,11 +245,10 @@ function ImportantLocations() {
 }
 
 const LocationCard = ({ location, onNavigate }) => {
-  // Ensure coordinates exist and are valid numbers
   const coordinates = Array.isArray(location.coordinates) && 
-                      location.coordinates.length === 2 &&
-                      !isNaN(location.coordinates[0]) && 
-                      !isNaN(location.coordinates[1])
+                    location.coordinates.length === 2 &&
+                    !isNaN(location.coordinates[0]) && 
+                    !isNaN(location.coordinates[1])
     ? location.coordinates
     : DEFAULT_CENTER;
 

@@ -122,6 +122,13 @@ function CategoryContainer() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [timeUntilNextRefresh, setTimeUntilNextRefresh] = useState(600); // 10 minutes in seconds
 
+  const handleBack = () => {
+    setSelectedCategory(null);
+    // Add a new entry to the history stack when a category is selected
+    // This ensures the back button works as expected
+    window.history.pushState({ hasSelectedCategory: false }, '');
+  };
+
   // Function to refresh data
   const refreshData = async () => {
     setIsRefreshing(true);
@@ -175,6 +182,26 @@ function CategoryContainer() {
       clearInterval(countdownInterval);
     };
   }, []);  // Empty dependency array means this runs once on mount
+
+  // Set up popstate listener for browser/mobile back button
+  useEffect(() => {
+    const handlePopState = (event) => {
+      // Check if we're going back from a selected category
+      if (selectedCategory && (!event.state || !event.state.hasSelectedCategory)) {
+        setSelectedCategory(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [selectedCategory]);
+
+  // When a category is selected, update history
+  useEffect(() => {
+    if (selectedCategory) {
+      window.history.pushState({ hasSelectedCategory: true }, '');
+    }
+  }, [selectedCategory]);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -343,7 +370,7 @@ function CategoryContainer() {
 
                   {/* Municipal Council */}
                   <div>
-                    <h5 className="font-semibold mb-2 text-[#F6AA1C]">🏛️ මහනුවර මහා නගර සභාව:</h5>
+                    <h5 className="font-semibold mb-2 text-[#F6AA1C]">🏛️ මහනුවර මහ නගර සභාව:</h5>
                     <ul className="space-y-2 ml-4">
                       <li className="flex items-start">
                       <span className="mr-2 font-extrabold">~</span>
@@ -434,6 +461,7 @@ function CategoryContainer() {
         <div>
           {/* Back button - shows on both mobile and desktop */}
           <button 
+            onClick={handleBack}
             className="mb-4 px-4 py-2 bg-[#BC3908] hover:bg-[#F6AA1C] text-[#F6AA1C] hover:text-[#220901] rounded-md flex items-center transition-all border-2 border-[#941B0C]"
           >
             <span className="mr-2">←</span> Back to categories
