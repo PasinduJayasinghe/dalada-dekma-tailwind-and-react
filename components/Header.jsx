@@ -61,7 +61,7 @@ function Banner() {
   }, []);
 
   return (
-    <div className="w-full h-32 flex items-center justify-center md:justify-between px-8 relative overflow-hidden bg-gradient-to-r from-[#220901] to-[#621708] shadow-lg cursor-default">
+    <div className="w-full h-28 flex items-center justify-center md:justify-between px-8 relative overflow-hidden bg-gradient-to-r from-[#220901] to-[#621708] shadow-lg cursor-default">
       {/* Flower background elements */}
       {flowers.map((flower) => (
         <div
@@ -84,13 +84,13 @@ function Banner() {
       ))}
 
       {/* Main Logo with artistic effects */}
-      <div className="flex items-center z-40 space-x-4">
+      <div className="hidden md:flex items-center z-40 space-x-4">
         <div className="relative group inline-flex items-center justify-center">
-        <img
-          src={Logo2}
-          alt="Logo"
-          className="h-16 transition-all z-20 duration-500 group-hover:scale-110 group-hover:rotate-2 filter drop-shadow-lg"
-        />
+          <img
+            src={Logo2}
+            alt="Logo"
+            className="h-16 transition-all z-20 duration-500 group-hover:scale-110 group-hover:rotate-2 filter drop-shadow-lg"
+          />
 
           <div className="absolute inset-0 bg-[#F6AA1C] opacity-0 group-hover:opacity-20 rounded-full blur-md transition-opacity duration-300"></div>
         </div>
@@ -101,20 +101,25 @@ function Banner() {
       </div>
         
       <div
-        className="hidden md:flex items-center z-40 justify-center space-x-4 animate-fadeIn"
+        className="flex items-center z-40 justify-center space-x-4 animate-fadeIn"
         style={{ fontFamily: 'FMBindumathi' }}
       >
+        <div className="md:hidden relative group inline-flex items-center justify-center">
+          <img
+            src={Logo2}
+            alt="Logo"
+            className="h-16 transition-all z-20 duration-500 group-hover:scale-110 group-hover:rotate-2 filter drop-shadow-lg"
+          />
+
+          <div className="absolute inset-0 bg-[#F6AA1C] opacity-0 group-hover:opacity-20 rounded-full blur-md transition-opacity duration-300"></div>
+        </div>
         <span
-          className="text-[#F6AA1C] font-bold text-5xl text-right  transform transition-all duration-500 drop-shadow-[0_0_10px_#F6AA1C] hover:drop-shadow-[0_0_20px_#F6AA1C]"
+          className="text-[#F6AA1C] font-bold text-3xl md:text-4xl lg:text-5xl md:text-right  transform transition-all duration-500 drop-shadow-[0_0_10px_#F6AA1C] hover:drop-shadow-[0_0_20px_#F6AA1C]"
         >
-          {`isrs o<od jkaokdj 2025`}
+          {`isrs o<od`} <br className="block sm:hidden" /> {`jkaokdj 2025`}
           {/* සිරි දළදා දැක්ම <br className="block lg:hidden" /> 2025 */}
         </span>
       </div>
-      
-      {/* Accent elements */}
-      <div className="absolute bottom-0 left-0 w-full h-1 z-40 bg-gradient-to-r from-[#941B0C] via-[#BC3908] to-[#941B0C]"></div>
-      <div className="absolute top-0 right-0 w-32 h-32 bg-[#941B0C] rounded-full mix-blend-multiply opacity-20 transform translate-x-16 -translate-y-16"></div>
     </div>
   );
 }

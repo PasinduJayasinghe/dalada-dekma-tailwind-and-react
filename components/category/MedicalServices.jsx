@@ -66,7 +66,7 @@ function MedicalServices() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+      <h2 className="text-3xl lg:text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
         {'yosis ffjoH fiajd'}
         {/* හදිසි වෛද්‍ය සේවා */}
       </h2>
@@ -86,7 +86,7 @@ function MedicalServices() {
             className="contents"
           >
           {medicalServices.map((service) => (
-            <Grid key={service.id}>
+            <Grid key={service.id} timestamp={service.formattedDate}>
               <div style={{ fontFamily : "NotoSansSinhala" }}>
                 <h3 className="text-lg font-bold mb-2">{service.title}</h3>
                 <p className="whitespace-pre-line">{service.content}</p>

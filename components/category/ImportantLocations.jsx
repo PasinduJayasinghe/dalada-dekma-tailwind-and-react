@@ -160,7 +160,7 @@ function ImportantLocations() {
 
   return (
     <div className="px-4 py-6">
-      <h2 className="text-4xl font-bold text-center mb-6 pb-2 border-b border-amber-300" style={{ fontFamily: "FMBindumathi"}}>
+      <h2 className="text-3xl lg:text-4xl font-bold text-center mb-6 pb-2 border-b border-amber-300" style={{ fontFamily: "FMBindumathi"}}>
         {'jeo.;a ia:dk'}
         {/* වැදගත් ස්ථාන */}
       </h2>

@@ -3,6 +3,7 @@ import AnimationSequence from "../Animation/AnimationSequence";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import Grid from "../Grid"
 
 function LostAndFound() {
   const [notices, setNotices] = useState([]);
@@ -82,31 +83,34 @@ function LostAndFound() {
   }
 
   return (
-    <div className="px-4 py-6">
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+    <div>
+      <h2 className="text-3xl lg:text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
         {'w;ruka jQjka fidhd .ekSu'}
         {/* අතරමන් වූවන් සොයා ගැනීම */}
       </h2>
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-gray-200 mb-6">
+      <div className="flex border-b border-gray-200 mb-6 text-[13px] lg:text-lg">
         <button
-          className={`py-2 px-4 font-medium ${activeTab === 'notices' ? 'text-amber-600 border-b-2 border-amber-500 font-extrabold' : 'text-gray-500'}`}
+          className={`py-2 px-4 font-extrabold ${activeTab === 'notices' ? 'text-amber-900 border-b-2 border-amber-800' : 'text-gray-700'}`}
           onClick={() => setActiveTab('notices')}
+          style={{ fontFamily: "NotoSansSinhala" }}
         >
-          අතරමන් වූ පුද්ගලයන්
+          නැතිනැති වූ දෑ
         </button>
         <button
-          className={`py-2 px-4 font-medium ${activeTab === 'guide' ? 'text-amber-600 border-b-2 border-amber-500' : 'text-gray-500'}`}
+          className={`py-2 px-4 font-extrabold ${activeTab === 'guide' ? 'text-amber-900 border-b-2 border-amber-800' : 'text-gray-700'}`}
           onClick={() => setActiveTab('guide')}
+          style={{ fontFamily: "NotoSansSinhala" }}
         >
-          සොයා ගැනීමේ මගපෙන්වීම
+          සොයා ගැනීමට උපදේශ
         </button>
         <button
-          className={`py-2 px-4 font-medium ${activeTab === 'locations' ? 'text-amber-600 border-b-2 border-amber-500' : 'text-gray-500'}`}
+          className={`py-2 px-4 font-extrabold ${activeTab === 'locations' ? 'text-amber-900 border-b-2 border-amber-800' : 'text-gray-700'}`}
           onClick={() => setActiveTab('locations')}
+          style={{ fontFamily: "NotoSansSinhala" }}
         >
-          වාර්තා කිරීමේ ස්ථාන
+          අතරමන් වූවන්
         </button>
       </div>
 
@@ -129,14 +133,12 @@ function LostAndFound() {
                 className="contents"
               >
                 {notices.map((notice) => (
-                  <div key={notice.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-                    <div className="p-4" style={{ fontFamily: "NotoSansSinhala" }}>
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="text-lg font-bold">{notice.title}</h3>
-                      </div>
-                      <p className="text-gray-700 mb-2">{notice.content}</p>
+                  <Grid key={notice.id} timestamp={notice.formattedDate}>
+                    <div style={{ fontFamily: "NotoSansSinhala" }}>
+                      <h3 className="text-lg font-bold">{notice.title}</h3>
+                      <p className="mb-2">{notice.content}</p>
                     </div>
-                  </div>
+                  </Grid>
                 ))}
               </AnimationSequence>
             </div>
@@ -146,15 +148,15 @@ function LostAndFound() {
 
       {activeTab === 'guide' && (
         <div className="bg-amber-50 rounded-lg p-6" style={{ fontFamily: "NotoSansSinhala" }}>
-          <h3 className="text-2xl font-bold mb-4 text-amber-800">අතරමන් වූ පුද්ගලයකු සොයා ගැනීමේ මගපෙන්වීම</h3>
+          <h3 className="text-xl md:text-2xl font-bold mb-4 text-amber-800">අතරමන් වූ පුද්ගලයකු සොයා ගැනීමේ මගපෙන්වීම</h3>
           <ol className="space-y-4 list-decimal list-inside">
             {GUIDE_STEPS.map((step, index) => (
-              <li key={index} className="text-gray-800">
+              <li key={index} className="text-gray-800 text-sm md:text-lg">
                 {step}
               </li>
             ))}
           </ol>
-          <div className="mt-6 p-4 bg-white rounded-lg border border-amber-200">
+          <div className="mt-6 p-4 bg-white rounded-lg border border-amber-200 text-justify text-sm md:text-lg">
             <h4 className="font-bold text-amber-700 mb-2">අවධානයට:</h4>
             <p>අතරමන් වූ දරුවන් සඳහා විශේෂ අවධානයක් යොමු කරන්න. ඔවුන්ගේ ඡායාරූප, ඇඳුම් සහ විශේෂ සලකුණු පිළිබඳ විස්තර ඉක්මනින් බෙදාහරින්න.</p>
           </div>

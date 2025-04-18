@@ -66,8 +66,8 @@ function SanitaryFacilities() {
   }
 
   return (
-    <div className="px-4 py-6">
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+    <div>
+      <h2 className="text-3xl lg:text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
         {'ikSmdrlaIl myiqlï $ jeisls,s'}
         {/* සනීපාරක්ෂක පහසුකම් / වැසිකිලි */}
       </h2>

@@ -111,7 +111,7 @@ function Notification({ staticMessages = [], interval = 5000 }) {
 
         <div className="messages-container">
           <div
-            className={`message ${isAnimating ? (slideDirection === 'left' ? 'slide-out-left' : 'slide-out-right') : ''}`}
+            className={`message text-sm ${isAnimating ? (slideDirection === 'left' ? 'slide-out-left' : 'slide-out-right') : ''}`}
             style={{ fontFamily: "NotoSansSinhala" }}
           >
             {displayMessages[currentIndex]}
@@ -119,7 +119,7 @@ function Notification({ staticMessages = [], interval = 5000 }) {
 
           {isAnimating && (
             <div
-              className={`message ${slideDirection === 'left' ? 'slide-in-left' : 'slide-in-right'}`}
+              className={`message text-sm ${slideDirection === 'left' ? 'slide-in-left' : 'slide-in-right'}`}
               style={{ fontFamily: "NotoSansSinhala" }}
             >
               {displayMessages[

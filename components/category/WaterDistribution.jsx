@@ -16,7 +16,7 @@ function WaterDistribution() {
   useEffect(() => {
     const fetchWaterPoints = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/locations/category/10');
+        const response = await fetch('http://localhost:5000/api/locations/category/9');
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         setWaterPoints(data);
@@ -77,23 +77,23 @@ function WaterDistribution() {
   }
 
   return (
-    <div className="px-4 py-6">
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+    <div>
+      <h2 className="text-3xl lg:text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
         {'mdkSh c, fnodyeÍu'}
         {/* පානීය ජල බෙදාහැරීම */}
       </h2>
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-gray-200 mb-6">
+      <div className="flex border-b border-gray-200 mb-6 text-sm lg:text-lg">
         <button
-          className={`py-2 px-4 font-medium ${activeTab === 'announcements' ? 'text-amber-600 border-b-2 border-amber-500' : 'text-gray-500'}`}
+          className={`py-2 px-4 font-extrabold ${activeTab === 'announcements' ? 'text-amber-900 border-b-2 border-amber-800' : 'text-gray-700'}`}
           onClick={() => setActiveTab('announcements')}
           style={{ fontFamily: "NotoSansSinhala" }}
         >
           නිවේදන
         </button>
         <button
-          className={`py-2 px-4 font-medium ${activeTab === 'locations' ? 'text-amber-600 border-b-2 border-amber-500' : 'text-gray-500'}`}
+          className={`py-2 px-4 font-extrabold ${activeTab === 'locations' ? 'text-amber-900 border-b-2 border-amber-800' : 'text-gray-700'}`}
           onClick={() => setActiveTab('locations')}
           style={{ fontFamily: "NotoSansSinhala" }}
         >
@@ -120,7 +120,7 @@ function WaterDistribution() {
                 className="contents"
               >
                 {announcements.map((announcement) => (
-                  <Grid key={announcement.id}>
+                  <Grid key={announcement.id}  timestamp={announcement.formattedDate}>
                     <div style={{ fontFamily: "NotoSansSinhala" }}>
                       <h3 className="text-lg font-bold mb-2">{announcement.title}</h3>
                       <p className="whitespace-pre-line">{announcement.content}</p>
