@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Announcements from "./category/Announcements";
 import ImportantLocations from "./category/ImportantLocations";
@@ -122,6 +121,15 @@ function CategoryContainer() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [timeUntilNextRefresh, setTimeUntilNextRefresh] = useState(600); // 10 minutes in seconds
 
+  const handleBack = () => {
+    setSelectedCategory(null);
+    // Add a new entry to the history stack when a category is selected
+    // This ensures the back button works as expected
+    window.history.pushState({ hasSelectedCategory: false }, '');
+  };
+
+
+
   // Function to refresh data
   const refreshData = async () => {
     setIsRefreshing(true);
@@ -194,6 +202,9 @@ function CategoryContainer() {
       });
     }
   }, [selectedCategory]);
+
+
+
   // New mobile navigation logic
   useEffect(() => {
     // Handle the browser's back button/gesture
@@ -463,7 +474,7 @@ function CategoryContainer() {
       {selectedCategory && (
         <div>
           {/* Back button - shows on both mobile and desktop */}
-          <button 
+          <button onClick={handleBack}
             className="mb-4 px-4 py-2 bg-[#BC3908] hover:bg-[#F6AA1C] text-[#F6AA1C] hover:text-[#220901] rounded-md flex items-center transition-all border-2 border-[#941B0C]"
           >
             <span className="mr-2">←</span> Back to categories
