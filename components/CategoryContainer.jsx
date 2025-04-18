@@ -493,7 +493,8 @@ function CategoryContainer() {
       {selectedCategory && (
         <div>
           {/* Back button - shows on both mobile and desktop */}
-
+          <button
+            onClick={handleBack}
             className="mb-4 px-4 py-2 bg-[#BC3908] hover:bg-[#F6AA1C] text-[#F6AA1C] hover:text-[#220901] rounded-md flex items-center transition-all border-2 border-[#941B0C]"
           >
             <span className="mr-2">←</span> Back to categories
