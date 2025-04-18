@@ -28,14 +28,14 @@ function Footer() {
     setError('');
     
     try {
-      const response = await fetch('https://localhost:7249/api/Subscribers', {  // Fixed URL (added colon after https)
+      const response = await fetch('http://localhost:5000/api/subscribers', {  // Fixed URL (added colon after https)
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Name: formData.name,
-          PhoneNumber: formData.phone
+          name: formData.name,
+          phoneNumber: formData.phone
         }),
       });
 
