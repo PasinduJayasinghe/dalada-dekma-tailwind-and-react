@@ -135,10 +135,40 @@ function CategoryContainer() {
       });
     }
   }, [selectedCategory]);
+  // New mobile navigation logic
+  useEffect(() => {
+    // Handle the browser's back button/gesture
+    const handlePopState = (event) => {
+      if (event.state && event.state.view === 'main') {
+        setSelectedCategory(null);
+      }
+    };
+        // Add event listener
+        window.addEventListener('popstate', handlePopState);
+    
+        // Clean up
+        return () => {
+          window.removeEventListener('popstate', handlePopState);
+        };
+      }, []);
 
-  const handleTileClick = (categoryId) => {
-    setSelectedCategory(categoryId === selectedCategory ? null : categoryId);
-  };
+    // Modify your existing handleTileClick function
+    const handleTileClick = (categoryId) => {
+      // If we're selecting a category (not toggling the same one off)
+      if (categoryId !== selectedCategory) {
+        // Push the main page state to history before navigating to category
+        window.history.pushState(
+          { view: 'main' }, 
+          '', 
+          window.location.pathname
+        );
+        
+        // Update state to show the selected category
+        setSelectedCategory(categoryId);
+      } else {
+        setSelectedCategory(null);
+      }
+    };
 
   return (
     <div className="cursor-default p-4 bg-cover bg-center min-h-screen flex flex-col" 
