@@ -17,7 +17,7 @@ function SanitaryFacilities() {
   
     const fetchFacilities = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/locations/category/5'); // Category 3 for sanitary
+        const response = await fetch('http://localhost:5000/api/locations/category/5');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
