@@ -111,8 +111,8 @@ function Notification({ staticMessages = [], interval = 5000 }) {
 
         <div className="messages-container">
           <div
-            className={`message text-sm ${isAnimating ? (slideDirection === 'left' ? 'slide-out-left' : 'slide-out-right') : ''}`}
-            style={{ fontFamily: "NotoSansSinhala" }}
+            className={`message text-xs ${isAnimating ? (slideDirection === 'left' ? 'slide-out-left' : 'slide-out-right') : ''}`}
+            style={{ fontFamily: "NotoSansSinhala", fontSize: "12px" }}
           >
             {displayMessages[currentIndex]}
           </div>
