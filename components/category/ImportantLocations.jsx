@@ -190,9 +190,19 @@ function ImportantLocations() {
       <h2 className="text-3xl lg:text-4xl font-bold text-center mb-6 pb-2 border-b border-amber-300" style={{ fontFamily: "FMBindumathi"}}>
         {'m%fõI ùfï ud¾.'}
       </h2>
-
-      <StaticImageGallery />
       
+      <StaticImageGallery />
+      <div className="flex justify-center items-center mb-6 gap-3">
+      <div className="mb-8 rounded-lg overflow-hidden shadow-lg h-100 w-100 border-2 border-[#BC3908]">
+      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=14CJEhMGyswV89aiYRDZdrO4NHkgw6Dw&ehbc=2E312F&noprof=1" width="640" height="480"></iframe>
+      </div>
+      <div className="mb-8 rounded-lg overflow-hidden shadow-lg h-100 w-100 border-2 border-[#BC3908]">
+      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1mhjXYUJjv0H6wB80H_-YIl1w073ZkvQ&ehbc=2E312F&noprof=1" width="640" height="480"></iframe>
+      </div>
+      <div className="mb-8 rounded-lg overflow-hidden shadow-lg h-100 w-100 border-2 border-[#BC3908]">
+      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1VNp9OorKJHb8tPgshj9oMBnJDbFuOY4&ehbc=2E312F&noprof=1" width="640" height="480"></iframe>
+      </div>
+      </div>
       {/* Category Filter */}
       <div className="mb-6">
         <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: "NotoSansSinhala" }}>

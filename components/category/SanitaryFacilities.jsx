@@ -74,11 +74,10 @@ function SanitaryFacilities() {
       
       {/* Embedded Google My Map */}
       <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
-        <iframe 
+        <iframe className="rounded-lg border-2 border-[#BC3908]"
           src="https://www.google.com/maps/d/u/0/embed?mid=1I3pUgO0EnzwvhFzymChReGo-2Q5m3Ls&ehbc=2E312F&noprof=1" 
           width="100%" 
-          height="480"
-          className="border-0"
+          height="720"
           allowFullScreen=""
           loading="lazy"
         ></iframe>

@@ -132,7 +132,10 @@ function MedicalServices() {
           ස්ථාන සිතියම්
         </button>
       </div>
-
+          {/* Embedded Google My Map */}
+          <div className="mb-8 rounded-lg flex justify-center overflow-hidden shadow-lg border-[#BC3908]">
+          <iframe className="border-2 border-[#BC3908] rounded-lg" src="https://www.google.com/maps/d/u/0/embed?mid=1L5PYC-Hgtr9ScNLwdMXC70pGvS155nI&ehbc=2E312F&noprof=1" width="100%" height="720"></iframe>
+      </div>
       {/* Tab Content */}
       {activeTab === 'services' && (
         <>
