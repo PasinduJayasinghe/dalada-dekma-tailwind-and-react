@@ -66,7 +66,7 @@ function WorshipServices() {
           No frequently asked questions available at the moment.
         </div>
       ) : (
-        <div className="p-4">
+        <div className="p-4 bg-[#941B0C] bg-opacity-70 p-4 rounded-lg border border-[#BC3908] text-white">
           <AnimationSequence 
             direction="right" 
             baseDelay={100} 
@@ -78,7 +78,7 @@ function WorshipServices() {
           >
             {questions.map((question) => (
               <ul key={question.id}>
-                <div style={{ fontFamily: "NotoSansSinhala" }}>
+                <div className="" style={{ fontFamily: "NotoSansSinhala" }}>
                   <li><h3 className="text-lg font-bold mb-2">{question.title}</h3></li>
                   <p className="whitespace-pre-line">{question.content}</p>
                   <br />

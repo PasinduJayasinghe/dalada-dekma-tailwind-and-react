@@ -79,8 +79,8 @@ function WaterDistribution() {
   return (
     <div>
       <h2 className="text-3xl lg:text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
-        {'mdkSh c, fnodyeÍu'}
-        {/* පානීය ජල බෙදාහැරීම */}
+        {'mdkSh c, myiqlï'}
+        {/* පානීය ජල පහසුකම්පහසුකම් */}
       </h2>
 
       {/* Navigation Tabs */}

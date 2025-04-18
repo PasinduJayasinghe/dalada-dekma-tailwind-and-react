@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Announcements from "./category/Announcements";
 import ImportantLocations from "./category/ImportantLocations";
@@ -13,7 +14,8 @@ import FAQ from "./category/FAQ";
 import WeatherReports from "./category/WeatherReports";
 import InfoCenter from "./category/InfoCenter";
 import Background from "../assets/images/daladamaligawa5.png";
-import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaHandHoldingWater, FaCloudSun, FaInfoCircle, FaQuestion, FaFacebook, FaYoutube, FaGlobe } from "react-icons/fa";
+import Map from "../assets/images/all locations.png"
+import { FaTrafficLight, FaBullhorn, FaMapMarkerAlt, FaUtensils, FaToilet, FaMedkit, FaSearch, FaCar, FaHandHoldingWater, FaCloudSun, FaInfoCircle, FaQuestion, FaFacebook, FaYoutube, FaGlobe, FaSync } from "react-icons/fa";
 
 function CategoryContainer() {
   const categories = [
@@ -116,6 +118,90 @@ function CategoryContainer() {
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [lastRefresh, setLastRefresh] = useState(new Date());
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [timeUntilNextRefresh, setTimeUntilNextRefresh] = useState(600); // 10 minutes in seconds
+
+  const handleBack = () => {
+    setSelectedCategory(null);
+    // Add a new entry to the history stack when a category is selected
+    // This ensures the back button works as expected
+    window.history.pushState({ hasSelectedCategory: false }, '');
+  };
+
+  // Function to refresh data
+  const refreshData = async () => {
+    setIsRefreshing(true);
+    
+    try {
+      // Here you would typically call your data fetching functions
+      // For example, if each category component has a refresh method:
+      if (selectedCategory) {
+        // Example: If component has a refresh method
+        // await categoryComponents[selectedCategory].refresh();
+        console.log(`Refreshing data for ${selectedCategory}...`);
+      } else {
+        // Refresh all categories when on the main screen
+        console.log("Refreshing data for all categories...");
+        // Example: categories.forEach(cat => cat.component.refresh());
+      }
+      
+      setLastRefresh(new Date());
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  // Auto-refresh every 10 minutes
+  useEffect(() => {
+    const refreshInterval = 10 * 60 * 1000; // 10 minutes in milliseconds
+    
+    // Set up the countdown timer
+    const countdownInterval = setInterval(() => {
+      setTimeUntilNextRefresh(prev => {
+        if (prev <= 1) {
+          return 600; // Reset to 10 minutes
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
+    // Set up the refresh timer
+    const refreshTimer = setInterval(() => {
+      refreshData();
+    }, refreshInterval);
+    
+    // Initial data fetch
+    refreshData();
+    
+    // Clean up intervals on component unmount
+    return () => {
+      clearInterval(refreshTimer);
+      clearInterval(countdownInterval);
+    };
+  }, []);  // Empty dependency array means this runs once on mount
+
+  // Set up popstate listener for browser/mobile back button
+  useEffect(() => {
+    const handlePopState = (event) => {
+      // Check if we're going back from a selected category
+      if (selectedCategory && (!event.state || !event.state.hasSelectedCategory)) {
+        setSelectedCategory(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [selectedCategory]);
+
+  // When a category is selected, update history
+  useEffect(() => {
+    if (selectedCategory) {
+      window.history.pushState({ hasSelectedCategory: true }, '');
+    }
+  }, [selectedCategory]);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -140,12 +226,43 @@ function CategoryContainer() {
     setSelectedCategory(categoryId === selectedCategory ? null : categoryId);
   };
 
+  // Format time until next refresh
+  const formatTimeRemaining = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
+  // Manual refresh handler
+  const handleManualRefresh = () => {
+    refreshData();
+    setTimeUntilNextRefresh(600); // Reset timer to 10 minutes
+  };
+
   return (
     <div className="cursor-default p-4 bg-cover bg-center min-h-screen flex flex-col" 
       style={{ 
         backgroundImage: `linear-gradient(rgba(200, 200, 255, 0.7), rgba(200, 200, 8, 0.5)), url(${Background})`
       }}
     >
+      {/* Refresh status bar (Hidden for a reason) */}
+      <div className="hidden mb-4 bg-[#220901]/90 text-[#F6AA1C] px-4 py-2 rounded-lg shadow flex justify-between items-center border-2 border-[#941B0C]">
+        <div className="flex items-center">
+          <span>Last updated: {lastRefresh.toLocaleTimeString()}</span>
+          <div className="ml-6 text-sm">
+            Next update in: {formatTimeRemaining(timeUntilNextRefresh)}
+          </div>
+        </div>
+        <button 
+          onClick={handleManualRefresh}
+          disabled={isRefreshing}
+          className={`flex items-center bg-[#BC3908] hover:bg-[#F6AA1C] text-[#F6AA1C] hover:text-[#220901] px-3 py-1 rounded ${isRefreshing ? 'opacity-50 cursor-not-allowed' : ''}`}
+        >
+          <FaSync className={`mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+          {isRefreshing ? 'Refreshing...' : 'Refresh Now'}
+        </button>
+      </div>
+
       {/* Show tiles when no category is selected */}
       {!selectedCategory && (
         <div className="flex flex-col gap-6 justify-center items-center">
@@ -175,9 +292,9 @@ function CategoryContainer() {
           </div>
 
           {/* Additional divs for contact and radio player */}
-          <div className="grid gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-3/4 mx-auto mt-6">
             {/* Contact Details Div */}
-            <div className="bg-[#220901]/90 p-6 rounded-lg shadow-lg border-2 border-[#941B0C] text-[#F6AA1C]">
+            <div className="bg-[#220901]/90 h-auto p-6 rounded-lg shadow-lg border-2 border-[#941B0C] text-[#F6AA1C]">
               <h3 className="text-xl sm:text-2xl font-bold mb-4" style={{ fontFamily: "NotoSansSinhala" }}>
                 ක්ෂණික ඇමතුම්
               </h3>
@@ -312,6 +429,29 @@ function CategoryContainer() {
                 </div>
               </div>
             </div>
+            <div className="group relative h-auto overflow-hidden rounded-lg shadow-lg border-2 border-[#941B0C] hover:border-[#F6AA1C] transition-all duration-300">
+              <a
+                href={Map}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full h-full"
+              >
+                <img 
+                  src={Map} 
+                  alt="පොදු පහසුකම් සිතියම"
+                  className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#220901]/90 to-transparent flex items-end p-4 pointer-events-none">
+                  <p 
+                    className="text-[#F6AA1C] font-bold text-lg"
+                    style={{ fontFamily: "NotoSansSinhala" }}
+                  >
+                    පොදු පහසුකම් සිතියම
+                  </p>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       )}
@@ -321,7 +461,7 @@ function CategoryContainer() {
         <div>
           {/* Back button - shows on both mobile and desktop */}
           <button 
-            onClick={() => setSelectedCategory(null)}
+            onClick={handleBack}
             className="mb-4 px-4 py-2 bg-[#BC3908] hover:bg-[#F6AA1C] text-[#F6AA1C] hover:text-[#220901] rounded-md flex items-center transition-all border-2 border-[#941B0C]"
           >
             <span className="mr-2">←</span> Back to categories
