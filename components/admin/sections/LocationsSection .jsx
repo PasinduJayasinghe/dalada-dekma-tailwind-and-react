@@ -61,6 +61,7 @@ export default function LocationsSection() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const isLostPerson = formData.categoryId === "7";
     const body = {
       name: formData.name,
       description: formData.description,
@@ -70,7 +71,8 @@ export default function LocationsSection() {
       hours: formData.hours,
       capacity: formData.capacity,
       fee: formData.fee,
-      category_id: Number(formData.categoryId)
+      category_id: Number(formData.categoryId),
+      ...(isLostPerson && { status: "Not Found" })
     };
     
     await postData(body);

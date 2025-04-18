@@ -44,7 +44,7 @@ function CategoryContainer() {
       id: "freefood",
       title: "දන්සැල්",
       title_fon: "okaie,a",
-      description: "Food donation",
+      description: "Food donations",
       component: FreeFood,
       icon: FaUtensils
     },
@@ -159,17 +159,15 @@ function CategoryContainer() {
                     className="grid sm:grid-cols-1 bg-[#621708]/90 hover:bg-[#F6AA1C] h-56 text-white hover:text-[#220901] p-4 rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 border-2 border-[#941B0C] flex flex-col justify-center items-center text-center"
                   >
                     <div className="flex justify-center items-center mb-3">
-                      {/* <div className="p-3 bg-[#220901] rounded-full w-28 md:w-24 sm:w-20 md:h-20 sm:h-20 flex items-center justify-center text-[#F6AA1C] border-2 border-[#BC3908]"> */}
                         {isFontAwesomeIcon ? (
                           <FontAwesomeIcon icon={category.icon} size="2x" />
                         ) : (
                           <category.icon size={56} />
                         )}
-                      {/* </div> */}
                     </div>
                     <div className="flex flex-col justify-center items-center text-center">
-                      <h2 className="text-2xl sm:text-3xl font-extrabold mb-2" style={{ fontFamily: "FMBindumathi"}}>{category.title_fon}</h2>
-                      <p className="text-md sm:text-lg mb-4 font-extralight">{category.description}</p>
+                      <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-1" style={{ fontFamily: "FMBindumathi"}}>{category.title_fon}</h2>
+                      <p className="text-sm sm:text-md md:text-lg mb-4 font-extralight">{category.description}</p>
                     </div>
                   </div>
                 );
@@ -330,7 +328,7 @@ function CategoryContainer() {
           </button>
           
           {/* Content container */}
-          <div className="bg-[#220901]/90 p-4 rounded-lg shadow-lg border-2 border-[#941B0C] text-[#F6AA1C]">
+          <div className=" p-4 rounded-lg shadow-lg">
             {(() => {
               const category = categories.find(c => c.id === selectedCategory);
               const CategoryComponent = category?.component;

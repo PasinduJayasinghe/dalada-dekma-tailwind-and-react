@@ -103,8 +103,8 @@ useEffect(() => {
   }
 
   return (
-    <div className="px-4 py-6">
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+    <div>
+      <h2 className="text-3xl lg:text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
         {'jdyk k;r lsÍï yd m%jdyk fiajd'}
         {/* වාහන නතර කිරීම් / ප්‍රවාහන සේවාසේවා */}
       </h2>

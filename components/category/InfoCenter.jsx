@@ -61,7 +61,7 @@ function InfoCenter() {
 
   return (
     <div>
-      <h2 className="text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
+      <h2 className="text-3xl lg:text-4xl font-semibold mb-4 border-b pb-2 border-amber-300 text-center" style={{ fontFamily: "FMBindumathi"}}>
         {'f;dr;=re uOHia:dkh'}
         {/* තොරතුරු මධ්‍යස්ථානය */}
       </h2>
