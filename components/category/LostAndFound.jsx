@@ -96,14 +96,14 @@ function LostAndFound() {
           onClick={() => setActiveTab('notices')}
           style={{ fontFamily: "NotoSansSinhala" }}
         >
-          නැතිනැති වූ දෑ
+          නැති වූ දෑ
         </button>
         <button
           className={`py-2 px-4 font-extrabold ${activeTab === 'guide' ? 'text-amber-900 border-b-2 border-amber-800' : 'text-gray-700'}`}
           onClick={() => setActiveTab('guide')}
           style={{ fontFamily: "NotoSansSinhala" }}
         >
-          සොයා ගැනීමට උපදේශ
+          සොයා ගැනීමට උපදෙස්
         </button>
         <button
           className={`py-2 px-4 font-extrabold ${activeTab === 'locations' ? 'text-amber-900 border-b-2 border-amber-800' : 'text-gray-700'}`}

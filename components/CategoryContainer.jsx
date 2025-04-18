@@ -343,7 +343,7 @@ function CategoryContainer() {
 
                   {/* Municipal Council */}
                   <div>
-                    <h5 className="font-semibold mb-2 text-[#F6AA1C]">🏛️ මහනුවර මහ නගර සභාව:</h5>
+                    <h5 className="font-semibold mb-2 text-[#F6AA1C]">🏛️ මහනුවර මහා නගර සභාව:</h5>
                     <ul className="space-y-2 ml-4">
                       <li className="flex items-start">
                       <span className="mr-2 font-extrabold">~</span>

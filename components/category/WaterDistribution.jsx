@@ -97,7 +97,7 @@ function WaterDistribution() {
           onClick={() => setActiveTab('locations')}
           style={{ fontFamily: "NotoSansSinhala" }}
         >
-          ජල බෙදාහැරීමේ ස්ථාන
+          ජලය බෙදාහැරීමේ ස්ථාන
         </button>
       </div>
 
