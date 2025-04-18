@@ -20,19 +20,19 @@ function ImportantLocations() {
       id: 1,
       src: walespark,
       alt: "Route 1",
-      caption: "වේල්ස් පාර්ක් හන්දිය හරහා මාර්ගය"
+      caption: "ප්‍රවේශ මාර්ග 1"
     },
     {
       id: 2,
       src: rathubokkuwa,
       alt: "Route 2",
-      caption: "රතුබොක්කුව හන්දිය හරහා මාර්ගය"
+      caption: "ප්‍රවේශ මාර්ග 2"
     },
     {
       id: 3,
       src: dssenanayake,
       alt: "Route 3",
-      caption: "ඩී.එස් සේනානායක විදිය හරහා මාර්ගය"
+      caption: "ප්‍රවේශ මාර්ග 3"
     }
   ];
 
@@ -115,7 +115,7 @@ function ImportantLocations() {
         {/* Loading Spinner */}
         <div className="flex justify-center items-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-300"></div>
-          <span className="ml-4 text-[#F6AA1C]">Loading locations...</span>
+          <span className="ml-4">Loading locations...</span>
         </div>
       </div>
     );
