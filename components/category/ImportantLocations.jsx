@@ -192,15 +192,15 @@ function ImportantLocations() {
       </h2>
       
       <StaticImageGallery />
-      <div className="flex justify-center items-center mb-6 gap-3">
+      <div className="flex-col items-center  mb-6 gap-3">
       <div className="mb-8 rounded-lg overflow-hidden shadow-lg h-100 w-100 border-2 border-[#BC3908]">
-      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=14CJEhMGyswV89aiYRDZdrO4NHkgw6Dw&ehbc=2E312F&noprof=1" width="640" height="480"></iframe>
+      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=14CJEhMGyswV89aiYRDZdrO4NHkgw6Dw&ehbc=2E312F&noprof=1" width="720" height="520"></iframe>
       </div>
       <div className="mb-8 rounded-lg overflow-hidden shadow-lg h-100 w-100 border-2 border-[#BC3908]">
-      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1mhjXYUJjv0H6wB80H_-YIl1w073ZkvQ&ehbc=2E312F&noprof=1" width="640" height="480"></iframe>
+      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1mhjXYUJjv0H6wB80H_-YIl1w073ZkvQ&ehbc=2E312F&noprof=1" width="720" height="520"></iframe>
       </div>
       <div className="mb-8 rounded-lg overflow-hidden shadow-lg h-100 w-100 border-2 border-[#BC3908]">
-      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1VNp9OorKJHb8tPgshj9oMBnJDbFuOY4&ehbc=2E312F&noprof=1" width="640" height="480"></iframe>
+      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1VNp9OorKJHb8tPgshj9oMBnJDbFuOY4&ehbc=2E312F&noprof=1" width="720" height="520"></iframe>
       </div>
       </div>
       {/* Category Filter */}
