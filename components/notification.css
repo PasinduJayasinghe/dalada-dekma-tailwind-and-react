@@ -31,7 +31,8 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0 40px;
-  font-size: 1rem; /* text-sm */
+  /* Base font size for mobile */
+  font-size: 16px;
 }
 
 .nav-button {
@@ -43,7 +44,6 @@
   height: 32px;
   width: 32px;
   display: none; /* Hidden by default */
-  display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -132,14 +132,31 @@
   }
 }
 
-@media (min-width: 640px) {
+/* Responsive font sizing with appropriate breakpoints */
+/* Extra small devices (phones) */
+@media (max-width: 575.98px) {
   .message {
-    font-size: 1rem; /* sm:text-base */
+    font-size: 14px;
   }
 }
 
+/* Small devices (landscape phones) */
+@media (min-width: 576px) {
+  .message {
+    font-size: 16px;
+  }
+}
+
+/* Medium devices (tablets) */
 @media (min-width: 768px) {
   .message {
-    font-size: 1.125rem; /* md:text-lg */
+    font-size: 18px;
+  }
+}
+
+/* Large devices (desktops) */
+@media (min-width: 992px) {
+  .message {
+    font-size: 22px;
   }
 }

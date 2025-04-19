@@ -325,7 +325,7 @@ function CategoryContainer() {
           </div>
 
           {/* Additional divs for contact and radio player */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-3/4 mx-auto mt-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:w-3/4 mx-auto mt-6">
             {/* Contact Details Div */}
             <div className="bg-[#220901]/90 h-auto p-6 rounded-lg shadow-lg border-2 border-[#941B0C] text-[#F6AA1C]">
               <h3 className="text-xl sm:text-2xl font-bold mb-4" style={{ fontFamily: "NotoSansSinhala" }}>

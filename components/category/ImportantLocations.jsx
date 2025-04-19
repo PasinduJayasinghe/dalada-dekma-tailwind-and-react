@@ -170,7 +170,7 @@ function ImportantLocations() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#220901]/90 to-transparent flex items-end p-4 pointer-events-none">
               <p 
-                className="text-[#F6AA1C] font-bold text-lg"
+                className="text-[#F6AA1C] font-bold text-sm md:text-lg"
                 style={{ fontFamily: "NotoSansSinhala" }}
               >
                 {image.caption}
@@ -192,17 +192,19 @@ function ImportantLocations() {
       </h2>
       
       <StaticImageGallery />
-    
-      <div className="mb-8 rounded-lg overflow-hidden shadow-lg h-100 w-100 border-2 border-[#BC3908]">
-      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=14CJEhMGyswV89aiYRDZdrO4NHkgw6Dw&ehbc=2E312F&noprof=1" width="100%" height="520"></iframe>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="group relative overflow-hidden rounded-lg h-98 shadow-lg border-2 border-[#941B0C] hover:border-[#F6AA1C] transition-all duration-300">
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=14CJEhMGyswV89aiYRDZdrO4NHkgw6Dw&ehbc=2E312F&noprof=1" width="100%" height="520"></iframe>
+        </div>
+        <div className="group relative overflow-hidden rounded-lg h-98 shadow-lg border-2 border-[#941B0C] hover:border-[#F6AA1C] transition-all duration-300">
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1mhjXYUJjv0H6wB80H_-YIl1w073ZkvQ&ehbc=2E312F&noprof=1" width="100%" height="520"></iframe>
+        </div>
+        <div className="group relative overflow-hidden rounded-lg h-98 shadow-lg border-2 border-[#941B0C] hover:border-[#F6AA1C] transition-all duration-300">
+        <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1VNp9OorKJHb8tPgshj9oMBnJDbFuOY4&ehbc=2E312F&noprof=1" width="100%" height="520"></iframe>
+        </div>
       </div>
-      <div className="mb-8 rounded-lg overflow-hidden shadow-lg h-100 w-100 border-2 border-[#BC3908]">
-      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1mhjXYUJjv0H6wB80H_-YIl1w073ZkvQ&ehbc=2E312F&noprof=1" width="100%" height="520"></iframe>
-      </div>
-      <div className="mb-8 rounded-lg overflow-hidden shadow-lg h-100 w-100 border-2 border-[#BC3908]">
-      <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1VNp9OorKJHb8tPgshj9oMBnJDbFuOY4&ehbc=2E312F&noprof=1" width="100%" height="520"></iframe>
-      </div>
-      
+
       {/* Category Filter */}
       <div className="mb-6">
         <h3 className="text-xl font-semibold mb-3" style={{ fontFamily: "NotoSansSinhala" }}>
