@@ -28,7 +28,7 @@ function Footer() {
     setError('');
     
     try {
-      const response = await fetch('http://localhost:5000/api/subscribers', {  // Fixed URL (added colon after https)
+      const response = await fetch('http://localhost:5000/api/subscribers', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ function Footer() {
 
   return (
     <footer 
-      className="bg-[#220901] text-amber-50 py-12 cursor-default border-t-4 border-[#BC3908] relative"
+      className="bg-[#220901] text-amber-50 py-6 cursor-default border-t-4 border-[#BC3908] relative"
       style={{
         backgroundImage: `url(${perahara})`,
         backgroundRepeat: 'repeat-x',
